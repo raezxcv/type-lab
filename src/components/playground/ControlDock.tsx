@@ -21,15 +21,14 @@ import {
   Check,
   Columns,
   Shuffle,
-  ChevronRight
+  ChevronRight,
+  SlidersHorizontal
 } from 'lucide-react';
 
 interface ControlDockProps {
   state: TypographicState;
   onChange: (updates: Partial<TypographicState>) => void;
   onReset: () => void;
-  backgroundTexture: 'none' | 'darkroom' | 'swiss-grid' | 'macro-ink';
-  onChangeBackgroundTexture: (texture: 'none' | 'darkroom' | 'swiss-grid' | 'macro-ink') => void;
   onCopyCSS: () => void;
   onAutoFitSize: () => void;
   customFonts: FontDefinition[];
@@ -42,8 +41,6 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   state,
   onChange,
   onReset,
-  backgroundTexture,
-  onChangeBackgroundTexture,
   onCopyCSS,
   onAutoFitSize,
   customFonts,
@@ -155,6 +152,48 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     });
   };
 
+  const handleShuffleTextureModifiers = () => {
+    const blendModes: Array<TypographicState['textureBlendMode']> = [
+      'overlay', 'screen', 'multiply', 'hard-light', 'soft-light', 'difference', 'color-dodge'
+    ];
+    const tints: Array<TypographicState['textureTint']> = [
+      'none', 'green', 'amber', 'cyan', 'crimson', 'monochrome'
+    ];
+    const randomBlend = blendModes[Math.floor(Math.random() * blendModes.length)];
+    const randomTint = tints[Math.floor(Math.random() * tints.length)];
+    const randomOpacity = Number((Math.random() * 0.45 + 0.25).toFixed(2));
+    const randomScale = [75, 100, 125, 150, 175, 200][Math.floor(Math.random() * 6)];
+    const randomContrast = [80, 100, 120, 150, 180][Math.floor(Math.random() * 5)];
+    const randomBrightness = [80, 100, 110, 130][Math.floor(Math.random() * 4)];
+    const randomBlur = [0, 0, 1, 2, 4][Math.floor(Math.random() * 5)];
+    const randomInvert = Math.random() > 0.65;
+
+    onChange({
+      textureOpacity: randomOpacity,
+      textureBlendMode: randomBlend,
+      textureScale: randomScale,
+      textureContrast: randomContrast,
+      textureBrightness: randomBrightness,
+      textureBlur: randomBlur,
+      textureInvert: randomInvert,
+      textureTint: randomTint,
+    });
+  };
+
+  const handleResetTextureModifiers = () => {
+    onChange({
+      textureOpacity: 0.35,
+      textureBlendMode: 'overlay',
+      textureScale: 100,
+      textureContrast: 100,
+      textureBrightness: 100,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'none',
+      textureRepeat: 'cover',
+    });
+  };
+
   return (
     <div className="w-full bg-[#111317] border-t lg:border-t-0 lg:border-l border-[#22262E] text-xs font-mono-code flex flex-col">
       
@@ -164,7 +203,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           { id: 'type', label: '01 TYPE & PAIRING', icon: Type },
           { id: 'pairings', label: '02 PAIRINGS GALLERY', icon: Columns },
           { id: 'effects', label: '03 EFFECTS & MOTION', icon: Sliders },
-          { id: 'canvas', label: '04 CANVAS & PRESETS', icon: Palette },
+          { id: 'canvas', label: '04 CANVAS & TEXTURES', icon: Palette },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeMainTab === tab.id;
@@ -1016,33 +1055,311 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             </div>
 
-            {/* Background Texture Selection */}
-            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
-              <label className="text-[#A1A1AA] block text-xs font-semibold flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                ORIGINAL GRAPHIC TEXTURES
-              </label>
+            {/* Background Texture Selection & Texture Modifier Lab */}
+            <div className="space-y-3 pt-2 border-t border-[#1E232E]">
+              <div className="flex items-center justify-between">
+                <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-[#00FF66]" />
+                  <span>ORIGINAL GRAPHIC TEXTURES (10)</span>
+                </label>
+                <span className="text-[10px] px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
+                  {state.backgroundTexture !== 'none' ? 'ACTIVE' : 'OFF'}
+                </span>
+              </div>
+
+              {/* Texture Selection Grid */}
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { id: 'none', label: 'SOLID COLOR', desc: 'Minimal Swiss stark canvas' },
-                  { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics & film grain' },
-                  { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Architectural shadow planes' },
-                  { id: 'macro-ink', label: 'MACRO INK EMULSION', desc: 'Lithographic paper bleed' },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => onChangeBackgroundTexture(item.id as any)}
-                    className={`p-2.5 text-left border transition-all ${
-                      backgroundTexture === item.id
-                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
-                        : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
-                    }`}
-                  >
-                    <div className="text-xs font-bold">{item.label}</div>
-                    <div className="text-[11px] text-[#A1A1AA] mt-0.5 line-clamp-1">{item.desc}</div>
-                  </button>
-                ))}
+                  { id: 'none', label: 'SOLID CANVAS', desc: 'Minimal stark Swiss poster ground', category: 'MINIMAL' },
+                  { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics, focal lens & optics', category: 'PHOTO' },
+                  { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Monolithic concrete shadow study', category: 'PHOTO' },
+                  { id: 'macro-ink', label: 'MACRO INK BLEED', desc: 'Lithographic capillary paper bleed', category: 'PHOTO' },
+                  { id: 'photostat', label: 'PHOTOSTAT GRAIN', desc: '1960s electrostatic toner dust dispersion', category: 'PHOTO' },
+                  { id: 'risograph', label: 'RISOGRAPH HALFTONE', desc: 'Macro dual-drum screen mesh & ink gain', category: 'PHOTO' },
+                  { id: 'halftone-dots', label: 'VECTOR HALFTONE', desc: 'Procedural geometric dot raster matrix', category: 'VECTOR' },
+                  { id: 'cyber-scanline', label: 'CRT SCANLINES', desc: 'Phosphor cathode ray line interference', category: 'CRT' },
+                  { id: 'blueprint-grid', label: 'BLUEPRINT MATRIX', desc: 'Drafting coordinate grid with marks', category: 'VECTOR' },
+                  { id: 'film-grain', label: 'FILM ISO NOISE', desc: 'Silver halide micro-emulsion noise', category: 'VECTOR' },
+                ].map((item) => {
+                  const isSelected = state.backgroundTexture === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => onChange({ backgroundTexture: item.id as any })}
+                      className={`p-2.5 text-left border transition-all ${
+                        isSelected
+                          ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                          : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7] hover:border-[#3A4354]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold leading-tight">{item.label}</span>
+                        <span className={`text-[9px] px-1 py-0.2 rounded font-mono-code ${
+                          isSelected ? 'bg-[#00FF66]/20 text-[#00FF66]' : 'bg-[#181D26] text-[#6B7280]'
+                        }`}>
+                          {item.category}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-[#A1A1AA] mt-1 line-clamp-1">{item.desc}</div>
+                    </button>
+                  );
+                })}
               </div>
+
+              {/* ==================== TEXTURE MODIFIER LAB ==================== */}
+              {state.backgroundTexture !== 'none' && (
+                <div className="p-3.5 sm:p-4 bg-[#090B0F] border border-[#232B3B] space-y-4">
+                  {/* Lab Header */}
+                  <div className="flex items-center justify-between pb-2 border-b border-[#1A1F2B]">
+                    <div className="flex items-center gap-2">
+                      <SlidersHorizontal className="w-3.5 h-3.5 text-[#00FF66]" />
+                      <span className="text-xs font-bold text-[#F4F5F7] tracking-wider uppercase">
+                        TEXTURE MODIFIERS
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleShuffleTextureModifiers}
+                        className="flex items-center gap-1 text-[11px] text-[#00FF66] hover:text-[#4DFF95] bg-[#142319] hover:bg-[#1E3627] px-2 py-0.5 border border-[#00FF66]/40 font-bold transition-colors"
+                        title="Randomize texture parameters"
+                      >
+                        <Shuffle className="w-3 h-3" />
+                        <span>SHUFFLE</span>
+                      </button>
+                      <button
+                        onClick={handleResetTextureModifiers}
+                        className="flex items-center gap-1 text-[11px] text-[#A1A1AA] hover:text-[#F4F5F7] bg-[#151922] hover:bg-[#1E232E] px-2 py-0.5 border border-[#22262E] transition-colors"
+                        title="Reset texture parameters to default"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        <span>RESET</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 1. OPACITY / DENSITY SLIDER */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[#C2CAD8] font-semibold">OPACITY (DENSITY)</span>
+                      <span className="text-[#00FF66] font-bold">{Math.round((state.textureOpacity ?? 0.45) * 100)}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.05"
+                      max="1.00"
+                      step="0.01"
+                      value={state.textureOpacity ?? 0.45}
+                      onChange={(e) => onChange({ textureOpacity: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                    <div className="flex gap-1.5 pt-0.5">
+                      {[0.15, 0.35, 0.55, 0.80, 1.0].map((val) => (
+                        <button
+                          key={val}
+                          onClick={() => onChange({ textureOpacity: val })}
+                          className={`flex-1 py-0.5 text-[10px] border transition-colors ${
+                            Math.abs((state.textureOpacity ?? 0.45) - val) < 0.04
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          {Math.round(val * 100)}%
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 2. BLEND MODE PICKER */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[#C2CAD8] font-semibold">BLEND MODE</span>
+                      <span className="text-[#00FF66] font-bold uppercase">{state.textureBlendMode ?? 'overlay'}</span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {[
+                        { id: 'overlay', label: 'OVERLAY' },
+                        { id: 'screen', label: 'SCREEN' },
+                        { id: 'multiply', label: 'MULTIPLY' },
+                        { id: 'hard-light', label: 'HARD-LT' },
+                        { id: 'soft-light', label: 'SOFT-LT' },
+                        { id: 'difference', label: 'DIFFER' },
+                        { id: 'color-dodge', label: 'DODGE' },
+                        { id: 'normal', label: 'NORMAL' },
+                      ].map((mode) => (
+                        <button
+                          key={mode.id}
+                          onClick={() => onChange({ textureBlendMode: mode.id as any })}
+                          className={`py-1 px-1 text-center text-[10px] font-mono-code border transition-colors ${
+                            (state.textureBlendMode ?? 'overlay') === mode.id
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          {mode.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 3. SCALE / GRAIN MAGNIFICATION */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[#C2CAD8] font-semibold">SCALE / ZOOM</span>
+                      <span className="text-[#00FF66] font-bold">{state.textureScale ?? 100}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="50"
+                      max="250"
+                      step="5"
+                      value={state.textureScale ?? 100}
+                      onChange={(e) => onChange({ textureScale: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                    <div className="flex gap-1.5 pt-0.5">
+                      {[75, 100, 150, 200].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => onChange({ textureScale: s })}
+                          className={`flex-1 py-0.5 text-[10px] border transition-colors ${
+                            (state.textureScale ?? 100) === s
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          {s}%
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 4. CONTRAST & BRIGHTNESS CONTROLS */}
+                  <div className="grid grid-cols-2 gap-3 pt-1 border-t border-[#181D26]">
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-[#808898]">CONTRAST</span>
+                        <span className="text-[#00FF66] font-bold text-[11px]">{state.textureContrast ?? 100}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="50"
+                        max="250"
+                        step="5"
+                        value={state.textureContrast ?? 100}
+                        onChange={(e) => onChange({ textureContrast: Number(e.target.value) })}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-[#808898]">BRIGHTNESS</span>
+                        <span className="text-[#00FF66] font-bold text-[11px]">{state.textureBrightness ?? 100}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="30"
+                        max="200"
+                        step="5"
+                        value={state.textureBrightness ?? 100}
+                        onChange={(e) => onChange({ textureBrightness: Number(e.target.value) })}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 5. DIFFUSION & LUMINANCE POLARITY */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-[#181D26]">
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-[#808898]">DIFFUSION (BLUR)</span>
+                        <span className="text-[#00FF66] font-bold text-[11px]">{state.textureBlur ?? 0}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="12"
+                        step="1"
+                        value={state.textureBlur ?? 0}
+                        onChange={(e) => onChange({ textureBlur: Number(e.target.value) })}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[#808898] text-xs block">LUMINANCE POLARITY</span>
+                      <button
+                        onClick={() => onChange({ textureInvert: !state.textureInvert })}
+                        className={`w-full py-1 px-2 text-center text-xs border transition-colors ${
+                          state.textureInvert
+                            ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                            : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                        }`}
+                      >
+                        {state.textureInvert ? 'NEGATIVE [INVERTED]' : 'POSITIVE [NATURAL]'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 6. DUOTONE PROCESS TINT */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[#C2CAD8] font-semibold">DUOTONE PROCESS TINT</span>
+                      <span className="text-[#00FF66] font-bold uppercase">{state.textureTint ?? 'none'}</span>
+                    </div>
+                    <div className="grid grid-cols-6 gap-1.5">
+                      {[
+                        { id: 'none', label: 'OFF', color: '#333B4A' },
+                        { id: 'green', label: 'GREEN', color: '#00FF66' },
+                        { id: 'amber', label: 'AMBER', color: '#FFB800' },
+                        { id: 'cyan', label: 'CYAN', color: '#00E5FF' },
+                        { id: 'crimson', label: 'RED', color: '#FF3366' },
+                        { id: 'monochrome', label: 'B&W', color: '#FFFFFF' },
+                      ].map((t) => (
+                        <button
+                          key={t.id}
+                          onClick={() => onChange({ textureTint: t.id as any })}
+                          className={`py-1 flex flex-col items-center justify-center gap-1 border transition-colors ${
+                            (state.textureTint ?? 'none') === t.id
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          <span
+                            className="w-3 h-3 rounded-none border border-black/40"
+                            style={{ backgroundColor: t.color }}
+                          />
+                          <span className="text-[9px] uppercase">{t.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 7. TILING & FIT MODE */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <span className="text-[#808898] text-xs font-semibold block">TILING & FIT MODE</span>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {[
+                        { id: 'cover', label: 'COVER (FILL)' },
+                        { id: 'repeat', label: 'TILE REPEAT' },
+                        { id: 'contain', label: 'CONTAIN (FIT)' },
+                      ].map((r) => (
+                        <button
+                          key={r.id}
+                          onClick={() => onChange({ textureRepeat: r.id as any })}
+                          className={`py-1 text-center text-[10px] font-mono-code border transition-colors ${
+                            (state.textureRepeat ?? 'cover') === r.id
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          {r.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Grid Overlay Controls */}

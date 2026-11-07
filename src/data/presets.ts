@@ -44,7 +44,17 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "57",
       watermarkOpacity: 0.07,
-      watermarkSize: 180
+      watermarkSize: 180,
+      backgroundTexture: 'none',
+      textureOpacity: 0.45,
+      textureBlendMode: 'overlay',
+      textureScale: 100,
+      textureContrast: 100,
+      textureBrightness: 100,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'none',
+      textureRepeat: 'cover'
     }
   },
   {
@@ -90,7 +100,17 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "MHz",
       watermarkOpacity: 0.08,
-      watermarkSize: 220
+      watermarkSize: 220,
+      backgroundTexture: 'cyber-scanline',
+      textureOpacity: 0.35,
+      textureBlendMode: 'screen',
+      textureScale: 100,
+      textureContrast: 120,
+      textureBrightness: 100,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'green',
+      textureRepeat: 'repeat'
     }
   },
   {
@@ -136,7 +156,17 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "11",
       watermarkOpacity: 0.08,
-      watermarkSize: 320
+      watermarkSize: 320,
+      backgroundTexture: 'macro-ink',
+      textureOpacity: 0.30,
+      textureBlendMode: 'overlay',
+      textureScale: 110,
+      textureContrast: 140,
+      textureBrightness: 90,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'none',
+      textureRepeat: 'cover'
     }
   },
   {
@@ -182,7 +212,17 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "&",
       watermarkOpacity: 0.06,
-      watermarkSize: 180
+      watermarkSize: 180,
+      backgroundTexture: 'darkroom',
+      textureOpacity: 0.25,
+      textureBlendMode: 'soft-light',
+      textureScale: 100,
+      textureContrast: 110,
+      textureBrightness: 100,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'amber',
+      textureRepeat: 'cover'
     }
   },
   {
@@ -228,7 +268,17 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "M",
       watermarkOpacity: 0.05,
-      watermarkSize: 180
+      watermarkSize: 180,
+      backgroundTexture: 'swiss-grid',
+      textureOpacity: 0.35,
+      textureBlendMode: 'multiply',
+      textureScale: 100,
+      textureContrast: 130,
+      textureBrightness: 95,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'none',
+      textureRepeat: 'cover'
     }
   },
   {
@@ -274,7 +324,17 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "SPQR",
       watermarkOpacity: 0.05,
-      watermarkSize: 220
+      watermarkSize: 220,
+      backgroundTexture: 'film-grain',
+      textureOpacity: 0.20,
+      textureBlendMode: 'overlay',
+      textureScale: 100,
+      textureContrast: 100,
+      textureBrightness: 100,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: 'none',
+      textureRepeat: 'cover'
     }
   }
 ];

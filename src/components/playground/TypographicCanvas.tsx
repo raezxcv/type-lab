@@ -6,18 +6,38 @@ interface TypographicCanvasProps {
   state: TypographicState;
   onChangeText: (text: string) => void;
   onChangeSubText: (subText: string) => void;
-  backgroundTexture: 'none' | 'darkroom' | 'swiss-grid' | 'macro-ink';
   canvasRef: React.RefObject<HTMLDivElement | null>;
   onAutoFitSize: () => void;
   activeLayer?: 'headline' | 'secondary';
   onSelectLayer?: (layer: 'headline' | 'secondary') => void;
 }
 
+const TEXTURE_ASSETS: Record<string, string> = {
+  'none': '',
+  'darkroom': '/images/type-lab-darkroom-texture.jpg',
+  'swiss-grid': '/images/swiss-grid-abstract-geometry.jpg',
+  'macro-ink': '/images/macro-ink-interference-plate.jpg',
+  'photostat': '/images/photostat-grain-plate.jpg',
+  'risograph': '/images/risograph-halftone-mesh.jpg',
+  'halftone-dots': "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><circle cx='8' cy='8' r='2.5' fill='%23ffffff' opacity='0.75'/></svg>",
+  'cyber-scanline': "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'><rect width='4' height='2' fill='%23ffffff' opacity='0.35'/><rect y='2' width='4' height='2' fill='%23000000' opacity='0.35'/></svg>",
+  'blueprint-grid': "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><path d='M 40 0 L 0 0 0 40' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.4'/><circle cx='40' cy='40' r='1.5' fill='%2300FF66' opacity='0.7'/></svg>",
+  'film-grain': "data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='0.55'/></svg>"
+};
+
+const TINT_COLORS: Record<string, string> = {
+  none: 'transparent',
+  green: '#00FF66',
+  amber: '#FFB800',
+  cyan: '#00E5FF',
+  crimson: '#FF3366',
+  monochrome: '#FFFFFF',
+};
+
 export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   state,
   onChangeText,
   onChangeSubText,
-  backgroundTexture,
   canvasRef,
   onAutoFitSize,
   onSelectLayer,
@@ -25,14 +45,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   const textContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const textureUrls = {
-    'none': '',
-    'darkroom': '/images/type-lab-darkroom-texture.jpg',
-    'swiss-grid': '/images/swiss-grid-abstract-geometry.jpg',
-    'macro-ink': '/images/macro-ink-interference-plate.jpg'
-  };
-
-  const currentTextureUrl = textureUrls[backgroundTexture];
+  const currentTextureUrl = TEXTURE_ASSETS[state.backgroundTexture] || '';
 
   // Dynamic aspect ratio classes with flexible vertical breathing room
   const frameClasses = {
@@ -154,18 +167,53 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
         <div
           ref={canvasRef}
           id="typography-export-target"
-          className={`relative transition-all duration-300 flex flex-col justify-between p-8 sm:p-12 border border-[#262C3A] shadow-2xl ${frameClasses}`}
+          className={`relative transition-all duration-300 flex flex-col justify-between p-8 sm:p-12 border border-[#262C3A] shadow-2xl overflow-hidden ${frameClasses}`}
           style={{
             backgroundColor: state.backgroundColor,
-            backgroundImage: currentTextureUrl ? `url(${currentTextureUrl})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
           }}
         >
           
-          {/* Subtle texture blend layer if image is active */}
-          {currentTextureUrl && (
-            <div className="absolute inset-0 bg-[#070809]/45 pointer-events-none z-0" />
+          {/* CUSTOMIZABLE ORIGINAL GRAPHIC TEXTURE LAYER */}
+          {state.backgroundTexture !== 'none' && currentTextureUrl && (
+            <div 
+              className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+              style={{
+                opacity: state.textureOpacity ?? 0.45,
+                mixBlendMode: state.textureBlendMode ?? 'overlay',
+              }}
+            >
+              <div 
+                className="w-full h-full"
+                style={{
+                  backgroundImage: `url("${currentTextureUrl}")`,
+                  backgroundSize: state.textureRepeat === 'repeat' 
+                    ? `${state.textureScale ?? 100}%` 
+                    : (state.textureRepeat === 'contain' ? 'contain' : 'cover'),
+                  backgroundRepeat: state.textureRepeat === 'repeat' ? 'repeat' : 'no-repeat',
+                  backgroundPosition: 'center',
+                  transform: (state.textureScale && state.textureScale !== 100 && state.textureRepeat !== 'repeat')
+                    ? `scale(${state.textureScale / 100})` 
+                    : undefined,
+                  transformOrigin: 'center center',
+                  filter: [
+                    `contrast(${state.textureContrast ?? 100}%)`,
+                    `brightness(${state.textureBrightness ?? 100}%)`,
+                    state.textureBlur && state.textureBlur > 0 ? `blur(${state.textureBlur}px)` : '',
+                    state.textureInvert ? 'invert(1)' : '',
+                  ].filter(Boolean).join(' '),
+                }}
+              />
+              {state.textureTint && state.textureTint !== 'none' && (
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    backgroundColor: TINT_COLORS[state.textureTint] || 'transparent',
+                    mixBlendMode: 'color',
+                    opacity: 0.6,
+                  }}
+                />
+              )}
+            </div>
           )}
 
           {/* BACKGROUND WATERMARK / SWISS ARCHITECTURAL CHARACTER */}

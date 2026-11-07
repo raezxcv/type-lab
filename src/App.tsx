@@ -27,7 +27,6 @@ export const App: React.FC = () => {
   const [activeLayer, setActiveLayer] = useState<'headline' | 'secondary'>('headline');
   const [typoState, setTypoState] = useState<TypographicState>(DEFAULT_STATE);
   const [customFonts, setCustomFonts] = useState<FontDefinition[]>([]);
-  const [backgroundTexture, setBackgroundTexture] = useState<'none' | 'darkroom' | 'swiss-grid' | 'macro-ink'>('none');
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   
@@ -86,7 +85,6 @@ export const App: React.FC = () => {
 
   const handleReset = () => {
     setTypoState(DEFAULT_STATE);
-    setBackgroundTexture('none');
   };
 
   const handleInvert = () => {
@@ -263,7 +261,6 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 state={typoState}
                 onChangeText={(text) => handleUpdateState({ text })}
                 onChangeSubText={(subText) => handleUpdateState({ subText })}
-                backgroundTexture={backgroundTexture}
                 canvasRef={canvasRef}
                 onAutoFitSize={handleAutoFitSize}
                 activeLayer={activeLayer}
@@ -277,8 +274,6 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 state={typoState}
                 onChange={handleUpdateState}
                 onReset={handleReset}
-                backgroundTexture={backgroundTexture}
-                onChangeBackgroundTexture={setBackgroundTexture}
                 onCopyCSS={handleCopyCSS}
                 onAutoFitSize={handleAutoFitSize}
                 customFonts={customFonts}

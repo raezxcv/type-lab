@@ -35,6 +35,30 @@ export type CanvasFrame = 'poster' | 'square' | 'ribbon' | 'editorial' | 'fluid'
 
 export type GridOverlayType = 'modular' | 'baseline' | 'crosshair' | 'none';
 
+export type TextureId = 
+  | 'none'
+  | 'darkroom'
+  | 'swiss-grid'
+  | 'macro-ink'
+  | 'photostat'
+  | 'risograph'
+  | 'halftone-dots'
+  | 'cyber-scanline'
+  | 'blueprint-grid'
+  | 'film-grain';
+
+export type TextureBlendMode = 
+  | 'normal' 
+  | 'overlay' 
+  | 'screen' 
+  | 'multiply' 
+  | 'hard-light' 
+  | 'soft-light' 
+  | 'difference' 
+  | 'color-dodge';
+
+export type TextureTint = 'none' | 'green' | 'amber' | 'cyan' | 'monochrome' | 'crimson';
+
 export interface TypographicState {
   text: string;
   subText: string; // Secondary pairing text
@@ -74,6 +98,18 @@ export interface TypographicState {
   watermarkText: string;
   watermarkOpacity: number;
   watermarkSize: number;
+
+  // Original Graphic Texture & Modifiers
+  backgroundTexture: TextureId;
+  textureOpacity: number; // 0.05 to 1.0
+  textureBlendMode: TextureBlendMode;
+  textureScale: number; // 50 to 250%
+  textureContrast: number; // 50 to 250%
+  textureBrightness: number; // 30 to 200%
+  textureBlur: number; // 0 to 15px
+  textureInvert: boolean;
+  textureTint: TextureTint;
+  textureRepeat: 'cover' | 'repeat' | 'contain';
 }
 
 export interface SpecimenPreset {
