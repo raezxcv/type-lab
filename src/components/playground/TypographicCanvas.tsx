@@ -17,11 +17,17 @@ const encodeSvg = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent
 
 const TEXTURE_ASSETS: Record<string, string> = {
   'none': '',
+  'crumpled-paper': '/images/crumpled-paper-plate.jpg',
+  'photostat': '/images/photostat-grain-plate.jpg',
   'darkroom': '/images/type-lab-darkroom-texture.jpg',
   'swiss-grid': '/images/swiss-grid-abstract-geometry.jpg',
   'macro-ink': '/images/macro-ink-interference-plate.jpg',
-  'photostat': '/images/photostat-grain-plate.jpg',
   'risograph': '/images/risograph-halftone-mesh.jpg',
+  'distressed-xerox': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><filter id="distress"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7"/></filter><rect width="100%" height="100%" filter="url(#distress)" opacity="0.65"/><line x1="0" y1="20" x2="120" y2="20" stroke="#000" stroke-width="0.8" opacity="0.3"/><line x1="0" y1="85" x2="120" y2="85" stroke="#fff" stroke-width="0.5" opacity="0.4"/></svg>`),
+  'glitch-matrix': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><rect width="3" height="12" fill="#ff0044" opacity="0.35"/><rect x="4" width="3" height="12" fill="#00ff66" opacity="0.35"/><rect x="8" width="3" height="12" fill="#00e5ff" opacity="0.35"/><line y1="6" x2="12" y2="6" stroke="#000" stroke-width="1" opacity="0.4"/></svg>`),
+  'woodcut-hatch': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><line x1="0" y1="16" x2="16" y2="0" stroke="#ffffff" stroke-width="1.2" opacity="0.45"/><line x1="-4" y1="12" x2="12" y2="-4" stroke="#ffffff" stroke-width="0.8" opacity="0.25"/><line x1="4" y1="20" x2="20" y2="4" stroke="#ffffff" stroke-width="0.8" opacity="0.25"/></svg>`),
+  'marbled-ink': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="marble"><feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="5" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="35"/></filter><g filter="url(#marble)" stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.5"><path d="M 0,20 Q 50,80 100,20 T 200,20"/><path d="M 0,70 Q 60,10 120,80 T 200,70"/><path d="M 0,130 Q 70,180 140,110 T 200,140"/><path d="M 0,180 Q 40,120 100,190 T 200,180"/></g></svg>`),
+  'thermal-fax': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="1.2" fill="#00FF66" opacity="0.5"/><rect width="8" height="1" fill="#ffffff" opacity="0.2"/></svg>`),
   'halftone-dots': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5" fill="#ffffff" opacity="0.85"/><circle cx="0" cy="0" r="1.5" fill="#ffffff" opacity="0.5"/><circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.5"/></svg>`),
   'cyber-scanline': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6"><rect width="6" height="3" fill="#ffffff" opacity="0.5"/><rect y="3" width="6" height="3" fill="#000000" opacity="0.5"/></svg>`),
   'blueprint-grid': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M 48 0 L 0 0 0 48" fill="none" stroke="#00FF66" stroke-width="0.8" opacity="0.45"/><circle cx="48" cy="48" r="2" fill="#00FF66" opacity="0.85"/></svg>`),
@@ -82,6 +88,35 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
     whiteSpace: 'pre-wrap',
   };
 
+  // Helper to render inline graphic plates (above, between, below typography)
+  const renderInlineImagePlate = (position: 'above' | 'between' | 'below') => {
+    if (!state.showImageLayer || !state.imageUrl || state.imagePlacement !== position) return null;
+    return (
+      <div className="w-full my-2 border border-current/25 overflow-hidden relative group">
+        <img
+          src={state.imageUrl}
+          alt={state.imageCaption || "Graphic Plate"}
+          className="w-full object-cover transition-all"
+          style={{
+            maxHeight: `${state.imageHeight || 200}px`,
+            opacity: state.imageOpacity ?? 0.85,
+            mixBlendMode: (state.imageBlendMode as any) || 'normal',
+            filter: state.imageFilter === 'grayscale' ? 'grayscale(1)' :
+                    state.imageFilter === 'invert' ? 'invert(1)' :
+                    state.imageFilter === 'high-contrast' ? 'contrast(1.6) brightness(1.1)' :
+                    state.imageFilter === 'duotone' ? 'grayscale(1) contrast(1.4) sepia(1) hue-rotate(90deg)' : 'none',
+          }}
+        />
+        {state.imageCaption && (
+          <div className="text-[10px] font-mono-code uppercase px-2.5 py-1 bg-black/75 text-[#F4F5F7] border-t border-current/20 flex justify-between items-center">
+            <span className="truncate pr-2">{state.imageCaption}</span>
+            <span className="text-[#00FF66] shrink-0 font-bold">PLATE // REF</span>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Secondary Pairing Text styles
   const subTextStyle: React.CSSProperties = {
     fontFamily: state.subFontFamily,
@@ -118,7 +153,10 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           <button
             onClick={() => {
               const textures: Array<TypographicState['backgroundTexture']> = [
-                'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph', 'halftone-dots', 'cyber-scanline', 'blueprint-grid', 'film-grain', 'none'
+                'none', 'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph',
+                'crumpled-paper', 'marbled-ink', 'distressed-xerox', 'glitch-matrix',
+                'woodcut-hatch', 'thermal-fax', 'halftone-dots', 'cyber-scanline',
+                'blueprint-grid', 'film-grain'
               ];
               const idx = textures.indexOf(state.backgroundTexture);
               const next = textures[(idx + 1) % textures.length];
@@ -237,6 +275,30 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             </div>
           )}
 
+          {/* CUSTOM BACKGROUND IMAGE LAYER */}
+          {state.showImageLayer && state.imageUrl && state.imagePlacement === 'background' && (
+            <div 
+              className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+              style={{
+                opacity: state.imageOpacity ?? 0.8,
+                mixBlendMode: state.imageBlendMode ?? 'normal',
+              }}
+            >
+              <img
+                src={state.imageUrl}
+                alt="Poster Background Plate"
+                className="w-full h-full"
+                style={{
+                  objectFit: state.imageFit ?? 'cover',
+                  filter: state.imageFilter === 'grayscale' ? 'grayscale(1)' :
+                          state.imageFilter === 'invert' ? 'invert(1)' :
+                          state.imageFilter === 'high-contrast' ? 'contrast(1.6) brightness(1.1)' :
+                          state.imageFilter === 'duotone' ? 'grayscale(1) contrast(1.4) sepia(1) hue-rotate(90deg)' : 'none',
+                }}
+              />
+            </div>
+          )}
+
           {/* BACKGROUND WATERMARK / SWISS ARCHITECTURAL CHARACTER */}
           {state.showWatermark && state.watermarkText && (
             <div 
@@ -303,8 +365,10 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           {/* CORE TYPOGRAPHIC CONTENT CONTAINER - EXPANDS FREELY TO ALWAYS SHOW FULL TEXT */}
           <div 
             ref={textContainerRef}
-            className="relative z-10 my-auto flex flex-col justify-center w-full py-6 space-y-5"
+            className="relative z-10 my-auto flex flex-col justify-center w-full py-6 space-y-4"
           >
+            {/* INLINE IMAGE PLATE: ABOVE HEADLINE */}
+            {renderInlineImagePlate('above')}
             
             {/* MARQUEE KINETIC MODE */}
             {state.kineticMode === 'marquee' ? (
@@ -364,6 +428,9 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
               </div>
             )}
 
+            {/* INLINE IMAGE PLATE: BETWEEN HEADLINE AND SECONDARY */}
+            {renderInlineImagePlate('between')}
+
             {/* SECONDARY FONT PAIRING TEXT LAYER (SUBHEADLINE / BODY) */}
             {state.showSubText && state.subText && (
               <div 
@@ -383,6 +450,9 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                 </div>
               </div>
             )}
+
+            {/* INLINE IMAGE PLATE: BELOW SECONDARY */}
+            {renderInlineImagePlate('below')}
 
           </div>
 

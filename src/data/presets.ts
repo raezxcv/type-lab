@@ -54,7 +54,16 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'none',
-      textureRepeat: 'cover'
+      textureRepeat: 'cover',
+      showImageLayer: true,
+      imageUrl: '/images/swiss-grid-abstract-geometry.jpg',
+      imagePlacement: 'between',
+      imageOpacity: 1.0,
+      imageBlendMode: 'normal',
+      imageHeight: 180,
+      imageFilter: 'none',
+      imageCaption: 'Fig. 05 // Architectural Monolith Study',
+      imageFit: 'cover'
     }
   },
   {
@@ -110,7 +119,16 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'green',
-      textureRepeat: 'repeat'
+      textureRepeat: 'repeat',
+      showImageLayer: false,
+      imageUrl: '/images/type-lab-darkroom-texture.jpg',
+      imagePlacement: 'between',
+      imageOpacity: 1.0,
+      imageBlendMode: 'normal',
+      imageHeight: 200,
+      imageFilter: 'none',
+      imageCaption: 'Fig. 02 // Phosphor Array',
+      imageFit: 'cover'
     }
   },
   {
@@ -166,7 +184,16 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'none',
-      textureRepeat: 'cover'
+      textureRepeat: 'cover',
+      showImageLayer: true,
+      imageUrl: '/images/swiss-grid-abstract-geometry.jpg',
+      imagePlacement: 'between',
+      imageOpacity: 1.0,
+      imageBlendMode: 'normal',
+      imageHeight: 180,
+      imageFilter: 'none',
+      imageCaption: 'Fig. 05 // Architectural Monolith Study',
+      imageFit: 'cover'
     }
   },
   {
@@ -222,7 +249,16 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'amber',
-      textureRepeat: 'cover'
+      textureRepeat: 'cover',
+      showImageLayer: false,
+      imageUrl: '/images/crumpled-paper-plate.jpg',
+      imagePlacement: 'between',
+      imageOpacity: 0.85,
+      imageBlendMode: 'normal',
+      imageHeight: 180,
+      imageFilter: 'none',
+      imageCaption: 'Fig. 04 // Deconstructed Serif Form',
+      imageFit: 'cover'
     }
   },
   {
@@ -278,7 +314,16 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'none',
-      textureRepeat: 'cover'
+      textureRepeat: 'cover',
+      showImageLayer: true,
+      imageUrl: '/images/swiss-grid-abstract-geometry.jpg',
+      imagePlacement: 'between',
+      imageOpacity: 1.0,
+      imageBlendMode: 'normal',
+      imageHeight: 180,
+      imageFilter: 'none',
+      imageCaption: 'Fig. 05 // Architectural Monolith Study',
+      imageFit: 'cover'
     }
   },
   {
@@ -334,7 +379,16 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'none',
-      textureRepeat: 'cover'
+      textureRepeat: 'cover',
+      showImageLayer: false,
+      imageUrl: '/images/macro-ink-interference-plate.jpg',
+      imagePlacement: 'between',
+      imageOpacity: 1.0,
+      imageBlendMode: 'normal',
+      imageHeight: 200,
+      imageFilter: 'none',
+      imageCaption: 'Fig. 06 // Classical Relief Plate',
+      imageFit: 'cover'
     }
   }
 ];

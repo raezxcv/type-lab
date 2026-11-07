@@ -37,11 +37,17 @@ export type GridOverlayType = 'modular' | 'baseline' | 'crosshair' | 'none';
 
 export type TextureId = 
   | 'none'
+  | 'photostat'
   | 'darkroom'
   | 'swiss-grid'
   | 'macro-ink'
-  | 'photostat'
   | 'risograph'
+  | 'crumpled-paper'
+  | 'marbled-ink'
+  | 'distressed-xerox'
+  | 'glitch-matrix'
+  | 'woodcut-hatch'
+  | 'thermal-fax'
   | 'halftone-dots'
   | 'cyber-scanline'
   | 'blueprint-grid'
@@ -110,6 +116,17 @@ export interface TypographicState {
   textureInvert: boolean;
   textureTint: TextureTint;
   textureRepeat: 'cover' | 'repeat' | 'contain';
+
+  // Graphic Image Plate Layer (Background or Same layer with texts)
+  showImageLayer: boolean;
+  imageUrl: string;
+  imagePlacement: 'background' | 'between' | 'above' | 'below';
+  imageOpacity: number; // 0.1 to 1.0
+  imageBlendMode: 'normal' | 'screen' | 'overlay' | 'multiply' | 'luminosity';
+  imageHeight: number; // 120 to 360 px
+  imageFilter: 'none' | 'grayscale' | 'duotone' | 'invert' | 'high-contrast';
+  imageCaption: string; // e.g. "Fig. 11 // Structural Matrix"
+  imageFit: 'cover' | 'contain';
 }
 
 export interface SpecimenPreset {

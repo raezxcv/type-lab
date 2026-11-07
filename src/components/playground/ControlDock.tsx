@@ -48,7 +48,6 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   activeLayer: externalActiveLayer,
   onSelectLayer,
 }) => {
-  const [viewMode, setViewMode] = useState<'all' | 'tabbed'>('all');
   const [activeMainTab, setActiveMainTab] = useState<'type' | 'pairings' | 'effects' | 'canvas'>('type');
   const [internalActiveLayer, setInternalActiveLayer] = useState<'headline' | 'secondary'>('headline');
   const [fontPickerTarget, setFontPickerTarget] = useState<'headline' | 'secondary' | null>(null);
@@ -195,81 +194,46 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     });
   };
 
-  const showType = viewMode === 'all' || activeMainTab === 'type';
-  const showPairings = viewMode === 'all' || activeMainTab === 'pairings';
-  const showEffects = viewMode === 'all' || activeMainTab === 'effects';
-  const showCanvas = viewMode === 'all' || activeMainTab === 'canvas';
+  const showType = activeMainTab === 'type';
+  const showPairings = activeMainTab === 'pairings';
+  const showEffects = activeMainTab === 'effects';
+  const showCanvas = activeMainTab === 'canvas';
 
   return (
-    <div className="w-full bg-[#111317] border-t lg:border-t-0 lg:border-l border-[#22262E] text-xs font-mono-code flex flex-col">
+    <div className="w-full bg-[#111317] border-t lg:border-t-0 lg:border-l border-[#22262E] text-xs font-mono-code flex flex-col h-full min-h-0">
       
-      {/* Studio Adjustments Top Mode Switcher */}
-      <div className="flex items-center justify-between px-3 py-2 bg-[#080A0E] border-b border-[#1E232E]">
-        <div className="flex items-center gap-2 text-xs text-[#A1A1AA]">
-          <span className="w-2 h-2 rounded-full bg-[#00FF66] inline-block animate-pulse"></span>
-          <span className="font-bold text-[#F4F5F7] text-xs">
-            Adjustment Suite
-          </span>
-        </div>
-        <div className="flex items-center gap-1 bg-[#10131A] p-0.5 border border-[#222834]">
-          <button
-            onClick={() => setViewMode('all')}
-            className={`px-3 py-1 text-xs font-bold transition-all ${
-              viewMode === 'all'
-                ? 'bg-[#00FF66] text-black font-extrabold shadow-sm'
-                : 'text-[#CBD5E1] hover:text-[#F4F5F7]'
-            }`}
-            title="Display all 01-04 adjustment sections stacked at once (no scrolling between tabs)"
-          >
-            View All (01–04)
-          </button>
-          <button
-            onClick={() => setViewMode('tabbed')}
-            className={`px-3 py-1 text-xs font-bold transition-all ${
-              viewMode === 'tabbed'
-                ? 'bg-[#00FF66] text-black font-extrabold shadow-sm'
-                : 'text-[#CBD5E1] hover:text-[#F4F5F7]'
-            }`}
-            title="Focus on a single tab at a time"
-          >
-            Tabbed
-          </button>
-        </div>
-      </div>
-
-      {/* Primary Navigation Tabs — 4 Column Grid (NEVER SCROLLED!) */}
-      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0A0C10] border-b border-[#22262E]">
+      {/* Primary Navigation Tabs — 4 Column Grid with Prominent Active Indicator */}
+      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0A0C10] border-b border-[#22262E] shrink-0">
         {[
-          { id: 'type', num: '01', label: 'Type', icon: Type },
-          { id: 'pairings', num: '02', label: 'Pairs', icon: Columns },
-          { id: 'effects', num: '03', label: 'Effects', icon: Sliders },
-          { id: 'canvas', num: '04', label: 'Canvas', icon: Palette },
+          { id: 'type', num: '01', label: 'TYPE', icon: Type },
+          { id: 'pairings', num: '02', label: 'PAIRS', icon: Columns },
+          { id: 'effects', num: '03', label: 'EFFECTS', icon: Sliders },
+          { id: 'canvas', num: '04', label: 'CANVAS', icon: Palette },
         ].map((tab) => {
           const Icon = tab.icon;
-          const isActive = viewMode === 'tabbed' && activeMainTab === tab.id;
+          const isActive = activeMainTab === tab.id;
           return (
             <button
               key={tab.id}
-              onClick={() => {
-                if (viewMode === 'all') {
-                  const el = document.getElementById(`panel-section-${tab.id}`);
-                  el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                  setActiveMainTab(tab.id as any);
-                }
-              }}
-              className={`p-2 flex flex-col items-center justify-center text-center transition-all border ${
+              onClick={() => setActiveMainTab(tab.id as any)}
+              className={`relative p-2.5 flex flex-col items-center justify-center text-center transition-all border ${
                 isActive
-                  ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
-                  : 'border-[#1E232E] bg-[#0E1117] text-[#CBD5E1] hover:text-[#F4F5F7] hover:border-[#333C4D]'
+                  ? 'border-[#00FF66] bg-[#142318] text-[#00FF66] font-bold shadow-[0_0_12px_rgba(0,255,102,0.15)] ring-1 ring-[#00FF66]/50'
+                  : 'border-[#1E232E] bg-[#0E1117] text-[#9AA2B1] hover:text-[#F4F5F7] hover:border-[#333C4D] hover:bg-[#121620]'
               }`}
-              title={viewMode === 'all' ? `Jump to Section ${tab.num}: ${tab.label}` : `Switch to Tab ${tab.num}`}
+              title={`Switch to Tab ${tab.num}: ${tab.label}`}
             >
-              <div className="flex items-center gap-1">
-                <Icon className="w-3.5 h-3.5 text-[#00FF66]" />
+              {isActive && (
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#00FF66] shadow-[0_0_8px_#00FF66]" />
+              )}
+              <div className="flex items-center gap-1.5">
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#00FF66]' : 'text-[#8E97A8]'}`} />
                 <span className="text-xs font-bold font-mono-code">{tab.num}</span>
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00FF66] animate-pulse inline-block" />
+                )}
               </div>
-              <span className="text-xs font-bold mt-0.5 truncate w-full">
+              <span className="text-xs font-bold mt-1 truncate w-full tracking-wide">
                 {tab.label}
               </span>
             </button>
@@ -277,22 +241,12 @@ export const ControlDock: React.FC<ControlDockProps> = ({
         })}
       </div>
 
-      {/* Main Control Panel Body */}
-      <div className="p-4 sm:p-5 space-y-6 overflow-y-auto max-h-[calc(100vh-180px)] min-h-[500px] flex-1">
+      {/* Main Control Panel Body — Discrete Tab Viewport */}
+      <div className="p-4 sm:p-5 space-y-6 overflow-y-auto flex-1 min-h-0">
 
         {/* ==================== SECTION 1: TYPE & PAIRING DUAL-LAYER CONTROLLER ==================== */}
         {showType && (
           <div id="panel-section-type" className="space-y-5 pb-2">
-            {viewMode === 'all' && (
-              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
-                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
-                  <Type className="w-3.5 h-3.5" />
-                  <span>01: Type and pairing layers</span>
-                </span>
-                <span className="text-xs text-[#CBD5E1] font-mono-code">Primary & Secondary</span>
-              </div>
-            )}
-            
             {/* Dual Layer Segmented Switcher */}
             <div className="p-1.5 bg-[#0D0F14] border border-[#22262E] flex items-center gap-1.5">
               <button
@@ -774,23 +728,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
 
         {/* ==================== SECTION 2: PAIRINGS GALLERY ==================== */}
         {showPairings && (
-          <div id="panel-section-pairings" className="space-y-4 pt-4 border-t border-[#1E232E] pb-2">
-            {viewMode === 'all' && (
-              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
-                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
-                  <Columns className="w-3.5 h-3.5" />
-                  <span>02: Curated font pairings</span>
-                </span>
-                <button
-                  onClick={handleShufflePairing}
-                  className="text-xs text-[#00FF66] hover:text-[#4DFF95] flex items-center gap-1 font-bold"
-                >
-                  <Shuffle className="w-3.5 h-3.5" />
-                  <span>Shuffle</span>
-                </button>
-              </div>
-            )}
-            
+          <div id="panel-section-pairings" className="space-y-4 pb-2">
             {/* Header with Shuffle */}
             <div className="flex items-center justify-between p-3 bg-[#0D0F14] border border-[#22262E]">
               <div>
@@ -866,17 +804,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
 
         {/* ==================== SECTION 3: EFFECTS & WATERMARK ==================== */}
         {showEffects && (
-          <div id="panel-section-effects" className="space-y-5 pt-4 border-t border-[#1E232E] pb-2">
-            {viewMode === 'all' && (
-              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
-                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
-                  <Sliders className="w-3.5 h-3.5" />
-                  <span>03: Effects, transformations & watermark</span>
-                </span>
-                <span className="text-xs text-[#CBD5E1] font-mono-code">Kinetic & Glyph</span>
-              </div>
-            )}
-            
+          <div id="panel-section-effects" className="space-y-5 pb-2">
             {/* Kinetic Animation Modes */}
             <div className="space-y-2">
               <label className="text-[#A1A1AA] block text-xs font-semibold flex items-center gap-2">
@@ -1069,16 +997,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
 
         {/* ==================== SECTION 4: CANVAS & TEXTURES ==================== */}
         {showCanvas && (
-          <div id="panel-section-canvas" className="space-y-5 pt-4 border-t border-[#1E232E] pb-2">
-            {viewMode === 'all' && (
-              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
-                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
-                  <Palette className="w-3.5 h-3.5" />
-                  <span>04: Canvas framing & graphic textures</span>
-                </span>
-                <span className="text-xs text-[#00FF66] font-mono-code font-bold">10 textures</span>
-              </div>
-            )}
+          <div id="panel-section-canvas" className="space-y-5 pb-2">
             
             {/* Quick Invert button */}
             <button
@@ -1150,12 +1069,249 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             </div>
 
+            {/* ==================== GRAPHIC IMAGE LAYER CONTROLLER ==================== */}
+            <div className="space-y-3 pt-3 border-t border-[#1E232E]">
+              <div className="flex items-center justify-between">
+                <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-[#00FF66]" />
+                  <span>GRAPHIC IMAGE LAYER</span>
+                </label>
+                <button
+                  onClick={() => onChange({ showImageLayer: !state.showImageLayer })}
+                  className={`px-2.5 py-0.5 text-xs font-bold border transition-colors ${
+                    state.showImageLayer
+                      ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C]'
+                      : 'border-[#22262E] text-[#808898] bg-[#0D0F14]'
+                  }`}
+                >
+                  {state.showImageLayer ? 'PLATE: ACTIVE' : 'PLATE: OFF'}
+                </button>
+              </div>
+
+              {state.showImageLayer && (
+                <div className="p-3.5 bg-[#090B0F] border border-[#232B3B] space-y-3.5">
+                  
+                  {/* 1. Placement Selector */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[#C2CAD8] font-semibold">PLACEMENT MODE</span>
+                      <span className="text-[#00FF66] font-bold uppercase">{state.imagePlacement}</span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                      {[
+                        { id: 'background', label: 'BACKGROUND' },
+                        { id: 'between', label: 'BETWEEN TEXT' },
+                        { id: 'above', label: 'ABOVE HEAD' },
+                        { id: 'below', label: 'BELOW BODY' },
+                      ].map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => onChange({ imagePlacement: item.id as any })}
+                          className={`py-1.5 px-1 text-center text-xs border font-mono-code transition-colors ${
+                            state.imagePlacement === item.id
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 2. Studio Plates Library Preset Chips */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <span className="text-[#808898] text-xs font-semibold block">STUDIO SPECIMEN PLATES</span>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { label: 'CRUMPLED KRAFT', url: '/images/crumpled-paper-plate.jpg' },
+                        { label: 'SWISS BRUTALIST', url: '/images/swiss-grid-abstract-geometry.jpg' },
+                        { label: 'DARKROOM OPTICS', url: '/images/type-lab-darkroom-texture.jpg' },
+                        { label: 'MACRO INK BLEED', url: '/images/macro-ink-interference-plate.jpg' },
+                        { label: 'RISOGRAPH MESH', url: '/images/risograph-halftone-mesh.jpg' },
+                        { label: 'PHOTOSTAT GRAIN', url: '/images/photostat-grain-plate.jpg' },
+                      ].map((plate) => (
+                        <button
+                          key={plate.url}
+                          onClick={() => onChange({ imageUrl: plate.url, showImageLayer: true })}
+                          className={`py-1.5 px-2 text-left text-xs border transition-colors flex items-center justify-between ${
+                            state.imageUrl === plate.url
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#A1A1AA] hover:text-[#F4F5F7]'
+                          }`}
+                        >
+                          <span className="truncate">{plate.label}</span>
+                          {state.imageUrl === plate.url && <span className="text-[#00FF66] text-xs">✓</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 3. Custom File Upload & URL input */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#808898] text-xs font-semibold">CUSTOM IMAGE SOURCE</span>
+                      <label className="cursor-pointer text-xs text-[#00FF66] hover:text-[#4DFF95] underline font-bold">
+                        <span>[UPLOAD FILE]</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                const dataUrl = event.target?.result as string;
+                                if (dataUrl) {
+                                  onChange({ imageUrl: dataUrl, showImageLayer: true });
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      value={state.imageUrl.startsWith('data:') ? '[Uploaded Local Image Plate]' : state.imageUrl}
+                      onChange={(e) => {
+                        if (!e.target.value.startsWith('[Uploaded Local Image Plate]')) {
+                          onChange({ imageUrl: e.target.value });
+                        }
+                      }}
+                      placeholder="Enter image URL or select from studio plates..."
+                      className="w-full bg-[#11141A] border border-[#222834] px-2.5 py-1.5 text-xs text-[#F4F5F7] font-mono-code focus:outline-none focus:border-[#00FF66]"
+                    />
+                  </div>
+
+                  {/* 4. Height (Inline mode) or Fit (Background mode) */}
+                  {state.imagePlacement !== 'background' ? (
+                    <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-[#808898]">INLINE PLATE HEIGHT</span>
+                        <span className="text-[#00FF66] font-bold">{state.imageHeight || 200}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="80"
+                        max="360"
+                        step="10"
+                        value={state.imageHeight || 200}
+                        onChange={(e) => onChange({ imageHeight: Number(e.target.value) })}
+                        className="w-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                      <span className="text-[#808898] text-xs block">BACKGROUND FIT</span>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { id: 'cover', label: 'COVER (FILL CANVAS)' },
+                          { id: 'contain', label: 'CONTAIN (FIT WHOLE)' },
+                        ].map((f) => (
+                          <button
+                            key={f.id}
+                            onClick={() => onChange({ imageFit: f.id as any })}
+                            className={`py-1 text-center text-xs border font-mono-code ${
+                              (state.imageFit ?? 'cover') === f.id
+                                ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                                : 'border-[#1E2430] bg-[#11141A] text-[#808898]'
+                            }`}
+                          >
+                            {f.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 5. Opacity & Blend Mode */}
+                  <div className="grid grid-cols-2 gap-3 pt-1 border-t border-[#181D26]">
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center text-xs">
+                        <span className="text-[#808898]">OPACITY</span>
+                        <span className="text-[#00FF66] font-bold">{Math.round((state.imageOpacity ?? 0.85) * 100)}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0.10"
+                        max="1.00"
+                        step="0.05"
+                        value={state.imageOpacity ?? 0.85}
+                        onChange={(e) => onChange({ imageOpacity: Number(e.target.value) })}
+                        className="w-full"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[#808898] text-xs block">BLEND MODE</span>
+                      <select
+                        value={state.imageBlendMode || 'normal'}
+                        onChange={(e) => onChange({ imageBlendMode: e.target.value as TypographicState['imageBlendMode'] })}
+                        className="w-full bg-[#11141A] border border-[#222834] px-2 py-1 text-xs text-[#F4F5F7] font-mono-code focus:outline-none focus:border-[#00FF66]"
+                      >
+                        <option value="normal">Normal</option>
+                        <option value="multiply">Multiply</option>
+                        <option value="screen">Screen</option>
+                        <option value="overlay">Overlay</option>
+                        <option value="luminosity">Luminosity</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* 6. Visual Filter */}
+                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-[#808898]">IMAGE FILTER</span>
+                      <span className="text-[#00FF66] font-bold uppercase">{state.imageFilter || 'none'}</span>
+                    </div>
+                    <div className="grid grid-cols-5 gap-1">
+                      {[
+                        { id: 'none', label: 'NORMAL' },
+                        { id: 'grayscale', label: 'MONO' },
+                        { id: 'high-contrast', label: 'HI-CON' },
+                        { id: 'duotone', label: 'DUOTONE' },
+                        { id: 'invert', label: 'INVERT' },
+                      ].map((flt) => (
+                        <button
+                          key={flt.id}
+                          onClick={() => onChange({ imageFilter: flt.id as TypographicState['imageFilter'] })}
+                          className={`py-1 text-center text-[10px] font-mono-code border transition-colors ${
+                            (state.imageFilter || 'none') === flt.id
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
+                          }`}
+                        >
+                          {flt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 7. Plate Caption */}
+                  <div className="space-y-1 pt-1 border-t border-[#181D26]">
+                    <span className="text-[#808898] text-xs block">PLATE CAPTION LABEL</span>
+                    <input
+                      type="text"
+                      value={state.imageCaption || ''}
+                      onChange={(e) => onChange({ imageCaption: e.target.value })}
+                      placeholder="e.g. Fig. 11 // Structural Matrix"
+                      className="w-full bg-[#11141A] border border-[#222834] px-2.5 py-1.5 text-xs text-[#F4F5F7] font-mono-code focus:outline-none focus:border-[#00FF66]"
+                    />
+                  </div>
+
+                </div>
+              )}
+            </div>
+
             {/* Background Texture Selection & Texture Modifier Lab */}
             <div className="space-y-3 pt-2 border-t border-[#1E232E]">
               <div className="flex items-center justify-between">
                 <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
                   <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                  <span>ORIGINAL GRAPHIC TEXTURES (10)</span>
+                  <span>ORIGINAL GRAPHIC TEXTURES (16)</span>
                 </label>
                 <span className="text-[10px] px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
                   {state.backgroundTexture !== 'none' ? 'ACTIVE' : 'OFF'}
@@ -1165,12 +1321,18 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               {/* Texture Selection Grid */}
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { id: 'none', label: 'SOLID CANVAS', desc: 'Minimal stark Swiss poster ground', category: 'MINIMAL' },
+                  { id: 'none', label: 'SOLID CANVAS', desc: 'Minimal stark Swiss poster ground', category: 'SOLID' },
+                  { id: 'crumpled-paper', label: 'CRUMPLED KRAFT', desc: 'Folded editorial paper creases & cracks', category: 'PHOTO' },
+                  { id: 'photostat', label: 'PHOTOSTAT GRAIN', desc: '1960s electrostatic toner dust dispersion', category: 'PHOTO' },
                   { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics, focal lens & optics', category: 'PHOTO' },
                   { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Monolithic concrete shadow study', category: 'PHOTO' },
                   { id: 'macro-ink', label: 'MACRO INK BLEED', desc: 'Lithographic capillary paper bleed', category: 'PHOTO' },
-                  { id: 'photostat', label: 'PHOTOSTAT GRAIN', desc: '1960s electrostatic toner dust dispersion', category: 'PHOTO' },
                   { id: 'risograph', label: 'RISOGRAPH HALFTONE', desc: 'Macro dual-drum screen mesh & ink gain', category: 'PHOTO' },
+                  { id: 'marbled-ink', label: 'MARBLED SUMINAGASHI', desc: 'Fluid turbulence & organic marbled trails', category: 'ORGANIC' },
+                  { id: 'distressed-xerox', label: 'DISTRESSED XEROX', desc: 'High-contrast photocopier toner abrasion', category: 'GRUNGE' },
+                  { id: 'glitch-matrix', label: 'GLITCH RGB MATRIX', desc: 'Chromatic channel split & digital artifact', category: 'DIGITAL' },
+                  { id: 'woodcut-hatch', label: 'WOODCUT CROSSHATCH', desc: 'Linocut relief hatching & woodblock bite', category: 'PRINT' },
+                  { id: 'thermal-fax', label: 'THERMAL RECEIPT FAX', desc: 'Micro dot-matrix thermal print line raster', category: 'LO-FI' },
                   { id: 'halftone-dots', label: 'VECTOR HALFTONE', desc: 'Procedural geometric dot raster matrix', category: 'VECTOR' },
                   { id: 'cyber-scanline', label: 'CRT SCANLINES', desc: 'Phosphor cathode ray line interference', category: 'CRT' },
                   { id: 'blueprint-grid', label: 'BLUEPRINT MATRIX', desc: 'Drafting coordinate grid with marks', category: 'VECTOR' },
