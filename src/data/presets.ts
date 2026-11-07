@@ -10,8 +10,8 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
     historicalContext: 'Inspired by Josef Müller-Brockmann’s Akzidenz-Grotesk concert posters and Max Bill’s mathematical concrete art.',
     recommendedPairing: 'Plus Jakarta Sans (800) + JetBrains Mono (400)',
     state: {
-      text: "DIE NEUE GRAPHIK\nRASTER SYSTEME\n1957 // ZÜRICH",
-      subText: "Internationale Zeitschrift für Graphische Kunst und verwandte Gebiete. Herausgegeben von Lohse, Müller-Brockmann, Neuburg, Vivarelli.",
+      text: "DIE NEUE GRAPHIK",
+      subText: "1957 // ZÜRICH — Internationale Zeitschrift für Graphische Kunst und verwandte Gebiete.",
       showSubText: true,
       subFontFamily: "'JetBrains Mono', monospace",
       subFontSize: 13,
@@ -44,7 +44,7 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "57",
       watermarkOpacity: 0.07,
-      watermarkSize: 280
+      watermarkSize: 180
     }
   },
   {
@@ -148,8 +148,8 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
     historicalContext: 'Bodoni & Didot 18th-century Enlightenment book design collided with 1990s David Carson Ray Gun deconstruction.',
     recommendedPairing: 'Playfair Display (900 italic) + Space Grotesk (400)',
     state: {
-      text: "The Sublime\nGeometry of\nOptical Weight",
-      subText: "A rigorous dialogue between Enlightenment Didone hairline brackets and 21st-century architectural grotesque vectors.",
+      text: "The Sublime Geometry",
+      subText: "Of optical weight: A rigorous dialogue between Enlightenment Didone hairline brackets and 21st-century architectural grotesque vectors.",
       showSubText: true,
       subFontFamily: "'Space Grotesk', sans-serif",
       subFontSize: 13,
@@ -182,7 +182,7 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "&",
       watermarkOpacity: 0.06,
-      watermarkSize: 360
+      watermarkSize: 180
     }
   },
   {
@@ -194,8 +194,8 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
     historicalContext: '19th-century American wood type, constructivist agitprop banners (El Lissitzky, Rodchenko).',
     recommendedPairing: 'Bebas Neue (400) + IBM Plex Mono (400)',
     state: {
-      text: "MAXIMUM\nPRESSURE\nVELOCITY\nMAGNITUDE",
-      subText: "Vertical compression creates undeniable spatial dominance across massive architectural poster canvases.",
+      text: "PRESSURE // VELOCITY",
+      subText: "Maximum magnitude: Vertical compression creates undeniable spatial dominance across massive architectural poster canvases.",
       showSubText: true,
       subFontFamily: "'IBM Plex Mono', monospace",
       subFontSize: 12,
@@ -228,7 +228,7 @@ export const SPECIMEN_PRESETS: SpecimenPreset[] = [
       showWatermark: true,
       watermarkText: "M",
       watermarkOpacity: 0.05,
-      watermarkSize: 340
+      watermarkSize: 180
     }
   },
   {

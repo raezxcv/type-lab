@@ -9,6 +9,8 @@ interface TypographicCanvasProps {
   backgroundTexture: 'none' | 'darkroom' | 'swiss-grid' | 'macro-ink';
   canvasRef: React.RefObject<HTMLDivElement | null>;
   onAutoFitSize: () => void;
+  activeLayer?: 'headline' | 'secondary';
+  onSelectLayer?: (layer: 'headline' | 'secondary') => void;
 }
 
 export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
@@ -18,6 +20,8 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   backgroundTexture,
   canvasRef,
   onAutoFitSize,
+  activeLayer = 'headline',
+  onSelectLayer,
 }) => {
   const [zoomLevel, setZoomLevel] = useState<number>(100);
   const textContainerRef = useRef<HTMLDivElement | null>(null);
@@ -86,14 +90,14 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
         
         {/* Dimensions & Active Metrics */}
         <div className="flex items-center space-x-3">
-          <span className="flex items-center gap-2 text-[#00FF66] font-semibold">
-            <span className="w-2 h-2 bg-[#00FF66] inline-block"></span>
-            FRAME: [{state.canvasFrame.toUpperCase()}]
-          </span>
+          <h1 className="flex items-center gap-2 text-[#00FF66] font-bold text-xs uppercase m-0">
+            <span className="w-2 h-2 bg-[#00FF66] inline-block animate-pulse"></span>
+            TYPE//LAB 11 STUDIO
+          </h1>
           <span className="text-[#3A4354]">|</span>
-          <span>SIZE: {state.fontSize}px</span>
-          <span className="hidden sm:inline text-[#3A4354]">|</span>
-          <span className="hidden sm:inline">TRACK: {state.letterSpacing > 0 ? `+${state.letterSpacing}` : state.letterSpacing}em</span>
+          <span className="text-xs">FRAME: [{state.canvasFrame.toUpperCase()}]</span>
+          <span className="text-[#3A4354]">|</span>
+          <span className="text-xs">SCALE: {state.fontSize}px</span>
         </div>
 
         {/* Action controls: Auto-fit text & Zoom */}
@@ -130,7 +134,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             {zoomLevel !== 100 && (
               <button
                 onClick={() => setZoomLevel(100)}
-                className="px-1.5 py-1 text-[10px] text-[#00FF66] border-l border-[#262C3A]"
+                className="px-1.5 py-1 text-[11px] text-[#00FF66] border-l border-[#262C3A]"
                 title="Reset zoom to 100%"
               >
                 100%
@@ -170,17 +174,22 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             <div 
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden"
               style={{ opacity: state.watermarkOpacity }}
+              aria-hidden="true"
             >
-              <span 
-                className="font-space font-black select-none leading-none"
-                style={{ 
-                  fontSize: `${state.watermarkSize}px`,
-                  color: state.textColor,
-                  transform: 'translateY(-5%)'
-                }}
-              >
-                {state.watermarkText}
-              </span>
+              <svg className="w-full h-full pointer-events-none select-none" aria-hidden="true" viewBox="0 0 500 500">
+                <text 
+                  x="50%" 
+                  y="52%" 
+                  textAnchor="middle" 
+                  dominantBaseline="middle" 
+                  fill={state.textColor}
+                  fontSize={Math.min(state.watermarkSize, 200)}
+                  fontWeight="900"
+                  fontFamily="'Space Grotesk', sans-serif"
+                >
+                  {state.watermarkText}
+                </text>
+              </svg>
             </div>
           )}
 
@@ -215,7 +224,10 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
               <span className="opacity-75 text-[11px]">Series: Kinetic Swiss Modernism</span>
             </div>
             <div className="text-right flex flex-col">
-              <span className="font-semibold text-xs">Typeface: {state.fontFamily.split(',')[0].replace(/['"]/g, '')}</span>
+              <span className="font-semibold text-xs">
+                {state.fontFamily.split(',')[0].replace(/['"]/g, '')}
+                {state.showSubText && ` + ${state.subFontFamily.split(',')[0].replace(/['"]/g, '')}`}
+              </span>
               <span className="opacity-75 text-[11px]">Size: {state.fontSize}px // Leading: {state.lineHeight}</span>
             </div>
           </div>
@@ -266,14 +278,25 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
               </div>
             ) : (
               /* PRIMARY DIRECT EDITABLE HEADLINE - 100% UNCLIPPED & EXPANDS DYNAMICALLY */
-              <div className="w-full">
+              <div 
+                className={`w-full relative transition-all duration-200 rounded p-1.5 ${
+                  activeLayer === 'headline' ? 'border border-[#00FF66]/60 bg-[#00FF66]/[0.02]' : 'border border-transparent hover:border-[#00FF66]/30'
+                }`}
+                onClick={() => onSelectLayer?.('headline')}
+              >
+                {activeLayer === 'headline' && (
+                  <div className="absolute -top-3 left-1 px-1.5 py-0.5 bg-[#00FF66] text-black text-xs font-mono-code font-bold select-none pointer-events-none">
+                    Active headline layer
+                  </div>
+                )}
                 <div
                   contentEditable
                   suppressContentEditableWarning
+                  onFocus={() => onSelectLayer?.('headline')}
                   onBlur={(e) => onChangeText(e.currentTarget.innerText)}
-                  className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/50 rounded-none cursor-text transition-all"
+                  className="w-full focus:outline-none rounded-none cursor-text transition-all"
                   style={headlineStyle}
-                  title="Click directly to edit text"
+                  title="Click directly to edit headline"
                 >
                   {state.text}
                 </div>
@@ -282,14 +305,25 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
 
             {/* SECONDARY FONT PAIRING TEXT LAYER (SUBHEADLINE / BODY) */}
             {state.showSubText && state.subText && (
-              <div className="w-full pt-2 border-t border-current/15">
+              <div 
+                className={`w-full pt-3 mt-2 border-t border-current/15 relative transition-all duration-200 rounded p-1.5 ${
+                  activeLayer === 'secondary' ? 'border border-[#00FF66]/60 bg-[#00FF66]/[0.02]' : 'border border-transparent hover:border-[#00FF66]/30'
+                }`}
+                onClick={() => onSelectLayer?.('secondary')}
+              >
+                {activeLayer === 'secondary' && (
+                  <div className="absolute -top-3 left-1 px-1.5 py-0.5 bg-[#00FF66] text-black text-xs font-mono-code font-bold select-none pointer-events-none">
+                    Active secondary layer
+                  </div>
+                )}
                 <div
                   contentEditable
                   suppressContentEditableWarning
+                  onFocus={() => onSelectLayer?.('secondary')}
                   onBlur={(e) => onChangeSubText(e.currentTarget.innerText)}
-                  className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 rounded-none cursor-text transition-all"
+                  className="w-full focus:outline-none rounded-none cursor-text transition-all"
                   style={subTextStyle}
-                  title="Click to edit secondary pairing text"
+                  title="Click directly to edit secondary pairing text"
                 >
                   {state.subText}
                 </div>

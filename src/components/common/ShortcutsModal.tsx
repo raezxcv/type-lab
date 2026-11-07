@@ -57,7 +57,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ isOpen, onClose 
           ))}
         </div>
 
-        <div className="pt-4 border-t border-[#22262E] flex justify-between items-center text-[10px] text-[#556072]">
+        <div className="pt-4 border-t border-[#22262E] flex justify-between items-center text-[11px] text-[#556072]">
           <span>TYPE//LAB 11 ACCESSIBILITY CONFORMANCE</span>
           <button
             onClick={onClose}

@@ -14,7 +14,7 @@ export const CURATED_PAIRINGS: FontPairing[] = [
     bodyFamily: "'JetBrains Mono', monospace",
     bodyWeight: 400,
     bodyTracking: 0.05,
-    headlineSample: 'RASTER SYSTEME',
+    headlineSample: 'RASTER SYSTEME 1957',
     bodySample: 'An orthogonal grid brings imagery, type, and color into intellectual and optical unity.'
   },
   {
@@ -63,7 +63,7 @@ export const CURATED_PAIRINGS: FontPairing[] = [
     bodyWeight: 400,
     bodyTracking: 0.04,
     headlineSample: 'MAGNITUDE & PRESSURE',
-    bodySample: 'Vertical compression creates undeniable dominance across large architectural poster dimensions.'
+    bodySample: 'Vertical compression creates undeniable spatial dominance across massive architectural poster canvases.'
   },
   {
     id: 'haute-couture-bodoni',
@@ -128,5 +128,69 @@ export const CURATED_PAIRINGS: FontPairing[] = [
     bodyTracking: 0.02,
     headlineSample: 'GEOMETRIC SYNTHESIS',
     bodySample: 'Elementary geometric figures — circle, square, and triangle — translated into pure vector rhythm.'
+  },
+  {
+    id: 'gothic-cyber-subversion',
+    name: 'Cybernetic Gothic Tension',
+    category: 'Cyber Brutalist',
+    description: 'Historical Mainz Blackletter paired with high-precision Swiss geometric grotesque.',
+    headlineFontId: 'unifraktur',
+    headlineFamily: "'UnifrakturMaguntia', serif",
+    headlineWeight: 400,
+    headlineTracking: 0.04,
+    bodyFontId: 'plus-jakarta',
+    bodyFamily: "'Plus Jakarta Sans', sans-serif",
+    bodyWeight: 600,
+    bodyTracking: 0.06,
+    headlineSample: 'Digital Alchemy & Form',
+    bodySample: 'Centuries-old calligraphy meets modern screen-rasterized Swiss precision.'
+  },
+  {
+    id: 'heavyweight-agitprop',
+    name: 'Constructivist Agitprop',
+    category: 'Industrial Minimal',
+    description: 'Maximum impact condensed poster title balanced by contemporary variable grotesque narrative.',
+    headlineFontId: 'anton',
+    headlineFamily: "'Anton', sans-serif",
+    headlineWeight: 400,
+    headlineTracking: 0.05,
+    bodyFontId: 'epilogue',
+    bodyFamily: "'Epilogue', sans-serif",
+    bodyWeight: 500,
+    bodyTracking: 0.01,
+    headlineSample: 'MAXIMUM VISUAL WEIGHT',
+    bodySample: 'Unapologetic ink density designed for immediate optical capture across architectural scale.'
+  },
+  {
+    id: 'delicate-renaissance-modern',
+    name: 'Renaissance Book Arts & Geometric Sans',
+    category: 'Classical Roman',
+    description: 'Ultra-delicate Garamond serif with sharp brackets paired with clean contemporary Urbanist.',
+    headlineFontId: 'cormorant',
+    headlineFamily: "'Cormorant Garamond', serif",
+    headlineWeight: 600,
+    headlineTracking: 0.04,
+    bodyFontId: 'urbanist',
+    bodyFamily: "'Urbanist', sans-serif",
+    bodyWeight: 400,
+    bodyTracking: 0.02,
+    headlineSample: 'Harmonic Proportions in Print',
+    bodySample: 'The classic beauty of French Renaissance letter design framed by modern architectural simplicity.'
+  },
+  {
+    id: 'radar-telemetry-duo',
+    name: 'Space Age Technical Duo',
+    category: 'Modernist Swiss',
+    description: 'Geometric headline grotesque paired with technical HUD military-style monospace.',
+    headlineFontId: 'space-grotesk',
+    headlineFamily: "'Space Grotesk', sans-serif",
+    headlineWeight: 700,
+    headlineTracking: 0.08,
+    bodyFontId: 'share-tech-mono',
+    bodyFamily: "'Share Tech Mono', monospace",
+    bodyWeight: 400,
+    bodyTracking: 0.06,
+    headlineSample: 'KINETIC ORBITAL RADAR',
+    bodySample: 'Telemetry coordinates locked at 1420.405 MHz. Optical vectors stabilized across all axes.'
   }
 ];

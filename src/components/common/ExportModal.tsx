@@ -233,7 +233,7 @@ ${state.showSubText ? `
                 {copiedType === 'json' ? 'COPIED!' : 'COPY JSON'}
               </button>
             </div>
-            <pre className="p-3 bg-[#08090C] border border-[#1A1F29] text-[10px] text-[#8C98AC] overflow-x-auto max-h-24">
+            <pre className="p-3 bg-[#08090C] border border-[#1A1F29] text-[11px] text-[#8C98AC] overflow-x-auto max-h-24">
               <code>{jsonSnippet}</code>
             </pre>
           </div>

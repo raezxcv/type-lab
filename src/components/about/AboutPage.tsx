@@ -104,7 +104,7 @@ export const AboutPage: React.FC = () => {
             {/* Quote block */}
             <blockquote className="p-4 bg-[#0E1117] border-l-2 border-[#00FF66] text-xs italic text-[#C2CAD8] space-y-2">
               <p>&ldquo;The grid system is an aid, not a guarantee. It permits a number of possible uses and each designer can look for a solution appropriate to their personal style.&rdquo;</p>
-              <footer className="text-[10px] text-[#00FF66] font-mono-code not-italic font-bold">
+              <footer className="text-[11px] text-[#00FF66] font-mono-code not-italic font-bold">
                 — Josef Müller-Brockmann, Grid Systems in Graphic Design (1961)
               </footer>
             </blockquote>
@@ -118,7 +118,7 @@ export const AboutPage: React.FC = () => {
                 <Terminal className="w-4 h-4 text-[#00FF66]" />
                 THE THREE AXIOMS OF TYPE//LAB 11
               </span>
-              <span className="text-[#00FF66] text-[10px]">AXIOMS//2026</span>
+              <span className="text-[#00FF66] text-[11px]">AXIOMS//2026</span>
             </div>
 
             <div className="space-y-4 text-xs">
@@ -222,14 +222,14 @@ export const AboutPage: React.FC = () => {
                   <div className={`relative flex items-center justify-center transition-transform ${
                     isSelected ? 'scale-125' : 'group-hover:scale-110'
                   }`}>
-                    <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-bold ${
+                    <span className={`w-6 h-6 rounded-full border flex items-center justify-center text-[11px] font-bold ${
                       isSelected 
                         ? 'bg-[#00FF66] text-[#070809] border-[#00FF66] shadow-[0_0_12px_#00FF66]' 
                         : 'bg-[#0E1117] text-[#00FF66] border-[#00FF66]/60 hover:bg-[#16261B]'
                     }`}>
                       +
                     </span>
-                    <span className="absolute -bottom-5 whitespace-nowrap text-[9px] font-mono-code px-1 bg-[#070809] border border-[#22262E] text-[#C2CAD8] opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="absolute -bottom-5 whitespace-nowrap text-[10px] font-mono-code px-1 bg-[#070809] border border-[#22262E] text-[#C2CAD8] opacity-0 group-hover:opacity-100 transition-opacity">
                       {point.label}
                     </span>
                   </div>
@@ -245,7 +245,7 @@ export const AboutPage: React.FC = () => {
                 <span className="text-[#00FF66] font-bold uppercase tracking-wider">
                   ANATOMICAL TELEMETRY
                 </span>
-                <span className="text-[10px] text-[#758091]">PIN: {selectedAnatomy.id.toUpperCase()}</span>
+                <span className="text-[11px] text-[#758091]">PIN: {selectedAnatomy.id.toUpperCase()}</span>
               </div>
 
               <div>
@@ -270,7 +270,7 @@ export const AboutPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-[#1E232E] flex items-center justify-between text-[10px] text-[#556072]">
+            <div className="pt-6 border-t border-[#1E232E] flex items-center justify-between text-[11px] text-[#556072]">
               <span>SELECT PINS TO REVEAL SPECIFICATIONS</span>
               <span className="text-[#00FF66]">DIN 1450 A11Y STANDARD</span>
             </div>
@@ -337,7 +337,7 @@ export const AboutPage: React.FC = () => {
                     }`}
                   >
                     <span>{r.name}</span>
-                    <span className="text-[10px] font-mono-code opacity-80">{r.ratio} ({r.value})</span>
+                    <span className="text-[11px] font-mono-code opacity-80">{r.ratio} ({r.value})</span>
                   </button>
                 ))}
               </div>
@@ -350,7 +350,7 @@ export const AboutPage: React.FC = () => {
               <span className="text-[#00FF66] font-bold">
                 COMPUTED SCALE PROGRESSION ({selectedRatio}x)
               </span>
-              <span className="text-[#758091] text-[10px]">7 PROGRESSION NODES</span>
+              <span className="text-[#758091] text-[11px]">7 PROGRESSION NODES</span>
             </div>
 
             <div className="space-y-3">
@@ -363,7 +363,7 @@ export const AboutPage: React.FC = () => {
                     <span className="w-16 text-xs text-[#00FF66] font-bold">
                       {item.size}px
                     </span>
-                    <span className="text-[10px] text-[#758091]">
+                    <span className="text-[11px] text-[#758091]">
                       {item.rem}rem // {item.label}
                     </span>
                   </div>
@@ -434,10 +434,10 @@ export const AboutPage: React.FC = () => {
               className="p-6 bg-[#0E1117] border border-[#22262E] space-y-3 hover:border-[#00FF66]/50 transition-colors"
             >
               <div className="flex items-center justify-between border-b border-[#1E232E] pb-2">
-                <span className="text-[10px] px-2 py-0.5 bg-[#142319] text-[#00FF66] border border-[#00FF66]/30 font-bold">
+                <span className="text-[11px] px-2 py-0.5 bg-[#142319] text-[#00FF66] border border-[#00FF66]/30 font-bold">
                   {item.category.toUpperCase()}
                 </span>
-                <span className="text-[10px] text-[#4E5868]">LEX_REF #{idx + 1}</span>
+                <span className="text-[11px] text-[#4E5868]">LEX_REF #{idx + 1}</span>
               </div>
 
               <h3 className="text-lg font-space font-bold text-[#F4F5F7]">
@@ -492,7 +492,7 @@ export const AboutPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-6 border-t border-[#1E232E] flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-[#4E5868]">
+        <div className="pt-6 border-t border-[#1E232E] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#4E5868]">
           <span>© 2026 TYPE//LAB 11. INDEPENDENT MULTIDISCIPLINARY DIGITAL DESIGN STUDIO.</span>
           <span className="text-[#00FF66]">DESIGNED FOR THE 20-DAY DIGITAL DESIGN CHALLENGE</span>
         </div>

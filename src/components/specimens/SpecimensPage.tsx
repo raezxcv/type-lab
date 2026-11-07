@@ -104,7 +104,7 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
               {globalTestText && (
                 <button
                   onClick={() => setGlobalTestText('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#758091] hover:text-[#F4F5F7]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-[#758091] hover:text-[#F4F5F7]"
                 >
                   CLEAR
                 </button>
@@ -149,7 +149,7 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
                 {/* Specimen Header Metadata Bar */}
                 <div className="px-5 py-3 bg-[#0E1117] border-b border-[#1E232E] flex flex-wrap items-center justify-between gap-3 text-xs">
                   <div className="flex items-center space-x-3">
-                    <span className="font-bold text-[#00FF66] px-2 py-0.5 bg-[#142319] border border-[#00FF66]/30 text-[10px]">
+                    <span className="font-bold text-[#00FF66] px-2 py-0.5 bg-[#142319] border border-[#00FF66]/30 text-[11px]">
                       {specimen.catalogId}
                     </span>
                     <span className="font-space font-bold text-[#F4F5F7] tracking-tight text-sm">
@@ -242,7 +242,7 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
                     </p>
 
                     {/* Technical Telemetry Badges */}
-                    <div className="pt-6 flex flex-wrap gap-2 text-[10px] font-mono-code border-t border-current/20">
+                    <div className="pt-6 flex flex-wrap gap-2 text-[11px] font-mono-code border-t border-current/20">
                       <span className="px-2 py-1 bg-white/5 border border-current/20">
                         PRIMARY: {specimen.primaryFontName}
                       </span>
@@ -312,14 +312,14 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
                             </span>
                             <div>
                               <div className="font-bold text-[#F4F5F7]">GLYPH: &quot;{inspectedGlyph}&quot;</div>
-                              <div className="text-[10px] text-[#758091]">
+                              <div className="text-[11px] text-[#758091]">
                                 UNICODE: U+{inspectedGlyph.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')} // DEC: {inspectedGlyph.charCodeAt(0)}
                               </div>
                             </div>
                           </div>
                           <button
                             onClick={() => setInspectedGlyph(null)}
-                            className="text-[10px] text-[#758091] hover:text-[#F4F5F7]"
+                            className="text-[11px] text-[#758091] hover:text-[#F4F5F7]"
                           >
                             DISMISS
                           </button>
@@ -335,7 +335,7 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
                       <div className="space-y-2 p-3 bg-[#070809] border border-[#1E232E]">
                         {scaleRhythm.map((pt) => (
                           <div key={pt} className="flex items-baseline gap-4 py-1 border-b border-[#141820] last:border-none">
-                            <span className="w-12 text-[10px] text-[#00FF66] font-mono-code shrink-0">
+                            <span className="w-12 text-[11px] text-[#00FF66] font-mono-code shrink-0">
                               {pt}px
                             </span>
                             <div 
@@ -375,7 +375,7 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
                         </span>
                         <div className="flex flex-wrap gap-1.5 pt-1">
                           {specimen.openTypeHighlights.map((feat, idx) => (
-                            <span key={idx} className="px-2 py-0.5 bg-[#141822] text-[#00FF66] border border-[#232B3C] text-[10px]">
+                            <span key={idx} className="px-2 py-0.5 bg-[#141822] text-[#00FF66] border border-[#232B3C] text-[11px]">
                               {feat}
                             </span>
                           ))}

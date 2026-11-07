@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
-import type { TypographicState, FontDefinition } from '../../types';
+import React, { useState } from 'react';
+import type { TypographicState, FontDefinition, FontPairing } from '../../types';
 import { AVAILABLE_FONTS } from '../../data/fonts';
 import { SPECIMEN_PRESETS } from '../../data/presets';
 import { CURATED_PAIRINGS } from '../../data/pairings';
+import { VisualFontPicker } from './VisualFontPicker';
 import { 
   Type, 
   Sliders, 
@@ -14,13 +15,13 @@ import {
   AlignRight, 
   AlignJustify,
   Grid,
-  Sparkles,
   ArrowRightLeft,
   Image as ImageIcon,
   Copy,
   Check,
-  Upload,
-  Columns
+  Columns,
+  Shuffle,
+  ChevronRight
 } from 'lucide-react';
 
 interface ControlDockProps {
@@ -33,6 +34,8 @@ interface ControlDockProps {
   onAutoFitSize: () => void;
   customFonts: FontDefinition[];
   onUploadCustomFont: (font: FontDefinition) => void;
+  activeLayer?: 'headline' | 'secondary';
+  onSelectLayer?: (layer: 'headline' | 'secondary') => void;
 }
 
 export const ControlDock: React.FC<ControlDockProps> = ({
@@ -45,17 +48,24 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   onAutoFitSize,
   customFonts,
   onUploadCustomFont,
+  activeLayer: externalActiveLayer,
+  onSelectLayer,
 }) => {
-  const [activeTab, setActiveTab] = useState<'type' | 'pairings' | 'layout' | 'color' | 'presets'>('type');
-  const [fontCategoryFilter, setFontCategoryFilter] = useState<string>('all');
+  const [activeMainTab, setActiveMainTab] = useState<'type' | 'pairings' | 'effects' | 'canvas'>('type');
+  const [internalActiveLayer, setInternalActiveLayer] = useState<'headline' | 'secondary'>('headline');
+  const [fontPickerTarget, setFontPickerTarget] = useState<'headline' | 'secondary' | null>(null);
   const [copiedCSS, setCopiedCSS] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const activeLayer = externalActiveLayer !== undefined ? externalActiveLayer : internalActiveLayer;
+  const setActiveLayer = (layer: 'headline' | 'secondary') => {
+    setInternalActiveLayer(layer);
+    onSelectLayer?.(layer);
+  };
 
   const allFonts = [...AVAILABLE_FONTS, ...customFonts];
 
-  const filteredFonts = fontCategoryFilter === 'all'
-    ? allFonts
-    : allFonts.filter(f => f.category === fontCategoryFilter);
+  const headlineFontObj = allFonts.find(f => f.cssFamily === state.fontFamily) || allFonts[0];
+  const secondaryFontObj = allFonts.find(f => f.cssFamily === state.subFontFamily) || allFonts[1];
 
   const samplePhrases = [
     "FORM FOLLOWS FUNCTION FOLLOWS FORM",
@@ -65,6 +75,13 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     "0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     "CONSTRUCTIVE DECONSTRUCTION OF THE LETTERFORM",
     "HYDROGEN LINE 1420.40575 MHz [LOCKED]"
+  ];
+
+  const secondarySamplePhrases = [
+    "Internationale Zeitschrift für Graphische Kunst und verwandte Gebiete.",
+    "Order is the prerequisite of optical clarity across architectural grids.",
+    "A dialogue between Enlightenment Didone hairline brackets and grotesque vectors.",
+    "Telemetry coordinates locked. Optical vectors stabilized across all axes."
   ];
 
   const handleCopyCSS = () => {
@@ -80,57 +97,41 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     });
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleApplyPairing = (pairing: FontPairing) => {
+    onChange({
+      fontFamily: pairing.headlineFamily,
+      fontWeight: pairing.headlineWeight,
+      letterSpacing: pairing.headlineTracking,
+      subFontFamily: pairing.bodyFamily,
+      subFontWeight: pairing.bodyWeight,
+      subLetterSpacing: pairing.bodyTracking,
+      showSubText: true,
+      subText: pairing.bodySample,
+    });
+  };
 
-    try {
-      const buffer = await file.arrayBuffer();
-      const fontName = file.name.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9 ]/g, ' ');
-      const cssFontFamily = `'${fontName}', sans-serif`;
-
-      const fontFace = new FontFace(fontName, buffer);
-      await fontFace.load();
-      document.fonts.add(fontFace);
-
-      const newFont: FontDefinition = {
-        id: `custom-${Date.now()}`,
-        name: fontName,
-        cssFamily: cssFontFamily,
-        category: 'custom',
-        weights: [400, 700],
-        origin: 'User Local File',
-        designer: 'Custom Upload',
-        bestUse: 'Custom Typographic Testing',
-        sampleText: 'CUSTOM LOADED TYPEFACE'
-      };
-
-      onUploadCustomFont(newFont);
-      onChange({ fontFamily: cssFontFamily });
-    } catch (err) {
-      console.error('Failed to load custom font file', err);
-      alert('Could not parse font file. Please provide a valid .ttf, .otf, or .woff file.');
-    }
+  const handleShufflePairing = () => {
+    const randomPairing = CURATED_PAIRINGS[Math.floor(Math.random() * CURATED_PAIRINGS.length)];
+    handleApplyPairing(randomPairing);
   };
 
   return (
     <div className="w-full bg-[#111317] border-t lg:border-t-0 lg:border-l border-[#22262E] text-xs font-mono-code flex flex-col">
       
-      {/* Control Tabs Header */}
+      {/* Primary Navigation Tabs */}
       <div className="flex border-b border-[#22262E] bg-[#0A0C10] px-3 py-1 gap-1 overflow-x-auto">
         {[
-          { id: 'type', label: 'AXES & TYPE', icon: Type },
-          { id: 'pairings', label: 'PAIRINGS', icon: Columns },
-          { id: 'layout', label: 'TRANSFORMS', icon: Sliders },
-          { id: 'color', label: 'ATMOSPHERE', icon: Palette },
-          { id: 'presets', label: 'PRESETS', icon: Sparkles },
+          { id: 'type', label: '01 TYPE & PAIRING', icon: Type },
+          { id: 'pairings', label: '02 PAIRINGS GALLERY', icon: Columns },
+          { id: 'effects', label: '03 EFFECTS & MOTION', icon: Sliders },
+          { id: 'canvas', label: '04 CANVAS & PRESETS', icon: Palette },
         ].map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+          const isActive = activeMainTab === tab.id;
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveMainTab(tab.id as any)}
               className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
                 isActive
                   ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
@@ -147,333 +148,378 @@ export const ControlDock: React.FC<ControlDockProps> = ({
       {/* Main Control Panel Body */}
       <div className="p-4 sm:p-5 space-y-5 overflow-y-auto max-h-[700px] flex-1">
 
-        {/* 1. TEXT INPUT & PHRASE BANK (Always visible at top for immediate workflow) */}
-        <div className="space-y-2.5 pb-4 border-b border-[#1E232E]">
-          <div className="flex items-center justify-between text-[#A1A1AA]">
-            <span className="font-semibold text-[#F4F5F7] flex items-center gap-2">
-              <span className="w-2 h-2 bg-[#00FF66]"></span>
-              HEADLINE TEXT INPUT
-            </span>
-            <span className="text-xs text-[#A1A1AA]">{state.text.length} Chars</span>
-          </div>
-          
-          <textarea
-            value={state.text}
-            onChange={(e) => onChange({ text: e.target.value })}
-            className="w-full bg-[#0D0F14] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-3 text-xs font-mono-code rounded-none resize-y min-h-[64px] focus:outline-none"
-            placeholder="Enter specimen string..."
-          />
-
-          {/* Quick preset phrase pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-            <span className="text-[#A1A1AA] uppercase font-bold shrink-0">Sample:</span>
-            {samplePhrases.slice(0, 3).map((phrase, idx) => (
-              <button
-                key={idx}
-                onClick={() => onChange({ text: phrase })}
-                className="px-2.5 py-1 bg-[#171B24] hover:bg-[#222836] text-[#C2CAD8] hover:text-[#00FF66] border border-[#232A38] whitespace-nowrap transition-colors shrink-0"
-              >
-                {phrase.length > 20 ? phrase.slice(0, 20) + '...' : phrase}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ==================== TAB 1: AXES & TYPE ==================== */}
-        {activeTab === 'type' && (
+        {/* ==================== TAB 1: TYPE & PAIRING DUAL-LAYER CONTROLLER ==================== */}
+        {activeMainTab === 'type' && (
           <div className="space-y-5">
             
-            {/* Font Family Selection with Category Filter & Upload */}
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between">
-                <label className="text-[#A1A1AA] block text-xs font-semibold">
-                  PRIMARY FONT ({allFonts.length} AVAILABLE)
-                </label>
-                
-                {/* Upload Custom Font Button */}
-                <div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".ttf,.otf,.woff,.woff2"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-1.5 px-2.5 py-1 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 text-xs font-bold transition-colors"
-                    title="Upload local .ttf, .otf, or .woff file"
-                  >
-                    <Upload className="w-3 h-3" />
-                    <span>UPLOAD FONT</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Category Filter Pills */}
-              <div className="flex flex-wrap gap-1 pb-1">
-                {['all', 'grotesk', 'serif', 'monospace', 'display', 'experimental', 'custom'].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setFontCategoryFilter(cat)}
-                    className={`px-2 py-0.5 text-[10px] uppercase font-bold border transition-colors ${
-                      fontCategoryFilter === cat
-                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
-                        : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-
-              {/* Font Dropdown */}
-              <select
-                value={state.fontFamily}
-                onChange={(e) => onChange({ fontFamily: e.target.value })}
-                className="w-full bg-[#0D0F14] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-2.5 text-xs font-mono-code rounded-none focus:outline-none"
-              >
-                {filteredFonts.map((font) => (
-                  <option key={font.id} value={font.cssFamily}>
-                    {font.name} [{font.category.toUpperCase()}]
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Font Size & Weight Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Size Slider + Auto Fit */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[#A1A1AA]">
-                  <span className="flex items-center gap-1.5">
-                    SIZE (PT/PX)
-                    <button
-                      onClick={onAutoFitSize}
-                      className="px-1.5 py-0.2 bg-[#1A251E] text-[#00FF66] text-[10px] font-bold border border-[#00FF66]/40 hover:bg-[#00FF66] hover:text-black transition-colors"
-                      title="Auto fit text size to frame"
-                    >
-                      FIT
-                    </button>
-                  </span>
-                  <span className="text-[#00FF66] font-bold">{state.fontSize}px</span>
-                </div>
-                <input
-                  type="range"
-                  min="12"
-                  max="180"
-                  step="1"
-                  value={state.fontSize}
-                  onChange={(e) => onChange({ fontSize: Number(e.target.value) })}
-                  className="w-full"
-                  aria-label="Font Size"
-                />
-              </div>
-
-              {/* Weight Slider */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[#A1A1AA]">
-                  <span>WEIGHT (AXIS)</span>
-                  <span className="text-[#00FF66] font-bold">{state.fontWeight}</span>
-                </div>
-                <input
-                  type="range"
-                  min="100"
-                  max="900"
-                  step="100"
-                  value={state.fontWeight}
-                  onChange={(e) => onChange({ fontWeight: Number(e.target.value) })}
-                  className="w-full"
-                  aria-label="Font Weight"
-                />
-              </div>
-            </div>
-
-            {/* Tracking (Letter Spacing) & Leading (Line Height) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Tracking */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[#A1A1AA]">
-                  <span>TRACKING (em)</span>
-                  <span className="text-[#00FF66] font-bold">{state.letterSpacing.toFixed(2)}em</span>
-                </div>
-                <input
-                  type="range"
-                  min="-0.10"
-                  max="0.80"
-                  step="0.01"
-                  value={state.letterSpacing}
-                  onChange={(e) => onChange({ letterSpacing: Number(e.target.value) })}
-                  className="w-full"
-                  aria-label="Letter Spacing Tracking"
-                />
-              </div>
-
-              {/* Leading */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-[#A1A1AA]">
-                  <span>LEADING (HEIGHT)</span>
-                  <span className="text-[#00FF66] font-bold">{state.lineHeight.toFixed(2)}</span>
-                </div>
-                <input
-                  type="range"
-                  min="0.60"
-                  max="2.20"
-                  step="0.05"
-                  value={state.lineHeight}
-                  onChange={(e) => onChange({ lineHeight: Number(e.target.value) })}
-                  className="w-full"
-                  aria-label="Line Height Leading"
-                />
-              </div>
-            </div>
-
-            {/* Word Spacing */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center text-[#A1A1AA]">
-                <span>WORD SPACING (em)</span>
-                <span className="text-[#00FF66] font-bold">{state.wordSpacing.toFixed(2)}em</span>
-              </div>
-              <input
-                type="range"
-                min="-0.30"
-                max="1.50"
-                step="0.05"
-                value={state.wordSpacing}
-                onChange={(e) => onChange({ wordSpacing: Number(e.target.value) })}
-                className="w-full"
-                aria-label="Word Spacing"
-              />
-            </div>
-
-            {/* Alignment & Transformations Row */}
-            <div className="space-y-2.5 pt-3 border-t border-[#1E232E]">
-              <span className="text-[#A1A1AA] block text-xs font-semibold">ALIGNMENT & CASE</span>
-              
-              <div className="flex flex-wrap gap-2.5">
-                {/* Alignment buttons */}
-                <div className="flex border border-[#22262E] bg-[#0D0F14]">
-                  {(['left', 'center', 'right', 'justify'] as const).map((align) => (
-                    <button
-                      key={align}
-                      onClick={() => onChange({ textAlign: align })}
-                      className={`p-2 transition-colors ${
-                        state.textAlign === align
-                          ? 'bg-[#1F2533] text-[#00FF66]'
-                          : 'text-[#A1A1AA] hover:text-[#F4F5F7]'
-                      }`}
-                      title={`Align ${align}`}
-                      aria-label={`Align ${align}`}
-                    >
-                      {align === 'left' && <AlignLeft className="w-4 h-4" />}
-                      {align === 'center' && <AlignCenter className="w-4 h-4" />}
-                      {align === 'right' && <AlignRight className="w-4 h-4" />}
-                      {align === 'justify' && <AlignJustify className="w-4 h-4" />}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Transform Case buttons */}
-                <div className="flex border border-[#22262E] bg-[#0D0F14]">
-                  {(['none', 'uppercase', 'lowercase', 'capitalize'] as const).map((transform) => (
-                    <button
-                      key={transform}
-                      onClick={() => onChange({ textTransform: transform })}
-                      className={`px-3 py-1.5 text-xs font-bold transition-colors ${
-                        state.textTransform === transform
-                          ? 'bg-[#1F2533] text-[#00FF66]'
-                          : 'text-[#A1A1AA] hover:text-[#F4F5F7]'
-                      }`}
-                      title={`Text Transform ${transform}`}
-                    >
-                      {transform === 'none' ? 'Aa' : transform === 'uppercase' ? 'AA' : transform === 'lowercase' ? 'aa' : 'Ab'}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Italic toggle */}
-                <button
-                  onClick={() => onChange({ isItalic: !state.isItalic })}
-                  className={`px-3 py-1.5 text-xs italic font-serif border border-[#22262E] transition-colors ${
-                    state.isItalic ? 'bg-[#1F2533] text-[#00FF66] border-[#00FF66]' : 'text-[#A1A1AA] bg-[#0D0F14]'
-                  }`}
-                  title="Toggle Italic / Slant"
-                >
-                  Italic
-                </button>
-
-                {/* Vertical writing mode toggle */}
-                <button
-                  onClick={() => onChange({ isVertical: !state.isVertical })}
-                  className={`px-3 py-1.5 text-xs font-mono-code border border-[#22262E] transition-colors ${
-                    state.isVertical ? 'bg-[#1F2533] text-[#00FF66] border-[#00FF66]' : 'text-[#A1A1AA] bg-[#0D0F14]'
-                  }`}
-                  title="Toggle Vertical Writing Mode"
-                >
-                  VERTICAL RL
-                </button>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* ==================== TAB 2: FONT PAIRINGS (NEW!) ==================== */}
-        {activeTab === 'pairings' && (
-          <div className="space-y-5">
-            
-            {/* Secondary Text Layer Toggle */}
-            <div className="flex items-center justify-between p-3 bg-[#0D0F14] border border-[#22262E]">
-              <div>
-                <span className="font-bold text-[#F4F5F7] block text-xs">SECONDARY TEXT LAYER (PAIRING)</span>
-                <span className="text-[11px] text-[#A1A1AA]">Compose headline + subhead/caption simultaneously</span>
-              </div>
+            {/* Dual Layer Segmented Switcher */}
+            <div className="p-1.5 bg-[#0D0F14] border border-[#22262E] flex items-center gap-1.5">
               <button
-                onClick={() => onChange({ showSubText: !state.showSubText })}
-                className={`px-3 py-1 text-xs font-bold border transition-colors ${
-                  state.showSubText
+                onClick={() => setActiveLayer('headline')}
+                className={`flex-1 py-2 px-3 text-left transition-all border ${
+                  activeLayer === 'headline'
                     ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
-                    : 'border-[#22262E] text-[#A1A1AA]'
+                    : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7]'
                 }`}
               >
-                {state.showSubText ? 'LAYER: ON' : 'LAYER: OFF'}
+                <div className="text-[11px] font-bold uppercase tracking-wider">LAYER A: PRIMARY HEADLINE</div>
+                <div className="text-xs font-semibold text-[#F4F5F7] truncate mt-0.5" style={{ fontFamily: state.fontFamily }}>
+                  {headlineFontObj.name} ({state.fontSize}px)
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveLayer('secondary')}
+                className={`flex-1 py-2 px-3 text-left transition-all border relative ${
+                  activeLayer === 'secondary'
+                    ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                    : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7]'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider">LAYER B: PAIRING TEXT</span>
+                  <span className={`px-1.5 py-0.2 text-[10px] font-bold rounded ${
+                    state.showSubText ? 'bg-[#00FF66] text-black' : 'bg-[#22262E] text-[#71717A]'
+                  }`}>
+                    {state.showSubText ? 'ON' : 'OFF'}
+                  </span>
+                </div>
+                <div className="text-xs font-semibold text-[#F4F5F7] truncate mt-0.5" style={{ fontFamily: state.subFontFamily }}>
+                  {secondaryFontObj.name} ({state.subFontSize}px)
+                </div>
               </button>
             </div>
 
-            {/* Secondary Text Input & Controls if enabled */}
-            {state.showSubText && (
-              <div className="p-3.5 bg-[#0D0F14] border border-[#22262E] space-y-3">
-                <span className="font-bold text-[#00FF66] text-xs block">
-                  SECONDARY PAIRING TEXT & AXES
-                </span>
+            {/* --- ACTIVE LAYER: HEADLINE --- */}
+            {activeLayer === 'headline' && (
+              <div className="space-y-4 pt-1">
+                
+                {/* Headline Text Input */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[#A1A1AA]">
+                    <span className="font-semibold text-[#F4F5F7] flex items-center gap-2 text-xs">
+                      <span className="w-2 h-2 bg-[#00FF66]"></span>
+                      HEADLINE TEXT
+                    </span>
+                    <span className="text-xs text-[#A1A1AA]">{state.text.length} Chars</span>
+                  </div>
+                  
+                  <textarea
+                    value={state.text}
+                    onChange={(e) => onChange({ text: e.target.value })}
+                    className="w-full bg-[#0D0F14] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-3 text-xs font-mono-code rounded-none resize-y min-h-[64px] focus:outline-none"
+                    placeholder="Enter headline copy..."
+                  />
 
-                <textarea
-                  value={state.subText}
-                  onChange={(e) => onChange({ subText: e.target.value })}
-                  placeholder="Enter secondary subheadline or body text..."
-                  className="w-full bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-2.5 text-xs font-mono-code rounded-none resize-y min-h-[50px] focus:outline-none"
-                />
-
-                <div className="space-y-1.5">
-                  <label className="text-[#A1A1AA] text-xs font-semibold block">PAIRING FONT FAMILY</label>
-                  <select
-                    value={state.subFontFamily}
-                    onChange={(e) => onChange({ subFontFamily: e.target.value })}
-                    className="w-full bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-2 text-xs font-mono-code rounded-none focus:outline-none"
-                  >
-                    {allFonts.map((f) => (
-                      <option key={f.id} value={f.cssFamily}>
-                        {f.name} [{f.category.toUpperCase()}]
-                      </option>
+                  {/* Sample Chips */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                    <span className="text-[#C2CAD8] uppercase font-semibold shrink-0">Sample:</span>
+                    {samplePhrases.slice(0, 3).map((phrase, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => onChange({ text: phrase })}
+                        className="px-2.5 py-1 bg-[#171B24] hover:bg-[#222836] text-[#C2CAD8] hover:text-[#00FF66] border border-[#232A38] whitespace-nowrap transition-colors shrink-0"
+                      >
+                        {phrase.length > 20 ? phrase.slice(0, 20) + '...' : phrase}
+                      </button>
                     ))}
-                  </select>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[#A1A1AA] text-[11px]">
-                      <span>SIZE</span>
-                      <span className="text-[#00FF66]">{state.subFontSize}px</span>
+                {/* Headline Font Selector Button with Visual Display */}
+                <div className="space-y-1.5 pt-2 border-t border-[#1E232E]">
+                  <label className="text-[#A1A1AA] block text-xs font-semibold">
+                    HEADLINE TYPEFACE
+                  </label>
+                  <button
+                    onClick={() => setFontPickerTarget('headline')}
+                    className="w-full p-3 bg-[#0D0F14] border border-[#272F3E] hover:border-[#00FF66] transition-all flex items-center justify-between group text-left"
+                  >
+                    <div>
+                      <div className="text-xs font-bold text-[#F4F5F7] group-hover:text-[#00FF66] transition-colors">
+                        {headlineFontObj.name}
+                      </div>
+                      <div className="text-base text-[#E2E8F0] truncate mt-0.5" style={{ fontFamily: state.fontFamily }}>
+                        {headlineFontObj.sampleText || 'Abcdefghijklmnopqrstuvwxyz'}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-[#00FF66] font-bold shrink-0">
+                      <span>CHANGE</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </div>
+                  </button>
+                </div>
+
+                {/* Font Size & Weight Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  {/* Size Slider + Steppers + Fit */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span className="flex items-center gap-1.5">
+                        SIZE
+                        <button
+                          onClick={onAutoFitSize}
+                          className="px-1.5 py-0.2 bg-[#1A251E] text-[#00FF66] text-[11px] font-bold border border-[#00FF66]/40 hover:bg-[#00FF66] hover:text-black transition-colors"
+                          title="Auto fit text size to frame"
+                        >
+                          FIT
+                        </button>
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => onChange({ fontSize: Math.max(12, state.fontSize - 5) })}
+                          className="px-1.5 py-0.2 bg-[#1A1F29] text-[#C2CAD8] hover:text-[#00FF66]"
+                        >
+                          -5
+                        </button>
+                        <span className="text-[#00FF66] font-bold min-w-[36px] text-center">{state.fontSize}px</span>
+                        <button
+                          onClick={() => onChange({ fontSize: Math.min(180, state.fontSize + 5) })}
+                          className="px-1.5 py-0.2 bg-[#1A1F29] text-[#C2CAD8] hover:text-[#00FF66]"
+                        >
+                          +5
+                        </button>
+                      </div>
+                    </div>
+                    <input
+                      type="range"
+                      min="12"
+                      max="180"
+                      step="1"
+                      value={state.fontSize}
+                      onChange={(e) => onChange({ fontSize: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+
+                  {/* Weight Slider + Quick Pills */}
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>WEIGHT</span>
+                      <span className="text-[#00FF66] font-bold">{state.fontWeight}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="100"
+                      max="900"
+                      step="100"
+                      value={state.fontWeight}
+                      onChange={(e) => onChange({ fontWeight: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-[11px] text-[#71717A] pt-0.5">
+                      {[300, 400, 600, 700, 900].map((w) => (
+                        <button
+                          key={w}
+                          onClick={() => onChange({ fontWeight: w })}
+                          className={`hover:text-[#00FF66] ${state.fontWeight === w ? 'text-[#00FF66] font-bold' : ''}`}
+                        >
+                          {w}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tracking & Leading */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>TRACKING</span>
+                      <span className="text-[#00FF66] font-bold">{state.letterSpacing.toFixed(2)}em</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="-0.10"
+                      max="0.80"
+                      step="0.01"
+                      value={state.letterSpacing}
+                      onChange={(e) => onChange({ letterSpacing: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>LEADING</span>
+                      <span className="text-[#00FF66] font-bold">{state.lineHeight.toFixed(2)}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.60"
+                      max="2.20"
+                      step="0.05"
+                      value={state.lineHeight}
+                      onChange={(e) => onChange({ lineHeight: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Alignment, Transform & Color */}
+                <div className="space-y-2.5 pt-3 border-t border-[#1E232E]">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    {/* Alignment */}
+                    <div className="flex border border-[#22262E] bg-[#0D0F14]">
+                      {(['left', 'center', 'right', 'justify'] as const).map((align) => (
+                        <button
+                          key={align}
+                          onClick={() => onChange({ textAlign: align })}
+                          className={`p-2 transition-colors ${
+                            state.textAlign === align
+                              ? 'bg-[#1F2533] text-[#00FF66]'
+                              : 'text-[#A1A1AA] hover:text-[#F4F5F7]'
+                          }`}
+                          title={`Align ${align}`}
+                        >
+                          {align === 'left' && <AlignLeft className="w-4 h-4" />}
+                          {align === 'center' && <AlignCenter className="w-4 h-4" />}
+                          {align === 'right' && <AlignRight className="w-4 h-4" />}
+                          {align === 'justify' && <AlignJustify className="w-4 h-4" />}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Transform Case */}
+                    <div className="flex border border-[#22262E] bg-[#0D0F14]">
+                      {(['none', 'uppercase', 'lowercase', 'capitalize'] as const).map((transform) => (
+                        <button
+                          key={transform}
+                          onClick={() => onChange({ textTransform: transform })}
+                          className={`px-3 py-1.5 text-xs font-bold transition-colors ${
+                            state.textTransform === transform
+                              ? 'bg-[#1F2533] text-[#00FF66]'
+                              : 'text-[#A1A1AA] hover:text-[#F4F5F7]'
+                          }`}
+                        >
+                          {transform === 'none' ? 'Aa' : transform === 'uppercase' ? 'AA' : transform === 'lowercase' ? 'aa' : 'Ab'}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Italic */}
+                    <button
+                      onClick={() => onChange({ isItalic: !state.isItalic })}
+                      className={`px-3 py-1.5 text-xs italic font-serif border border-[#22262E] transition-colors ${
+                        state.isItalic ? 'bg-[#1F2533] text-[#00FF66] border-[#00FF66]' : 'text-[#A1A1AA] bg-[#0D0F14]'
+                      }`}
+                    >
+                      Italic
+                    </button>
+                  </div>
+
+                  {/* Headline Color */}
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-[#A1A1AA] text-xs font-semibold">HEADLINE COLOR</span>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={state.textColor}
+                        onChange={(e) => onChange({ textColor: e.target.value })}
+                        className="w-7 h-7 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
+                      />
+                      <div className="flex gap-1.5">
+                        {['#F4F5F7', '#00FF66', '#FFB800', '#00E5FF', '#070809'].map((hex) => (
+                          <button
+                            key={hex}
+                            onClick={() => onChange({ textColor: hex })}
+                            className="w-6 h-6 border border-[#2B3342] hover:scale-110 transition-transform"
+                            style={{ backgroundColor: hex }}
+                            title={hex}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* --- ACTIVE LAYER: SECONDARY PAIRING --- */}
+            {activeLayer === 'secondary' && (
+              <div className="space-y-4 pt-1">
+                
+                {/* Layer Toggle Banner */}
+                <div className="p-3 bg-[#0D0F14] border border-[#22262E] flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-[#F4F5F7] block text-xs">PAIRING LAYER STATUS</span>
+                    <span className="text-[11px] text-[#A1A1AA]">Renders complementary subhead or caption</span>
+                  </div>
+                  <button
+                    onClick={() => onChange({ showSubText: !state.showSubText })}
+                    className={`px-3 py-1 text-xs font-bold border transition-colors ${
+                      state.showSubText
+                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                        : 'border-[#22262E] text-[#A1A1AA]'
+                    }`}
+                  >
+                    {state.showSubText ? 'ENABLED (VISIBLE)' : 'DISABLED (HIDDEN)'}
+                  </button>
+                </div>
+
+                {/* Secondary Text Input */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[#A1A1AA]">
+                    <span className="font-semibold text-[#F4F5F7] flex items-center gap-2 text-xs">
+                      <span className="w-2 h-2 bg-[#00FF66]"></span>
+                      SECONDARY PAIRING TEXT
+                    </span>
+                    <span className="text-xs text-[#A1A1AA]">{state.subText.length} Chars</span>
+                  </div>
+                  
+                  <textarea
+                    value={state.subText}
+                    onChange={(e) => onChange({ subText: e.target.value })}
+                    className="w-full bg-[#0D0F14] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-3 text-xs font-mono-code rounded-none resize-y min-h-[64px] focus:outline-none"
+                    placeholder="Enter secondary subheadline or body text..."
+                  />
+
+                  {/* Sample Chips */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                    <span className="text-[#C2CAD8] uppercase font-semibold shrink-0">Sample:</span>
+                    {secondarySamplePhrases.map((phrase, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => onChange({ subText: phrase })}
+                        className="px-2.5 py-1 bg-[#171B24] hover:bg-[#222836] text-[#C2CAD8] hover:text-[#00FF66] border border-[#232A38] whitespace-nowrap transition-colors shrink-0"
+                      >
+                        {phrase.length > 20 ? phrase.slice(0, 20) + '...' : phrase}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Secondary Font Selector Button with Visual Display */}
+                <div className="space-y-1.5 pt-2 border-t border-[#1E232E]">
+                  <label className="text-[#A1A1AA] block text-xs font-semibold">
+                    SECONDARY PAIRING TYPEFACE (DISTINCT FONT)
+                  </label>
+                  <button
+                    onClick={() => setFontPickerTarget('secondary')}
+                    className="w-full p-3 bg-[#0D0F14] border border-[#272F3E] hover:border-[#00FF66] transition-all flex items-center justify-between group text-left"
+                  >
+                    <div>
+                      <div className="text-xs font-bold text-[#F4F5F7] group-hover:text-[#00FF66] transition-colors">
+                        {secondaryFontObj.name} [{secondaryFontObj.category.toUpperCase()}]
+                      </div>
+                      <div className="text-base text-[#E2E8F0] truncate mt-0.5" style={{ fontFamily: state.subFontFamily }}>
+                        {secondaryFontObj.sampleText || 'Abcdefghijklmnopqrstuvwxyz'}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-[#00FF66] font-bold shrink-0">
+                      <span>CHANGE</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </div>
+                  </button>
+                </div>
+
+                {/* Secondary Size & Weight */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>PAIRING SIZE</span>
+                      <span className="text-[#00FF66] font-bold">{state.subFontSize}px</span>
                     </div>
                     <input
                       type="range"
@@ -485,10 +531,10 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     />
                   </div>
 
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[#A1A1AA] text-[11px]">
-                      <span>WEIGHT</span>
-                      <span className="text-[#00FF66]">{state.subFontWeight}</span>
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>PAIRING WEIGHT</span>
+                      <span className="text-[#00FF66] font-bold">{state.subFontWeight}</span>
                     </div>
                     <input
                       type="range"
@@ -501,59 +547,137 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     />
                   </div>
                 </div>
+
+                {/* Secondary Tracking & Color */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>PAIRING TRACKING</span>
+                      <span className="text-[#00FF66] font-bold">{state.subLetterSpacing.toFixed(2)}em</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="-0.05"
+                      max="0.40"
+                      step="0.01"
+                      value={state.subLetterSpacing}
+                      onChange={(e) => onChange({ subLetterSpacing: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[#A1A1AA]">
+                      <span>PAIRING COLOR</span>
+                      <span className="text-[#00FF66] uppercase">{state.subTextColor}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={state.subTextColor}
+                        onChange={(e) => onChange({ subTextColor: e.target.value })}
+                        className="w-7 h-7 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
+                      />
+                      <div className="flex gap-1">
+                        {['#00FF66', '#F4F5F7', '#FFB800', '#00E5FF', '#A1A1AA'].map((hex) => (
+                          <button
+                            key={hex}
+                            onClick={() => onChange({ subTextColor: hex })}
+                            className="w-5 h-5 border border-[#2B3342] hover:scale-110 transition-transform"
+                            style={{ backgroundColor: hex }}
+                            title={hex}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             )}
 
-            {/* Curated Font Pairings Catalog */}
-            <div className="space-y-3 pt-2 border-t border-[#1E232E]">
-              <span className="text-[#A1A1AA] block text-xs font-semibold">
-                CURATED CLASSIC & MODERN PAIRINGS (CLICK TO LOAD)
-              </span>
+          </div>
+        )}
 
-              <div className="space-y-2.5">
-                {CURATED_PAIRINGS.map((pairing) => (
-                  <button
-                    key={pairing.id}
-                    onClick={() => {
-                      onChange({
-                        fontFamily: pairing.headlineFamily,
-                        fontWeight: pairing.headlineWeight,
-                        letterSpacing: pairing.headlineTracking,
-                        subFontFamily: pairing.bodyFamily,
-                        subFontWeight: pairing.bodyWeight,
-                        subLetterSpacing: pairing.bodyTracking,
-                        showSubText: true,
-                        subText: pairing.bodySample,
-                      });
-                    }}
-                    className="w-full text-left p-3.5 border border-[#22262E] bg-[#0D0F14] hover:bg-[#151922] hover:border-[#00FF66] transition-all group"
-                  >
-                    <div className="flex items-center justify-between">
+        {/* ==================== TAB 2: PAIRINGS GALLERY ==================== */}
+        {activeMainTab === 'pairings' && (
+          <div className="space-y-4">
+            
+            {/* Header with Shuffle */}
+            <div className="flex items-center justify-between p-3 bg-[#0D0F14] border border-[#22262E]">
+              <div>
+                <span className="font-bold text-[#F4F5F7] block text-xs">STUDIO PAIRING ENGINE</span>
+                <span className="text-[11px] text-[#A1A1AA]">12 curated historical & contemporary duos</span>
+              </div>
+              <button
+                onClick={handleShufflePairing}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 font-bold text-xs transition-colors"
+                title="Randomize harmonious font pairing"
+              >
+                <Shuffle className="w-3.5 h-3.5" />
+                <span>SHUFFLE PAIR</span>
+              </button>
+            </div>
+
+            {/* Curated Pairing Cards */}
+            <div className="space-y-3">
+              {CURATED_PAIRINGS.map((pairing) => (
+                <div
+                  key={pairing.id}
+                  className="p-4 border border-[#22262E] bg-[#0A0C10] hover:border-[#00FF66] transition-all space-y-3 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
                       <span className="font-bold text-[#F4F5F7] text-xs group-hover:text-[#00FF66] transition-colors">
                         {pairing.name}
                       </span>
-                      <span className="text-[10px] px-1.5 py-0.5 bg-[#1A1F29] text-[#00FF66]">
-                        {pairing.category}
-                      </span>
+                      <span className="text-[11px] text-[#71717A] block mt-0.5">{pairing.category}</span>
                     </div>
-                    <div className="mt-2 text-xs flex items-center gap-2 text-[#C2CAD8]">
-                      <span className="font-bold text-[#F4F5F7]">{pairing.headlineFamily.split(',')[0].replace(/['"]/g, '')}</span>
-                      <span className="text-[#00FF66]">+</span>
-                      <span>{pairing.bodyFamily.split(',')[0].replace(/['"]/g, '')}</span>
+                    <button
+                      onClick={() => handleApplyPairing(pairing)}
+                      className="px-3 py-1.5 bg-[#00FF66] text-black font-bold text-xs hover:bg-[#4DFF95] transition-colors"
+                    >
+                      APPLY PAIRING
+                    </button>
+                  </div>
+
+                  {/* Dual font preview */}
+                  <div className="p-3 bg-[#11141A] border border-[#1A1F29] space-y-1.5">
+                    <div 
+                      className="text-lg font-bold text-[#F4F5F7] truncate leading-tight"
+                      style={{ 
+                        fontFamily: pairing.headlineFamily,
+                        letterSpacing: `${pairing.headlineTracking}em`,
+                        fontWeight: pairing.headlineWeight
+                      }}
+                    >
+                      {pairing.headlineSample}
                     </div>
-                    <p className="text-[11px] text-[#A1A1AA] mt-1.5 line-clamp-2 leading-relaxed">
-                      {pairing.description}
-                    </p>
-                  </button>
-                ))}
-              </div>
+                    <div 
+                      className="text-xs text-[#00FF66] line-clamp-2 leading-relaxed"
+                      style={{ 
+                        fontFamily: pairing.bodyFamily,
+                        letterSpacing: `${pairing.bodyTracking}em`,
+                        fontWeight: pairing.bodyWeight
+                      }}
+                    >
+                      {pairing.bodySample}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-[#71717A]">
+                    <span>{pairing.headlineFamily.split(',')[0].replace(/['"]/g, '')} + {pairing.bodyFamily.split(',')[0].replace(/['"]/g, '')}</span>
+                    <span className="text-[#A1A1AA] line-clamp-1 max-w-[200px]">{pairing.description}</span>
+                  </div>
+                </div>
+              ))}
             </div>
 
           </div>
         )}
 
-        {/* ==================== TAB 3: TRANSFORMS & KINETIC ==================== */}
-        {activeTab === 'layout' && (
+        {/* ==================== TAB 3: EFFECTS & WATERMARK ==================== */}
+        {activeMainTab === 'effects' && (
           <div className="space-y-5">
             
             {/* Kinetic Animation Modes */}
@@ -584,7 +708,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             </div>
 
-            {/* Vector Stroke / Outline Controls */}
+            {/* Vector Stroke Controls */}
             <div className="space-y-3 pt-3 border-t border-[#1E232E]">
               <span className="text-[#A1A1AA] block text-xs font-semibold">
                 VECTOR STROKE // OUTLINE MODE
@@ -604,7 +728,6 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     value={state.strokeWidth}
                     onChange={(e) => onChange({ strokeWidth: Number(e.target.value) })}
                     className="w-full"
-                    aria-label="Stroke Width"
                   />
                 </div>
 
@@ -619,7 +742,6 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       value={state.strokeColor}
                       onChange={(e) => onChange({ strokeColor: e.target.value })}
                       className="w-8 h-8 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
-                      aria-label="Stroke Color Picker"
                     />
                     <div className="flex gap-1.5">
                       {['#00FF66', '#FFFFFF', '#070809', '#FFB800'].map((hex) => (
@@ -652,7 +774,6 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   value={state.skew}
                   onChange={(e) => onChange({ skew: Number(e.target.value) })}
                   className="w-full"
-                  aria-label="Skew Angle"
                 />
               </div>
 
@@ -669,13 +790,101 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   value={state.rotation}
                   onChange={(e) => onChange({ rotation: Number(e.target.value) })}
                   className="w-full"
-                  aria-label="Rotation Angle"
                 />
               </div>
             </div>
 
+            {/* Swiss Architectural Watermark Layer Controls */}
+            <div className="p-3.5 bg-[#0D0F14] border border-[#22262E] space-y-3 pt-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="font-bold text-[#F4F5F7] text-xs block">ARCHITECTURAL WATERMARK</span>
+                  <span className="text-[11px] text-[#A1A1AA]">Massive background glyph layer</span>
+                </div>
+                <button
+                  onClick={() => onChange({ showWatermark: !state.showWatermark })}
+                  className={`px-2.5 py-0.5 text-xs font-bold border transition-colors ${
+                    state.showWatermark ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C]' : 'border-[#22262E] text-[#A1A1AA]'
+                  }`}
+                >
+                  {state.showWatermark ? 'ON' : 'OFF'}
+                </button>
+              </div>
+
+              {state.showWatermark && (
+                <div className="space-y-2.5 pt-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-[#A1A1AA] w-14">GLYPH:</span>
+                    <input
+                      type="text"
+                      maxLength={4}
+                      value={state.watermarkText}
+                      onChange={(e) => onChange({ watermarkText: e.target.value })}
+                      className="w-20 bg-[#08090C] border border-[#22262E] text-[#00FF66] p-1.5 text-center text-xs font-bold"
+                    />
+                    <div className="flex gap-1">
+                      {['57', '11', 'R', 'SPQR', '✦', '№'].map((txt) => (
+                        <button
+                          key={txt}
+                          onClick={() => onChange({ watermarkText: txt })}
+                          className="px-2 py-1 bg-[#151922] text-[#A1A1AA] hover:text-[#00FF66] border border-[#22262E] text-[11px]"
+                        >
+                          {txt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[#A1A1AA] text-[11px]">
+                    <span>OPACITY</span>
+                    <span className="text-[#00FF66] font-bold">{Math.round(state.watermarkOpacity * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.02"
+                    max="0.30"
+                    step="0.01"
+                    value={state.watermarkOpacity}
+                    onChange={(e) => onChange({ watermarkOpacity: Number(e.target.value) })}
+                    className="w-full"
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Phosphor Glow */}
+            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
+              <div className="flex justify-between items-center">
+                <span className="text-[#A1A1AA] text-xs font-semibold">PHOSPHOR LASER GLOW</span>
+                <button
+                  onClick={() => onChange({ textShadow: !state.textShadow })}
+                  className={`px-3 py-1 text-xs border ${
+                    state.textShadow ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C] font-bold' : 'border-[#22262E] text-[#A1A1AA]'
+                  }`}
+                >
+                  {state.textShadow ? 'GLOW: ON' : 'GLOW: OFF'}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ==================== TAB 4: CANVAS & PRESETS ==================== */}
+        {activeMainTab === 'canvas' && (
+          <div className="space-y-5">
+            
+            {/* Quick Invert button */}
+            <button
+              onClick={handleInvertColors}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#161B24] hover:bg-[#202735] text-[#F4F5F7] border border-[#272F3E] transition-colors font-bold"
+            >
+              <ArrowRightLeft className="w-4 h-4 text-[#00FF66]" />
+              <span>INVERT FOREGROUND ⇄ BACKGROUND</span>
+            </button>
+
             {/* Canvas Aspect Ratio Framing */}
-            <div className="space-y-2 pt-3 border-t border-[#1E232E]">
+            <div className="space-y-2">
               <label className="text-[#A1A1AA] block text-xs font-semibold">
                 CANVAS PROPORTIONS & RATIO
               </label>
@@ -702,8 +911,70 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             </div>
 
-            {/* Grid Overlay Controls (Controlled opacity behind text) */}
-            <div className="space-y-2 pt-3 border-t border-[#1E232E]">
+            {/* Background Color Picker */}
+            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
+              <div className="flex justify-between items-center text-[#A1A1AA]">
+                <span>BACKGROUND COLOR</span>
+                <span className="text-[#00FF66] font-bold uppercase">{state.backgroundColor}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="color"
+                  value={state.backgroundColor}
+                  onChange={(e) => onChange({ backgroundColor: e.target.value })}
+                  className="w-8 h-8 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
+                />
+                <div className="flex flex-wrap gap-1.5 flex-1">
+                  {[
+                    { hex: '#070809', label: 'Pitch Obsidian' },
+                    { hex: '#111317', label: 'Deep Monolith' },
+                    { hex: '#F4F5F7', label: 'Laboratory White' },
+                    { hex: '#00FF66', label: 'Electric Strobe' },
+                    { hex: '#1E232B', label: 'Graphite Zinc' },
+                  ].map((item) => (
+                    <button
+                      key={item.hex}
+                      onClick={() => onChange({ backgroundColor: item.hex })}
+                      className="w-6 h-6 border border-[#2B3342] relative hover:scale-110 transition-transform"
+                      style={{ backgroundColor: item.hex }}
+                      title={item.label}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Background Texture Selection */}
+            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
+              <label className="text-[#A1A1AA] block text-xs font-semibold flex items-center gap-2">
+                <ImageIcon className="w-4 h-4 text-[#00FF66]" />
+                ORIGINAL GRAPHIC TEXTURES
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { id: 'none', label: 'SOLID COLOR', desc: 'Minimal Swiss stark canvas' },
+                  { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics & film grain' },
+                  { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Architectural shadow planes' },
+                  { id: 'macro-ink', label: 'MACRO INK EMULSION', desc: 'Lithographic paper bleed' },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => onChangeBackgroundTexture(item.id as any)}
+                    className={`p-2.5 text-left border transition-all ${
+                      backgroundTexture === item.id
+                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                        : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
+                    }`}
+                  >
+                    <div className="text-xs font-bold">{item.label}</div>
+                    <div className="text-[11px] text-[#A1A1AA] mt-0.5 line-clamp-1">{item.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Grid Overlay Controls */}
+            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
               <div className="flex justify-between items-center">
                 <span className="text-[#A1A1AA] text-xs font-semibold flex items-center gap-2">
                   <Grid className="w-4 h-4 text-[#00FF66]" />
@@ -740,226 +1011,34 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               )}
             </div>
 
-          </div>
-        )}
-
-        {/* ==================== TAB 4: COLOR & ATMOSPHERE ==================== */}
-        {activeTab === 'color' && (
-          <div className="space-y-5">
-            
-            {/* Quick Invert button */}
-            <button
-              onClick={handleInvertColors}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#161B24] hover:bg-[#202735] text-[#F4F5F7] border border-[#272F3E] transition-colors font-bold"
-            >
-              <ArrowRightLeft className="w-4 h-4 text-[#00FF66]" />
-              <span>INVERT FOREGROUND ⇄ BACKGROUND</span>
-            </button>
-
-            {/* Text Color Picker */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-[#A1A1AA]">
-                <span>TEXT COLOR (FOREGROUND)</span>
-                <span className="text-[#00FF66] font-bold uppercase">{state.textColor}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={state.textColor}
-                  onChange={(e) => onChange({ textColor: e.target.value })}
-                  className="w-10 h-10 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
-                  aria-label="Text Color"
-                />
-                <div className="flex flex-wrap gap-2 flex-1">
-                  {[
-                    { hex: '#F4F5F7', label: 'Laboratory White' },
-                    { hex: '#00FF66', label: 'Phosphor Green' },
-                    { hex: '#070809', label: 'Obsidian Black' },
-                    { hex: '#FFB800', label: 'Hazard Amber' },
-                    { hex: '#00E5FF', label: 'Laser Cyan' },
-                    { hex: '#A1A1AA', label: 'Muted Zinc' },
-                  ].map((item) => (
-                    <button
-                      key={item.hex}
-                      onClick={() => onChange({ textColor: item.hex })}
-                      className="w-7 h-7 border border-[#2B3342] relative hover:scale-110 transition-transform"
-                      style={{ backgroundColor: item.hex }}
-                      title={item.label}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Background Color Picker */}
-            <div className="space-y-2 pt-3 border-t border-[#1E232E]">
-              <div className="flex justify-between items-center text-[#A1A1AA]">
-                <span>CANVAS BACKGROUND COLOR</span>
-                <span className="text-[#00FF66] font-bold uppercase">{state.backgroundColor}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="color"
-                  value={state.backgroundColor}
-                  onChange={(e) => onChange({ backgroundColor: e.target.value })}
-                  className="w-10 h-10 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
-                  aria-label="Background Color"
-                />
-                <div className="flex flex-wrap gap-2 flex-1">
-                  {[
-                    { hex: '#070809', label: 'Pitch Obsidian' },
-                    { hex: '#111317', label: 'Deep Monolith' },
-                    { hex: '#F4F5F7', label: 'Laboratory White' },
-                    { hex: '#00FF66', label: 'Electric Strobe' },
-                    { hex: '#1E232B', label: 'Graphite Zinc' },
-                  ].map((item) => (
-                    <button
-                      key={item.hex}
-                      onClick={() => onChange({ backgroundColor: item.hex })}
-                      className="w-7 h-7 border border-[#2B3342] relative hover:scale-110 transition-transform"
-                      style={{ backgroundColor: item.hex }}
-                      title={item.label}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Background Original Photographic Texture Selection */}
-            <div className="space-y-2 pt-3 border-t border-[#1E232E]">
-              <label className="text-[#A1A1AA] block text-xs font-semibold flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                ORIGINAL GRAPHIC TEXTURES (NONVERBAL)
-              </label>
-              <div className="grid grid-cols-2 gap-2.5">
-                {[
-                  { id: 'none', label: 'SOLID COLOR', desc: 'Minimal Swiss stark canvas' },
-                  { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics & film grain' },
-                  { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Architectural shadow planes' },
-                  { id: 'macro-ink', label: 'MACRO INK EMULSION', desc: 'Lithographic paper bleed' },
-                ].map((item) => (
+            {/* Presets List */}
+            <div className="space-y-3 pt-3 border-t border-[#1E232E]">
+              <span className="text-[#A1A1AA] block text-xs font-semibold">
+                COMPLETE HISTORICAL PRESETS (08)
+              </span>
+              <div className="space-y-2">
+                {SPECIMEN_PRESETS.map((preset) => (
                   <button
-                    key={item.id}
-                    onClick={() => onChangeBackgroundTexture(item.id as any)}
-                    className={`p-2.5 text-left border transition-all ${
-                      backgroundTexture === item.id
-                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
-                        : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
-                    }`}
+                    key={preset.id}
+                    onClick={() => onChange(preset.state)}
+                    className="w-full text-left p-3 border border-[#22262E] bg-[#0D0F14] hover:bg-[#151922] hover:border-[#00FF66] transition-all group"
                   >
-                    <div className="text-xs font-bold">{item.label}</div>
-                    <div className="text-[11px] text-[#A1A1AA] mt-1 line-clamp-1">{item.desc}</div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[#F4F5F7] text-xs group-hover:text-[#00FF66] transition-colors">
+                        {preset.name}
+                      </span>
+                      <span className="text-[11px] px-2 py-0.5 bg-[#1A1F29] text-[#00FF66] font-mono-code font-bold">
+                        {preset.code}
+                      </span>
+                    </div>
+                    <p className="text-xs text-[#A1A1AA] mt-1 line-clamp-1">
+                      {preset.description}
+                    </p>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Swiss Architectural Watermark Layer Controls */}
-            <div className="p-3.5 bg-[#0D0F14] border border-[#22262E] space-y-3 pt-3">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-[#F4F5F7] text-xs">SWISS ARCHITECTURAL WATERMARK</span>
-                <button
-                  onClick={() => onChange({ showWatermark: !state.showWatermark })}
-                  className={`px-2.5 py-0.5 text-xs font-bold border transition-colors ${
-                    state.showWatermark ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C]' : 'border-[#22262E] text-[#A1A1AA]'
-                  }`}
-                >
-                  {state.showWatermark ? 'ON' : 'OFF'}
-                </button>
-              </div>
-
-              {state.showWatermark && (
-                <div className="space-y-2.5 pt-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-[#A1A1AA] w-14">GLYPH:</span>
-                    <input
-                      type="text"
-                      maxLength={4}
-                      value={state.watermarkText}
-                      onChange={(e) => onChange({ watermarkText: e.target.value })}
-                      className="w-20 bg-[#08090C] border border-[#22262E] text-[#00FF66] p-1.5 text-center text-xs font-bold"
-                    />
-                    <div className="flex gap-1">
-                      {['57', '11', 'R', 'SPQR', '✦', '№'].map((txt) => (
-                        <button
-                          key={txt}
-                          onClick={() => onChange({ watermarkText: txt })}
-                          className="px-2 py-1 bg-[#151922] text-[#A1A1AA] hover:text-[#00FF66] border border-[#22262E] text-[10px]"
-                        >
-                          {txt}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[#A1A1AA] text-[11px]">
-                    <span>OPACITY</span>
-                    <span className="text-[#00FF66] font-bold">{Math.round(state.watermarkOpacity * 100)}%</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="0.02"
-                    max="0.30"
-                    step="0.01"
-                    value={state.watermarkOpacity}
-                    onChange={(e) => onChange({ watermarkOpacity: Number(e.target.value) })}
-                    className="w-full"
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Text Glow / Phosphor Radiation Toggle */}
-            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
-              <div className="flex justify-between items-center">
-                <span className="text-[#A1A1AA] text-xs font-semibold">PHOSPHOR LASER GLOW</span>
-                <button
-                  onClick={() => onChange({ textShadow: !state.textShadow })}
-                  className={`px-3 py-1 text-xs border ${
-                    state.textShadow ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C] font-bold' : 'border-[#22262E] text-[#A1A1AA]'
-                  }`}
-                >
-                  {state.textShadow ? 'GLOW: ON' : 'GLOW: OFF'}
-                </button>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* ==================== TAB 5: PRESETS (08) ==================== */}
-        {activeTab === 'presets' && (
-          <div className="space-y-3">
-            <span className="text-[#A1A1AA] block text-xs font-semibold">
-              CURATED HISTORICAL & EXPERIMENTAL PRESETS
-            </span>
-            <div className="space-y-2.5">
-              {SPECIMEN_PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  onClick={() => onChange(preset.state)}
-                  className="w-full text-left p-3.5 border border-[#22262E] bg-[#0D0F14] hover:bg-[#151922] hover:border-[#00FF66] transition-all group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#F4F5F7] text-xs group-hover:text-[#00FF66] transition-colors">
-                      {preset.name}
-                    </span>
-                    <span className="text-[11px] px-2 py-0.5 bg-[#1A1F29] text-[#00FF66] font-mono-code font-bold">
-                      {preset.code}
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#A1A1AA] mt-1.5 leading-relaxed line-clamp-2">
-                    {preset.description}
-                  </p>
-                  <div className="mt-2.5 flex items-center justify-between text-xs text-[#71717A]">
-                    <span>{preset.category}</span>
-                    <span className="text-[#00FF66] opacity-0 group-hover:opacity-100 transition-opacity font-bold">
-                      APPLY CONFIG →
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
           </div>
         )}
 
@@ -994,6 +1073,23 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           )}
         </button>
       </div>
+
+      {/* Visual Font Picker Modal Dialog */}
+      <VisualFontPicker
+        isOpen={fontPickerTarget !== null}
+        onClose={() => setFontPickerTarget(null)}
+        title={fontPickerTarget === 'headline' ? 'SELECT HEADLINE TYPEFACE' : 'SELECT SECONDARY PAIRING TYPEFACE'}
+        selectedFontFamily={fontPickerTarget === 'headline' ? state.fontFamily : state.subFontFamily}
+        onSelectFont={(font) => {
+          if (fontPickerTarget === 'headline') {
+            onChange({ fontFamily: font.cssFamily });
+          } else {
+            onChange({ subFontFamily: font.cssFamily });
+          }
+        }}
+        fonts={allFonts}
+        onUploadCustomFont={onUploadCustomFont}
+      />
 
     </div>
   );

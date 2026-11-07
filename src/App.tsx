@@ -24,6 +24,7 @@ export const App: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<'playground' | 'specimens' | 'about'>(getInitialTab);
+  const [activeLayer, setActiveLayer] = useState<'headline' | 'secondary'>('headline');
   const [typoState, setTypoState] = useState<TypographicState>(DEFAULT_STATE);
   const [customFonts, setCustomFonts] = useState<FontDefinition[]>([]);
   const [backgroundTexture, setBackgroundTexture] = useState<'none' | 'darkroom' | 'swiss-grid' | 'macro-ink'>('none');
@@ -192,7 +193,7 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
       {/* Main Content View Switcher */}
       <main className="flex-1 flex flex-col">
         {activeTab === 'playground' && (
-          <div className="flex-1 max-w-[1680px] w-full mx-auto px-3 sm:px-6 lg:px-8 py-3 grid grid-cols-1 lg:grid-cols-12 items-start gap-4">
+          <div className="flex-1 max-w-[1680px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 grid grid-cols-1 lg:grid-cols-12 gap-4">
             
             {/* Visual Canvas Artboard (7 cols on large screens) */}
             <div className="lg:col-span-7 xl:col-span-8 flex flex-col justify-center bg-[#070809] border border-[#1E232E]">
@@ -203,6 +204,8 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 backgroundTexture={backgroundTexture}
                 canvasRef={canvasRef}
                 onAutoFitSize={handleAutoFitSize}
+                activeLayer={activeLayer}
+                onSelectLayer={setActiveLayer}
               />
             </div>
 
@@ -218,6 +221,8 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 onAutoFitSize={handleAutoFitSize}
                 customFonts={customFonts}
                 onUploadCustomFont={handleUploadCustomFont}
+                activeLayer={activeLayer}
+                onSelectLayer={setActiveLayer}
               />
             </div>
 
