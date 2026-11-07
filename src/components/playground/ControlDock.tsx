@@ -48,6 +48,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   activeLayer: externalActiveLayer,
   onSelectLayer,
 }) => {
+  const [viewMode, setViewMode] = useState<'all' | 'tabbed'>('all');
   const [activeMainTab, setActiveMainTab] = useState<'type' | 'pairings' | 'effects' | 'canvas'>('type');
   const [internalActiveLayer, setInternalActiveLayer] = useState<'headline' | 'secondary'>('headline');
   const [fontPickerTarget, setFontPickerTarget] = useState<'headline' | 'secondary' | null>(null);
@@ -182,11 +183,11 @@ export const ControlDock: React.FC<ControlDockProps> = ({
 
   const handleResetTextureModifiers = () => {
     onChange({
-      textureOpacity: 0.35,
-      textureBlendMode: 'overlay',
+      textureOpacity: 0.65,
+      textureBlendMode: 'normal',
       textureScale: 100,
-      textureContrast: 100,
-      textureBrightness: 100,
+      textureContrast: 110,
+      textureBrightness: 105,
       textureBlur: 0,
       textureInvert: false,
       textureTint: 'none',
@@ -194,42 +195,103 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     });
   };
 
+  const showType = viewMode === 'all' || activeMainTab === 'type';
+  const showPairings = viewMode === 'all' || activeMainTab === 'pairings';
+  const showEffects = viewMode === 'all' || activeMainTab === 'effects';
+  const showCanvas = viewMode === 'all' || activeMainTab === 'canvas';
+
   return (
     <div className="w-full bg-[#111317] border-t lg:border-t-0 lg:border-l border-[#22262E] text-xs font-mono-code flex flex-col">
       
-      {/* Primary Navigation Tabs */}
-      <div className="flex border-b border-[#22262E] bg-[#0A0C10] px-3 py-1 gap-1 overflow-x-auto">
+      {/* Studio Adjustments Top Mode Switcher */}
+      <div className="flex items-center justify-between px-3 py-2 bg-[#080A0E] border-b border-[#1E232E]">
+        <div className="flex items-center gap-2 text-xs text-[#A1A1AA]">
+          <span className="w-2 h-2 rounded-full bg-[#00FF66] inline-block animate-pulse"></span>
+          <span className="font-bold text-[#F4F5F7] text-xs">
+            Adjustment Suite
+          </span>
+        </div>
+        <div className="flex items-center gap-1 bg-[#10131A] p-0.5 border border-[#222834]">
+          <button
+            onClick={() => setViewMode('all')}
+            className={`px-3 py-1 text-xs font-bold transition-all ${
+              viewMode === 'all'
+                ? 'bg-[#00FF66] text-black font-extrabold shadow-sm'
+                : 'text-[#CBD5E1] hover:text-[#F4F5F7]'
+            }`}
+            title="Display all 01-04 adjustment sections stacked at once (no scrolling between tabs)"
+          >
+            View All (01–04)
+          </button>
+          <button
+            onClick={() => setViewMode('tabbed')}
+            className={`px-3 py-1 text-xs font-bold transition-all ${
+              viewMode === 'tabbed'
+                ? 'bg-[#00FF66] text-black font-extrabold shadow-sm'
+                : 'text-[#CBD5E1] hover:text-[#F4F5F7]'
+            }`}
+            title="Focus on a single tab at a time"
+          >
+            Tabbed
+          </button>
+        </div>
+      </div>
+
+      {/* Primary Navigation Tabs — 4 Column Grid (NEVER SCROLLED!) */}
+      <div className="grid grid-cols-4 gap-1 p-2 bg-[#0A0C10] border-b border-[#22262E]">
         {[
-          { id: 'type', label: '01 TYPE & PAIRING', icon: Type },
-          { id: 'pairings', label: '02 PAIRINGS GALLERY', icon: Columns },
-          { id: 'effects', label: '03 EFFECTS & MOTION', icon: Sliders },
-          { id: 'canvas', label: '04 CANVAS & TEXTURES', icon: Palette },
+          { id: 'type', num: '01', label: 'Type', icon: Type },
+          { id: 'pairings', num: '02', label: 'Pairs', icon: Columns },
+          { id: 'effects', num: '03', label: 'Effects', icon: Sliders },
+          { id: 'canvas', num: '04', label: 'Canvas', icon: Palette },
         ].map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeMainTab === tab.id;
+          const isActive = viewMode === 'tabbed' && activeMainTab === tab.id;
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveMainTab(tab.id as any)}
-              className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
+              onClick={() => {
+                if (viewMode === 'all') {
+                  const el = document.getElementById(`panel-section-${tab.id}`);
+                  el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                  setActiveMainTab(tab.id as any);
+                }
+              }}
+              className={`p-2 flex flex-col items-center justify-center text-center transition-all border ${
                 isActive
-                  ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
-                  : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7] hover:bg-[#111317]'
+                  ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                  : 'border-[#1E232E] bg-[#0E1117] text-[#CBD5E1] hover:text-[#F4F5F7] hover:border-[#333C4D]'
               }`}
+              title={viewMode === 'all' ? `Jump to Section ${tab.num}: ${tab.label}` : `Switch to Tab ${tab.num}`}
             >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{tab.label}</span>
+              <div className="flex items-center gap-1">
+                <Icon className="w-3.5 h-3.5 text-[#00FF66]" />
+                <span className="text-xs font-bold font-mono-code">{tab.num}</span>
+              </div>
+              <span className="text-xs font-bold mt-0.5 truncate w-full">
+                {tab.label}
+              </span>
             </button>
           );
         })}
       </div>
 
       {/* Main Control Panel Body */}
-      <div className="p-4 sm:p-5 space-y-5 overflow-y-auto max-h-[700px] flex-1">
+      <div className="p-4 sm:p-5 space-y-6 overflow-y-auto max-h-[calc(100vh-180px)] min-h-[500px] flex-1">
 
-        {/* ==================== TAB 1: TYPE & PAIRING DUAL-LAYER CONTROLLER ==================== */}
-        {activeMainTab === 'type' && (
-          <div className="space-y-5">
+        {/* ==================== SECTION 1: TYPE & PAIRING DUAL-LAYER CONTROLLER ==================== */}
+        {showType && (
+          <div id="panel-section-type" className="space-y-5 pb-2">
+            {viewMode === 'all' && (
+              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
+                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
+                  <Type className="w-3.5 h-3.5" />
+                  <span>01: Type and pairing layers</span>
+                </span>
+                <span className="text-xs text-[#CBD5E1] font-mono-code">Primary & Secondary</span>
+              </div>
+            )}
             
             {/* Dual Layer Segmented Switcher */}
             <div className="p-1.5 bg-[#0D0F14] border border-[#22262E] flex items-center gap-1.5">
@@ -257,8 +319,8 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold uppercase tracking-wider">LAYER B: PAIRING TEXT</span>
-                  <span className={`px-1.5 py-0.2 text-[10px] font-bold rounded ${
-                    state.showSubText ? 'bg-[#00FF66] text-black' : 'bg-[#22262E] text-[#71717A]'
+                  <span className={`px-2 py-0.5 text-xs font-bold rounded ${
+                    state.showSubText ? 'bg-[#00FF66] text-black' : 'bg-[#22262E] text-[#CBD5E1]'
                   }`}>
                     {state.showSubText ? 'ON' : 'OFF'}
                   </span>
@@ -710,9 +772,24 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           </div>
         )}
 
-        {/* ==================== TAB 2: PAIRINGS GALLERY ==================== */}
-        {activeMainTab === 'pairings' && (
-          <div className="space-y-4">
+        {/* ==================== SECTION 2: PAIRINGS GALLERY ==================== */}
+        {showPairings && (
+          <div id="panel-section-pairings" className="space-y-4 pt-4 border-t border-[#1E232E] pb-2">
+            {viewMode === 'all' && (
+              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
+                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
+                  <Columns className="w-3.5 h-3.5" />
+                  <span>02: Curated font pairings</span>
+                </span>
+                <button
+                  onClick={handleShufflePairing}
+                  className="text-xs text-[#00FF66] hover:text-[#4DFF95] flex items-center gap-1 font-bold"
+                >
+                  <Shuffle className="w-3.5 h-3.5" />
+                  <span>Shuffle</span>
+                </button>
+              </div>
+            )}
             
             {/* Header with Shuffle */}
             <div className="flex items-center justify-between p-3 bg-[#0D0F14] border border-[#22262E]">
@@ -742,7 +819,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       <span className="font-bold text-[#F4F5F7] text-xs group-hover:text-[#00FF66] transition-colors">
                         {pairing.name}
                       </span>
-                      <span className="text-[11px] text-[#71717A] block mt-0.5">{pairing.category}</span>
+                      <span className="text-xs text-[#CBD5E1] block mt-0.5">{pairing.category}</span>
                     </div>
                     <button
                       onClick={() => handleApplyPairing(pairing)}
@@ -776,7 +853,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-[#71717A]">
+                  <div className="flex items-center justify-between text-xs text-[#CBD5E1]">
                     <span>{pairing.headlineFamily.split(',')[0].replace(/['"]/g, '')} + {pairing.bodyFamily.split(',')[0].replace(/['"]/g, '')}</span>
                     <span className="text-[#A1A1AA] line-clamp-1 max-w-[200px]">{pairing.description}</span>
                   </div>
@@ -787,9 +864,18 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           </div>
         )}
 
-        {/* ==================== TAB 3: EFFECTS & WATERMARK ==================== */}
-        {activeMainTab === 'effects' && (
-          <div className="space-y-5">
+        {/* ==================== SECTION 3: EFFECTS & WATERMARK ==================== */}
+        {showEffects && (
+          <div id="panel-section-effects" className="space-y-5 pt-4 border-t border-[#1E232E] pb-2">
+            {viewMode === 'all' && (
+              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
+                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
+                  <Sliders className="w-3.5 h-3.5" />
+                  <span>03: Effects, transformations & watermark</span>
+                </span>
+                <span className="text-xs text-[#CBD5E1] font-mono-code">Kinetic & Glyph</span>
+              </div>
+            )}
             
             {/* Kinetic Animation Modes */}
             <div className="space-y-2">
@@ -934,7 +1020,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       className="w-20 bg-[#08090C] border border-[#22262E] text-[#00FF66] p-1.5 text-center text-xs font-bold"
                     />
                     <div className="flex gap-1">
-                      {['57', '11', 'R', 'SPQR', '✦', '№'].map((txt) => (
+                      {['57', '11', 'R', 'SPQR', '§', '№'].map((txt) => (
                         <button
                           key={txt}
                           onClick={() => onChange({ watermarkText: txt })}
@@ -981,9 +1067,18 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           </div>
         )}
 
-        {/* ==================== TAB 4: CANVAS & PRESETS ==================== */}
-        {activeMainTab === 'canvas' && (
-          <div className="space-y-5">
+        {/* ==================== SECTION 4: CANVAS & TEXTURES ==================== */}
+        {showCanvas && (
+          <div id="panel-section-canvas" className="space-y-5 pt-4 border-t border-[#1E232E] pb-2">
+            {viewMode === 'all' && (
+              <div className="flex items-center justify-between py-2 px-3 bg-[#0D1016] border border-[#222834]">
+                <span className="text-xs font-bold text-[#00FF66] flex items-center gap-2">
+                  <Palette className="w-3.5 h-3.5" />
+                  <span>04: Canvas framing & graphic textures</span>
+                </span>
+                <span className="text-xs text-[#00FF66] font-mono-code font-bold">10 textures</span>
+              </div>
+            )}
             
             {/* Quick Invert button */}
             <button
@@ -1085,7 +1180,13 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   return (
                     <button
                       key={item.id}
-                      onClick={() => onChange({ backgroundTexture: item.id as any })}
+                      onClick={() => {
+                        onChange({
+                          backgroundTexture: item.id as any,
+                          textureOpacity: (state.textureOpacity && state.textureOpacity >= 0.4) ? state.textureOpacity : 0.65,
+                          textureBlendMode: state.textureBlendMode || 'normal',
+                        });
+                      }}
                       className={`p-2.5 text-left border transition-all ${
                         isSelected
                           ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
@@ -1094,8 +1195,8 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold leading-tight">{item.label}</span>
-                        <span className={`text-[9px] px-1 py-0.2 rounded font-mono-code ${
-                          isSelected ? 'bg-[#00FF66]/20 text-[#00FF66]' : 'bg-[#181D26] text-[#6B7280]'
+                        <span className={`text-[11px] px-1.5 py-0.5 rounded font-mono-code ${
+                          isSelected ? 'bg-[#00FF66]/20 text-[#00FF66]' : 'bg-[#181D26] text-[#A1A1AA]'
                         }`}>
                           {item.category}
                         </span>
@@ -1157,7 +1258,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         <button
                           key={val}
                           onClick={() => onChange({ textureOpacity: val })}
-                          className={`flex-1 py-0.5 text-[10px] border transition-colors ${
+                          className={`flex-1 py-0.5 text-xs border transition-colors ${
                             Math.abs((state.textureOpacity ?? 0.45) - val) < 0.04
                               ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                               : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
@@ -1189,7 +1290,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         <button
                           key={mode.id}
                           onClick={() => onChange({ textureBlendMode: mode.id as any })}
-                          className={`py-1 px-1 text-center text-[10px] font-mono-code border transition-colors ${
+                          className={`py-1 px-1 text-center text-xs font-mono-code border transition-colors ${
                             (state.textureBlendMode ?? 'overlay') === mode.id
                               ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                               : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
@@ -1221,7 +1322,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         <button
                           key={s}
                           onClick={() => onChange({ textureScale: s })}
-                          className={`flex-1 py-0.5 text-[10px] border transition-colors ${
+                          className={`flex-1 py-0.5 text-xs border transition-colors ${
                             (state.textureScale ?? 100) === s
                               ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                               : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'
@@ -1329,7 +1430,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                             className="w-3 h-3 rounded-none border border-black/40"
                             style={{ backgroundColor: t.color }}
                           />
-                          <span className="text-[9px] uppercase">{t.label}</span>
+                          <span className="text-[11px] font-bold uppercase">{t.label}</span>
                         </button>
                       ))}
                     </div>
@@ -1347,7 +1448,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         <button
                           key={r.id}
                           onClick={() => onChange({ textureRepeat: r.id as any })}
-                          className={`py-1 text-center text-[10px] font-mono-code border transition-colors ${
+                          className={`py-1 text-center text-xs font-mono-code border transition-colors ${
                             (state.textureRepeat ?? 'cover') === r.id
                               ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                               : 'border-[#1E2430] bg-[#11141A] text-[#808898] hover:text-[#C2CAD8]'

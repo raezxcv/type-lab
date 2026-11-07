@@ -8,9 +8,12 @@ interface TypographicCanvasProps {
   onChangeSubText: (subText: string) => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   onAutoFitSize: () => void;
+  onChangeTexture?: (texture: TypographicState['backgroundTexture']) => void;
   activeLayer?: 'headline' | 'secondary';
   onSelectLayer?: (layer: 'headline' | 'secondary') => void;
 }
+
+const encodeSvg = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
 const TEXTURE_ASSETS: Record<string, string> = {
   'none': '',
@@ -19,10 +22,10 @@ const TEXTURE_ASSETS: Record<string, string> = {
   'macro-ink': '/images/macro-ink-interference-plate.jpg',
   'photostat': '/images/photostat-grain-plate.jpg',
   'risograph': '/images/risograph-halftone-mesh.jpg',
-  'halftone-dots': "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><circle cx='8' cy='8' r='2.5' fill='%23ffffff' opacity='0.75'/></svg>",
-  'cyber-scanline': "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'><rect width='4' height='2' fill='%23ffffff' opacity='0.35'/><rect y='2' width='4' height='2' fill='%23000000' opacity='0.35'/></svg>",
-  'blueprint-grid': "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><path d='M 40 0 L 0 0 0 40' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.4'/><circle cx='40' cy='40' r='1.5' fill='%2300FF66' opacity='0.7'/></svg>",
-  'film-grain': "data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='0.55'/></svg>"
+  'halftone-dots': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5" fill="#ffffff" opacity="0.85"/><circle cx="0" cy="0" r="1.5" fill="#ffffff" opacity="0.5"/><circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.5"/></svg>`),
+  'cyber-scanline': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6"><rect width="6" height="3" fill="#ffffff" opacity="0.5"/><rect y="3" width="6" height="3" fill="#000000" opacity="0.5"/></svg>`),
+  'blueprint-grid': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M 48 0 L 0 0 0 48" fill="none" stroke="#00FF66" stroke-width="0.8" opacity="0.45"/><circle cx="48" cy="48" r="2" fill="#00FF66" opacity="0.85"/></svg>`),
+  'film-grain': encodeSvg(`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.75"/></svg>`)
 };
 
 const TINT_COLORS: Record<string, string> = {
@@ -38,6 +41,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   state,
   onChangeText,
   onChangeSubText,
+  onChangeTexture,
   canvasRef,
   onAutoFitSize,
   onSelectLayer,
@@ -110,6 +114,23 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           <span className="text-xs">FRAME: [{state.canvasFrame.toUpperCase()}]</span>
           <span className="text-[#3A4354]">|</span>
           <span className="text-xs">SCALE: {state.fontSize}px</span>
+          <span className="text-[#3A4354]">|</span>
+          <button
+            onClick={() => {
+              const textures: Array<TypographicState['backgroundTexture']> = [
+                'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph', 'halftone-dots', 'cyber-scanline', 'blueprint-grid', 'film-grain', 'none'
+              ];
+              const idx = textures.indexOf(state.backgroundTexture);
+              const next = textures[(idx + 1) % textures.length];
+              onChangeTexture?.(next);
+            }}
+            className="flex items-center gap-1.5 px-2 py-0.5 bg-[#12161F] hover:bg-[#1A222F] text-[#00FF66] border border-[#232B3B] transition-colors text-[11px] font-bold"
+            title="Cycle background texture plate"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00FF66]"></span>
+            <span>BG: {state.backgroundTexture.toUpperCase()}</span>
+            <span className="text-[#8E97A8] text-[10px]">⇄</span>
+          </button>
         </div>
 
         {/* Action controls: Auto-fit text & Zoom */}

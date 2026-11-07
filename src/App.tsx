@@ -186,8 +186,13 @@ export const App: React.FC = () => {
     ];
     const randomPalette = palettes[Math.floor(Math.random() * palettes.length)];
     const randomSkew = Math.random() > 0.8 ? Math.floor((Math.random() * 12) - 6) : 0;
-    const watermarks = ["57", "11", "№", "✦", "R", "SPQR", "M", "AXIOM"];
+    const watermarks = ["57", "11", "№", "§", "R", "SPQR", "M", "AXIOM"];
     const randomWatermark = watermarks[Math.floor(Math.random() * watermarks.length)];
+
+    const textures: Array<TypographicState['backgroundTexture']> = [
+      'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph', 'halftone-dots', 'cyber-scanline', 'blueprint-grid', 'film-grain'
+    ];
+    const randomTexture = textures[Math.floor(Math.random() * textures.length)];
 
     setTypoState(prev => ({
       ...prev,
@@ -211,6 +216,10 @@ export const App: React.FC = () => {
       subTextColor: randomPalette.sub,
       // Ambient Watermark
       watermarkText: randomWatermark,
+      // Graphic Texture
+      backgroundTexture: randomTexture,
+      textureOpacity: Number((Math.random() * 0.25 + 0.50).toFixed(2)),
+      textureBlendMode: 'normal',
     }));
   };
 
@@ -261,6 +270,7 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 state={typoState}
                 onChangeText={(text) => handleUpdateState({ text })}
                 onChangeSubText={(subText) => handleUpdateState({ subText })}
+                onChangeTexture={(bg) => handleUpdateState({ backgroundTexture: bg })}
                 canvasRef={canvasRef}
                 onAutoFitSize={handleAutoFitSize}
                 activeLayer={activeLayer}
