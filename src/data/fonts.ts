@@ -101,6 +101,83 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     bestUse: 'Urban signage, geometric branding, stark minimalist posters',
     sampleText: 'URBAN MINIMALISM & SHARP GEOMETRY'
   },
+  {
+    id: 'work-sans',
+    name: 'Work Sans',
+    cssFamily: "'Work Sans', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Wei Huang, early grotesque workhorse inspired by Stephenson Blake & Miller & Richard',
+    designer: 'Wei Huang',
+    bestUse: 'Modernist editorial, architectural signage, Swiss structural layouts',
+    sampleText: 'EARLY GROTESQUE ARCHITECTURAL STRUCTURE'
+  },
+  {
+    id: 'manrope',
+    name: 'Manrope',
+    cssFamily: "'Manrope', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Mikhail Sharanda (Gentleman), open-source modern geometric grotesque crossover',
+    designer: 'Mikhail Sharanda',
+    bestUse: 'Clean technology interfaces, product design, modern brand identities',
+    sampleText: 'GEOMETRIC CLARITY & FUNCTIONAL BEAUTY'
+  },
+  {
+    id: 'sora',
+    name: 'Sora',
+    cssFamily: "'Sora', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Barnbrook Studio (Jonathan Barnbrook), British design legend with signature ink-traps',
+    designer: 'Jonathan Barnbrook',
+    bestUse: 'Hi-tech futuristic interfaces, bold display titling, crypto and digital systems',
+    sampleText: 'PRECISION INK-TRAP VECTORS & SIGNAL TELEMETRY'
+  },
+  {
+    id: 'chivo',
+    name: 'Chivo',
+    cssFamily: "'Chivo', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Héctor Gatti & Omnibus-Type, high-energy grotesque with grotesque curves',
+    designer: 'Héctor Gatti',
+    bestUse: 'Newspaper headlines, high-impact titles, assertive posters',
+    sampleText: 'HIGH-ENERGY CONTEMPORARY GROTESQUE'
+  },
+  {
+    id: 'albert-sans',
+    name: 'Albert Sans',
+    cssFamily: "'Albert Sans', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Andreas Rasmussen, geometric modernist sans inspired by Danish architectural signage',
+    designer: 'Andreas Rasmussen',
+    bestUse: 'Scandinavian minimalism, wayfinding, stark balanced layouts',
+    sampleText: 'SCANDINAVIAN ARCHITECTURAL WAYFINDING'
+  },
+  {
+    id: 'public-sans',
+    name: 'Public Sans',
+    cssFamily: "'Public Sans', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'USWDS & Dan O. Williams, neutral modernist open-source workhorse based on Libre Franklin',
+    designer: 'Dan O. Williams',
+    bestUse: 'System design systems, clean governmental reports, editorial clarity',
+    sampleText: 'NEUTRAL MODERNIST WORKHORSE TYPEFACE'
+  },
+  {
+    id: 'lexend',
+    name: 'Lexend',
+    cssFamily: "'Lexend', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Thomas Jockin & Bonnie Shaver-Troup, variable typeface designed for reading proficiency',
+    designer: 'Thomas Jockin',
+    bestUse: 'Hyper-legible copy, educational manuals, clean variable interfaces',
+    sampleText: 'EXPANSIVE READING PROFICIENCY & VECTOR HARMONY'
+  },
 
   // --- INDUSTRIAL & COMPRESSED DISPLAY ---
   {
@@ -157,6 +234,94 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     designer: 'Patric King',
     bestUse: 'Modern street culture, assertive compressed titles, brutalist layout',
     sampleText: 'CHICAGO RAILWAY & PROTEST LETTERING'
+  },
+  {
+    id: 'syncopate',
+    name: 'Syncopate',
+    cssFamily: "'Syncopate', sans-serif",
+    category: 'display',
+    weights: [400, 700],
+    origin: 'Astigmatic, ultra-wide architectural extended uppercase typeface',
+    designer: 'Astigmatic',
+    bestUse: 'Cinematic headers, futuristic luxury, extreme horizontal architectural tension',
+    sampleText: 'EXPANDED HORIZONTAL ARCHITECTURE'
+  },
+  {
+    id: 'staatliches',
+    name: 'Staatliches',
+    cssFamily: "'Staatliches', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'Marc Foley & Inga Plönnigs, homage to 1930s German Bauhaus exhibition posters',
+    designer: 'Marc Foley, Inga Plönnigs',
+    bestUse: 'Constructivist posters, Bauhaus tributes, clean industrial caps',
+    sampleText: 'BAUHAUS STAATLICHES AUSSTELLUNG 1923'
+  },
+  {
+    id: 'righteous',
+    name: 'Righteous',
+    cssFamily: "'Righteous', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'Astigmatic, geometric art deco modernist poster titling',
+    designer: 'Astigmatic',
+    bestUse: 'Retro-modern posters, bold display titling, artistic album graphics',
+    sampleText: 'GEOMETRIC DECO MODERNIST TITLE'
+  },
+  {
+    id: 'barlow-condensed',
+    name: 'Barlow Condensed',
+    cssFamily: "'Barlow Condensed', sans-serif",
+    category: 'display',
+    weights: [400, 500, 600, 700, 800, 900],
+    origin: 'Jeremy Tribby, inspired by California transit visual identity and public car plates',
+    designer: 'Jeremy Tribby',
+    bestUse: 'Transit signage, fast horizontal scanning, industrial packaging',
+    sampleText: 'CALIFORNIA HIGHWAY TRANSIT SIGNAGE'
+  },
+  {
+    id: 'russo-one',
+    name: 'Russo One',
+    cssFamily: "'Russo One', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'Jovanny Lemonad, heavy Russian constructivist display sans',
+    designer: 'Jovanny Lemonad',
+    bestUse: 'Agitprop flyers, massive impact banners, industrial titles',
+    sampleText: 'CONSTRUCTIVIST MONOLITHIC WEIGHT'
+  },
+  {
+    id: 'six-caps',
+    name: 'Six Caps',
+    cssFamily: "'Six Caps', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'Vernon Adams, extreme vertical compression condensed grotesque',
+    designer: 'Vernon Adams',
+    bestUse: 'Architectural vertical columns, tightest horizontal spaces, skyscraper typography',
+    sampleText: 'EXTREME VERTICAL COMPRESSION TITLING'
+  },
+  {
+    id: 'bungee',
+    name: 'Bungee',
+    cssFamily: "'Bungee', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'David Jonathan Ross (DJR), urban street signage celebrating vertical and chromatic type',
+    designer: 'David Jonathan Ross',
+    bestUse: 'Vertical ribbon headers, colorful street posters, playful industrial badges',
+    sampleText: 'URBAN CHROMATIC SIGNAGE TYPE'
+  },
+  {
+    id: 'bungee-outline',
+    name: 'Bungee Outline',
+    cssFamily: "'Bungee Outline', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'David Jonathan Ross, hollow wireframe variant of the Bungee signage font',
+    designer: 'David Jonathan Ross',
+    bestUse: 'Architectural blueprints, wireframe titles, futuristic glowing headers',
+    sampleText: 'HOLLOW VECTOR WIREFRAME TITLE'
   },
 
   // --- MONOSPACED & TECHNICAL CODE ---
@@ -226,6 +391,72 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     bestUse: 'Terminal interfaces, military HUDs, sci-fi cyber consoles',
     sampleText: 'VECTOR RADAR HUD: TARGET ACQUIRED [OK]'
   },
+  {
+    id: 'azeret-mono',
+    name: 'Azeret Mono',
+    cssFamily: "'Azeret Mono', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Martin Vácha (Displaay Foundry), brutalist variable monospace with heavy optical personality',
+    designer: 'Martin Vácha',
+    bestUse: 'Cyber-brutalist layouts, cutting-edge art direction, technical editorial',
+    sampleText: 'DISPLAAY BRUTALIST MONOSPACE VECTORS'
+  },
+  {
+    id: 'dm-mono',
+    name: 'DM Mono',
+    cssFamily: "'DM Mono', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500],
+    origin: 'Colophon Foundry for Google, geometric British modernist monospace',
+    designer: 'Colophon Foundry',
+    bestUse: 'Clean telemetry, editorial footnotes, Swiss data indexing',
+    sampleText: 'COLOPHON GEOMETRIC MONOSPACE METRICS'
+  },
+  {
+    id: 'red-hat-mono',
+    name: 'Red Hat Mono',
+    cssFamily: "'Red Hat Mono', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500, 600, 700],
+    origin: 'MCKL (Jeremy Mickel) & Paula Scher (Pentagram) for Red Hat identity',
+    designer: 'Jeremy Mickel',
+    bestUse: 'Enterprise open-source systems, terminal dashboards, sleek tech branding',
+    sampleText: 'SYSTEM METRICS [CPU: 14.2% // MEM: 2048 MB]'
+  },
+  {
+    id: 'inconsolata',
+    name: 'Inconsolata',
+    cssFamily: "'Inconsolata', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Raph Levien, legendary open-source monospace inspired by Consolas and Letter Gothic',
+    designer: 'Raph Levien',
+    bestUse: 'Fine technical printing, code specimen publications, high-density terminals',
+    sampleText: 'RAPH LEVIEN MONOSPACE EXCELLENCE'
+  },
+  {
+    id: 'source-code-pro',
+    name: 'Source Code Pro',
+    cssFamily: "'Source Code Pro', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Paul D. Hunt (Adobe Type), monospaced counterpart to Source Sans',
+    designer: 'Paul D. Hunt',
+    bestUse: 'UI consoles, precision data charts, clean code pairing',
+    sampleText: 'ADOBE PRECISION MONOSPACE CALIBRATION'
+  },
+  {
+    id: 'courier-prime',
+    name: 'Courier Prime',
+    cssFamily: "'Courier Prime', monospace",
+    category: 'monospace',
+    weights: [400, 700],
+    origin: 'Alan Dague-Greene (Quote-Unquote Apps), optimized 12pt typewriter typeface for screenwriters',
+    designer: 'Alan Dague-Greene',
+    bestUse: 'Screenplays, vintage typewriter documents, tactile brutalist memos',
+    sampleText: 'EXT. BASEL TONHALLE - NIGHT - 1957'
+  },
 
   // --- HIGH-CONTRAST EDITORIAL SERIFS ---
   {
@@ -294,6 +525,83 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     bestUse: 'Warm tactile editorial, organic curves, contemporary display headlines',
     sampleText: 'Warm, tactile and expressive organic serif'
   },
+  {
+    id: 'abril-fatface',
+    name: 'Abril Fatface',
+    cssFamily: "'Abril Fatface', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'TypeTogether (Veronika Burian, José Scaglione), contemporary revival of 19th-century Didone fatfaces',
+    designer: 'Veronika Burian, José Scaglione',
+    bestUse: 'High-impact magazine covers, dramatic titling, opulent fashion posters',
+    sampleText: 'OPULENT FATFACE POSTER TITLING'
+  },
+  {
+    id: 'spectral',
+    name: 'Spectral',
+    cssFamily: "'Spectral', serif",
+    category: 'serif',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Production Type (Jean-Baptiste Levée), commissioned by Google for screen reading and French book design',
+    designer: 'Jean-Baptiste Levée',
+    bestUse: 'Long-form reading, literary journals, elegant editorial paragraphs',
+    sampleText: 'The French Literary Arts & Bookcraft'
+  },
+  {
+    id: 'prata',
+    name: 'Prata',
+    cssFamily: "'Prata', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Cyreal, elegant Didone typeface with teardrop terminals and high stroke contrast',
+    designer: 'Cyreal',
+    bestUse: 'Luxury branding, cosmetic packaging, high-fashion editorial',
+    sampleText: 'Delicate Teardrop Terminals & Grace'
+  },
+  {
+    id: 'newsreader',
+    name: 'Newsreader',
+    cssFamily: "'Newsreader', serif",
+    category: 'serif',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Production Type (Hugues Gentile), designed specifically for continuous digital news reading',
+    designer: 'Hugues Gentile',
+    bestUse: 'Editorial journalistic body, literary headlines, contemporary books',
+    sampleText: 'Contemporary Journalistic Precision'
+  },
+  {
+    id: 'young-serif',
+    name: 'Young Serif',
+    cssFamily: "'Young Serif', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Bastien Sozoo, chunky 1970s editorial revival serif with heavy bracketed serifs',
+    designer: 'Bastien Sozoo',
+    bestUse: '1970s nostalgia, music festival posters, warm tactile book covers',
+    sampleText: 'Chunky 1970s Bracketed Serif Revival'
+  },
+  {
+    id: 'italiana',
+    name: 'Italiana',
+    cssFamily: "'Italiana', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Santiago Orozco, inspired by Italian calligraphy, fashion magazine culture and architecture',
+    designer: 'Santiago Orozco',
+    bestUse: 'Vogue-style fashion covers, Italian luxury goods, high-fashion mastheads',
+    sampleText: 'Italian Haute Couture & Architectural Splendor'
+  },
+  {
+    id: 'cinzel-decorative',
+    name: 'Cinzel Decorative',
+    cssFamily: "'Cinzel Decorative', serif",
+    category: 'serif',
+    weights: [400, 700],
+    origin: 'Natanael Gama, Roman monumental capitals embellished with ornate calligraphic swashes',
+    designer: 'Natanael Gama',
+    bestUse: 'Ornamental monumental inscriptions, epic fantasy, ceremonial titles',
+    sampleText: 'ROMAN SWASH MONUMENTAL MAJESTY'
+  },
 
   // --- EXPERIMENTAL & DISPLAY ---
   {
@@ -350,5 +658,60 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     designer: 'Philipp Nurullin',
     bestUse: 'Corrupted data streams, cybernetic errors, brutalist noise graphics',
     sampleText: 'CORRUPTED VECTOR DATA STREAM'
+  },
+  {
+    id: 'megrim',
+    name: 'Megrim',
+    cssFamily: "'Megrim', cursive",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Daniel Johnson, experimental vector stencil with broken geometric lines and radical ligatures',
+    designer: 'Daniel Johnson',
+    bestUse: 'Cyberpunk titling, sci-fi experimental interfaces, geometric puzzle type',
+    sampleText: 'EXPERIMENTAL GEOMETRIC VECTOR STENCIL'
+  },
+  {
+    id: 'plaster',
+    name: 'Plaster',
+    cssFamily: "'Plaster', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Eben Sorkin, low-resolution cut-paper modernist stencil display',
+    designer: 'Eben Sorkin',
+    bestUse: 'Brutalist cut-paper collages, post-constructivist posters, gallery signage',
+    sampleText: 'CUT-PAPER MODERNIST STENCIL'
+  },
+  {
+    id: 'faster-one',
+    name: 'Faster One',
+    cssFamily: "'Faster One', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Eduardo Tunni, horizontal kinetic speed lines conveying supersonic velocity',
+    designer: 'Eduardo Tunni',
+    bestUse: 'Automotive graphics, supersonic kinetic banners, 1980s speed titles',
+    sampleText: 'SUPERSONIC KINETIC SPEED VECTORS'
+  },
+  {
+    id: 'press-start-2p',
+    name: 'Press Start 2P',
+    cssFamily: "'Press Start 2P', monospace",
+    category: 'experimental',
+    weights: [400],
+    origin: 'CodeMan38, classic 1980s Japanese arcade bitmap typeface based on Namco arcade hardware',
+    designer: 'CodeMan38',
+    bestUse: 'Arcade machine simulations, 8-bit retro gaming telemetry, digital nostalgia',
+    sampleText: '1-PLAYER READY // SCORE: 999990'
+  },
+  {
+    id: 'bungee-shade',
+    name: 'Bungee Shade',
+    cssFamily: "'Bungee Shade', sans-serif",
+    category: 'experimental',
+    weights: [400],
+    origin: 'David Jonathan Ross, dimensional cast shadow variant of the celebrated Bungee family',
+    designer: 'David Jonathan Ross',
+    bestUse: '3D cast shadow signage, retro urban murals, brutalist comic typography',
+    sampleText: 'DIMENSIONAL CAST SHADOW SIGNAGE'
   }
 ];

@@ -42,6 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>COLOR_SPACE: DCI-P3 // RGB TELEMETRY</span>
         </div>
         <div className="flex items-center space-x-4">
+          <span className="text-[#00FF66] font-semibold">CATALOG: 64 DESIGNER FONTS</span>
+          <span className="text-[#3A4250]">|</span>
           <span>SPECIMENS: 08 ACTIVE</span>
           <span className="text-[#3A4250]">|</span>
           <span className="text-[#F4F5F7]">

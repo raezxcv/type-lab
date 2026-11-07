@@ -480,9 +480,9 @@ export const AboutPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[#F4F5F7] font-bold block mb-2">TYPOGRAPHY REPERTOIRE</span>
-            <p>Space Grotesk, Syne, Plus Jakarta</p>
-            <p>JetBrains Mono, Space Mono</p>
-            <p>Playfair, Cinzel, Major Mono</p>
+            <p>64 Famous Designer Typefaces</p>
+            <p>Displaay, Colophon, Production Type</p>
+            <p>TypeTogether, DJR, Barnbrook, Adobe</p>
           </div>
           <div>
             <span className="text-[#F4F5F7] font-bold block mb-2">GRAPHIC ASSETS</span>
