@@ -78,10 +78,13 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   ];
 
   const secondarySamplePhrases = [
-    "Internationale Zeitschrift für Graphische Kunst und verwandte Gebiete.",
+    "1957 // ZÜRICH — Internationale Zeitschrift für Graphische Kunst und verwandte Gebiete.",
     "Order is the prerequisite of optical clarity across architectural grids.",
     "A dialogue between Enlightenment Didone hairline brackets and grotesque vectors.",
-    "Telemetry coordinates locked. Optical vectors stabilized across all axes."
+    "Telemetry coordinates locked. Optical vectors stabilized across all axes.",
+    "An orthogonal grid brings imagery, type, and color into intellectual and optical unity.",
+    "Vertical compression creates undeniable spatial dominance across massive architectural poster canvases.",
+    "Digital letterforms are mathematical Bézier curves undergoing continuous kinetic transformation."
   ];
 
   const handleCopyCSS = () => {
@@ -113,6 +116,43 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   const handleShufflePairing = () => {
     const randomPairing = CURATED_PAIRINGS[Math.floor(Math.random() * CURATED_PAIRINGS.length)];
     handleApplyPairing(randomPairing);
+  };
+
+  const handleShuffleSecondary = () => {
+    const eligibleFonts = allFonts.filter(f => f.cssFamily !== state.fontFamily);
+    const randomFont = eligibleFonts.length > 0 ? eligibleFonts[Math.floor(Math.random() * eligibleFonts.length)] : allFonts[0];
+    const bodyWeights = randomFont.weights.filter(w => w <= 600);
+    const randomWeight = bodyWeights.length > 0 ? bodyWeights[Math.floor(Math.random() * bodyWeights.length)] : randomFont.weights[0];
+    const randomPhrase = secondarySamplePhrases[Math.floor(Math.random() * secondarySamplePhrases.length)];
+    const randomSize = Math.floor(Math.random() * 4) + 12;
+    const randomTracking = Number(((Math.random() * 0.06) + 0.02).toFixed(2));
+    const accentColors = ['#00FF66', '#F4F5F7', '#FFB800', '#00E5FF'];
+    const randomColor = accentColors[Math.floor(Math.random() * accentColors.length)];
+
+    onChange({
+      showSubText: true,
+      subFontFamily: randomFont.cssFamily,
+      subFontWeight: randomWeight,
+      subFontSize: randomSize,
+      subLetterSpacing: randomTracking,
+      subTextColor: randomColor,
+      subText: randomPhrase,
+    });
+  };
+
+  const handleShuffleHeadline = () => {
+    const randomFont = allFonts[Math.floor(Math.random() * allFonts.length)];
+    const randomWeight = randomFont.weights[Math.floor(Math.random() * randomFont.weights.length)];
+    const randomPhrase = samplePhrases[Math.floor(Math.random() * samplePhrases.length)];
+    const randomSize = Math.floor(Math.random() * 20) + 42;
+    const randomTracking = Number(((Math.random() * 0.2) - 0.04).toFixed(2));
+    onChange({
+      fontFamily: randomFont.cssFamily,
+      fontWeight: randomWeight,
+      fontSize: randomSize,
+      letterSpacing: randomTracking,
+      text: randomPhrase,
+    });
   };
 
   return (
@@ -201,7 +241,18 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       <span className="w-2 h-2 bg-[#00FF66]"></span>
                       HEADLINE TEXT
                     </span>
-                    <span className="text-xs text-[#A1A1AA]">{state.text.length} Chars</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleShuffleHeadline}
+                        className="text-xs text-[#00FF66] hover:text-[#4DFF95] flex items-center gap-1 transition-colors"
+                        title="Randomize headline font, weight and phrase"
+                      >
+                        <Shuffle className="w-3 h-3" />
+                        <span>SHUFFLE</span>
+                      </button>
+                      <span className="text-[#3A4250]">|</span>
+                      <span className="text-xs text-[#A1A1AA]">{state.text.length} Chars</span>
+                    </div>
                   </div>
                   
                   <textarea
@@ -446,16 +497,26 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     <span className="font-bold text-[#F4F5F7] block text-xs">PAIRING LAYER STATUS</span>
                     <span className="text-[11px] text-[#A1A1AA]">Renders complementary subhead or caption</span>
                   </div>
-                  <button
-                    onClick={() => onChange({ showSubText: !state.showSubText })}
-                    className={`px-3 py-1 text-xs font-bold border transition-colors ${
-                      state.showSubText
-                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
-                        : 'border-[#22262E] text-[#A1A1AA]'
-                    }`}
-                  >
-                    {state.showSubText ? 'ENABLED (VISIBLE)' : 'DISABLED (HIDDEN)'}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleShuffleSecondary}
+                      className="px-2.5 py-1 text-xs font-bold border border-[#22262E] bg-[#121620] hover:border-[#00FF66] text-[#00FF66] flex items-center gap-1.5 transition-colors"
+                      title="Randomize secondary font, size, weight & phrase"
+                    >
+                      <Shuffle className="w-3.5 h-3.5" />
+                      <span>SHUFFLE</span>
+                    </button>
+                    <button
+                      onClick={() => onChange({ showSubText: !state.showSubText })}
+                      className={`px-3 py-1 text-xs font-bold border transition-colors ${
+                        state.showSubText
+                          ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                          : 'border-[#22262E] text-[#A1A1AA]'
+                      }`}
+                    >
+                      {state.showSubText ? 'ENABLED (VISIBLE)' : 'DISABLED (HIDDEN)'}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Secondary Text Input */}
@@ -465,7 +526,18 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       <span className="w-2 h-2 bg-[#00FF66]"></span>
                       SECONDARY PAIRING TEXT
                     </span>
-                    <span className="text-xs text-[#A1A1AA]">{state.subText.length} Chars</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleShuffleSecondary}
+                        className="text-xs text-[#00FF66] hover:text-[#4DFF95] flex items-center gap-1 transition-colors"
+                        title="Randomize secondary font, weight, color & text"
+                      >
+                        <Shuffle className="w-3.5 h-3.5" />
+                        <span>SHUFFLE</span>
+                      </button>
+                      <span className="text-[#3A4250]">|</span>
+                      <span className="text-xs text-[#A1A1AA]">{state.subText.length} Chars</span>
+                    </div>
                   </div>
                   
                   <textarea
