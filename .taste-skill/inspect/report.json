@@ -1,0 +1,1223 @@
+{
+ "url": "http://localhost:4173/",
+ "at": "2026-11-07T06:52:49.191Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.6,
+    0.54
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 980,
+     "screens": 1.1,
+     "words": 202,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 17,
+     "sections": 0,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // ZÜRICH",
+     "words": 8,
+     "chars": 46,
+     "lines": 1,
+     "size": 68,
+     "vw": 4.7,
+     "font": "Plus Jakarta Sans",
+     "weight": 800,
+     "tracking": -0.04,
+     "leading": 0.92,
+     "upper": true,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.33,
+     "top": 422,
+     "tag": "div",
+     "kind": "heading"
+    },
+    "h1": null,
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "JetBrains Mono",
+       "share": 0.94,
+       "mono": true
+      },
+      {
+       "family": "Plus Jakarta Sans",
+       "share": 0.04,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-serif",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-monospace",
+       "share": 0,
+       "mono": false
+      }
+     ],
+     "familyCount": 5,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      16,
+      68
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 68,
+      "vw": 4.7,
+      "font": "Plus Jakarta Sans",
+      "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // "
+     },
+     "monoShare": 0.94,
+     "monoProseShare": 0.9,
+     "monoFamilies": [
+      "JetBrains Mono",
+      "ui-monospace"
+     ],
+     "monoSamples": [
+      "SYS_ONLINE // ENGINE v2.4",
+      "|",
+      "COORDINATES: 47.3769° N, 8.5417° E (ZÜRI",
+      "|",
+      "COLOR_SPACE: DCI-P3 // RGB TELEMETRY",
+      "SPECIMENS: 08 ACTIVE"
+     ],
+     "microLabels": 3,
+     "microLabelShare": 0.084,
+     "microSamples": [
+      "TYPE//LAB 11 EXPERIMENTAL POSTER",
+      "ALLGEMEINE GEWERBESCHULE BASEL // ZÜRICH",
+      "FIG. 11-A"
+     ],
+     "upperShare": 0.8,
+     "centerShare": 0.24,
+     "smallText": 37
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#070809",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.13,
+      "l": 0.03
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#070809",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.13,
+        "l": 0.03
+       }
+      },
+      {
+       "color": "#0a0c10",
+       "top": 90,
+       "hsl": {
+        "h": 220,
+        "s": 0.23,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#f4f5f7",
+       "share": 0.34
+      },
+      {
+       "color": "#758091",
+       "share": 0.33
+      },
+      {
+       "color": "#00ff66",
+       "share": 0.11
+      },
+      {
+       "color": "#8c98ac",
+       "share": 0.09
+      },
+      {
+       "color": "#424b5c",
+       "share": 0.05
+      }
+     ],
+     "button": {
+      "bg": "#151922",
+      "hsl": {
+       "h": 222,
+       "s": 0.24,
+       "l": 0.11
+      },
+      "fg": "#00ff66"
+     },
+     "lowContrast": [
+      {
+       "text": "46 CHARS",
+       "ratio": 2.6,
+       "need": 4.5,
+       "size": 10,
+       "fg": "#4e5868",
+       "bg": "#111317"
+      },
+      {
+       "text": "SAMPLE:",
+       "ratio": 2.9,
+       "need": 4.5,
+       "size": 10,
+       "fg": "#556072",
+       "bg": "#111317"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 9,
+     "inHero": 9,
+     "radius": 0,
+     "height": 30,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 9,
+     "upper": 4,
+     "heroLabels": [
+      "01 // PLAYGROUND",
+      "02 // SPECIMENS",
+      "03 // CODEX & ABOUT",
+      "RANDOM",
+      "EXPORT"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 2,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "button.flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "div#typography-export-target.relative.mx-auto → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 22,
+     "hairlineSamples": [
+      "header.sticky.top-0 1440px",
+      "div.hidden.lg:flex 1440px",
+      "div.lg:col-span-7.xl:col-span-8 960px",
+      "div.h-full.border-x 37px",
+      "div.h-full.border-x 37px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 90,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "jetbrains mono",
+     "plus jakarta sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 980,
+    "margins": {
+     "left": 30,
+     "right": 16
+    },
+    "sections": [],
+    "gaps": [],
+    "h1s": [],
+    "edgeText": [
+     {
+      "text": "← DIN 476 MODULAR SYSTEM →",
+      "side": "left",
+      "px": 7
+     },
+     {
+      "text": "PRESETS (08)",
+      "side": "right",
+      "px": 0
+     }
+    ],
+    "edges": [],
+    "leftBlocks": 0,
+    "bodySize": 10,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.14,
+    "voidBox": {
+     "x": 720,
+     "y": 120,
+     "w": 240,
+     "h": 780
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.39,
+    0.74
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1527,
+     "screens": 1.5,
+     "words": 176,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 17,
+     "sections": 0,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // ZÜRICH",
+     "words": 8,
+     "chars": 46,
+     "lines": 1,
+     "size": 68,
+     "vw": 8.9,
+     "font": "Plus Jakarta Sans",
+     "weight": 800,
+     "tracking": -0.04,
+     "leading": 0.92,
+     "upper": true,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.62,
+     "top": 381,
+     "tag": "div",
+     "kind": "heading"
+    },
+    "h1": null,
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "JetBrains Mono",
+       "share": 0.93,
+       "mono": true
+      },
+      {
+       "family": "Plus Jakarta Sans",
+       "share": 0.05,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-serif",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 4,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      16,
+      68
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 68,
+      "vw": 8.9,
+      "font": "Plus Jakarta Sans",
+      "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // "
+     },
+     "monoShare": 0.93,
+     "monoProseShare": 0.88,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "T/",
+      "11",
+      "Digital Typographic Studio",
+      "01 // PLAYGROUND",
+      "02 // SPECIMENS",
+      "03 // CODEX & ABOUT"
+     ],
+     "microLabels": 3,
+     "microLabelShare": 0.098,
+     "microSamples": [
+      "TYPE//LAB 11 EXPERIMENTAL POSTER",
+      "ALLGEMEINE GEWERBESCHULE BASEL // ZÜRICH",
+      "FIG. 11-A"
+     ],
+     "upperShare": 0.8,
+     "centerShare": 0.27,
+     "smallText": 32
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#070809",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.13,
+      "l": 0.03
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#070809",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.13,
+        "l": 0.03
+       }
+      },
+      {
+       "color": "#0a0c10",
+       "top": 65,
+       "hsl": {
+        "h": 220,
+        "s": 0.23,
+        "l": 0.05
+       }
+      },
+      {
+       "color": "#111317",
+       "top": 923,
+       "hsl": {
+        "h": 220,
+        "s": 0.15,
+        "l": 0.08
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#f4f5f7",
+       "share": 0.37
+      },
+      {
+       "color": "#758091",
+       "share": 0.28
+      },
+      {
+       "color": "#8c98ac",
+       "share": 0.11
+      },
+      {
+       "color": "#00ff66",
+       "share": 0.1
+      },
+      {
+       "color": "#424b5c",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#151922",
+      "hsl": {
+       "h": 222,
+       "s": 0.24,
+       "l": 0.11
+      },
+      "fg": "#00ff66"
+     },
+     "lowContrast": [
+      {
+       "text": "46 CHARS",
+       "ratio": 2.6,
+       "need": 4.5,
+       "size": 10,
+       "fg": "#4e5868",
+       "bg": "#111317"
+      },
+      {
+       "text": "SAMPLE:",
+       "ratio": 2.9,
+       "need": 4.5,
+       "size": 10,
+       "fg": "#556072",
+       "bg": "#111317"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 8,
+     "inHero": 5,
+     "radius": 0,
+     "height": 46,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 8,
+     "upper": 4,
+     "heroLabels": [
+      "01 // PLAYGROUND",
+      "02 // SPECIMENS",
+      "03 // CODEX & ABOUT",
+      "EXPORT",
+      "AXES & TYPE"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 2,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "button.flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+      "div#typography-export-target.relative.mx-auto → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "header.sticky.top-0 768px",
+      "div.lg:col-span-7.xl:col-span-8 768px",
+      "div.h-full.border-x 37px",
+      "div.h-full.border-x 37px",
+      "div.h-full.border-x 37px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "jetbrains mono",
+     "plus jakarta sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1527,
+    "margins": {
+     "left": 16,
+     "right": 18
+    },
+    "sections": [
+     {
+      "sel": "div.lg:col-span-7.xl:col-span-8",
+      "tag": "div",
+      "top": 65,
+      "height": 858,
+      "words": 59,
+      "media": 0,
+      "middle": 11,
+      "heading": null,
+      "left": 7,
+      "right": 18,
+      "textLeft": 7,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.lg:col-span-5.xl:col-span-4",
+      "tag": "div",
+      "top": 923,
+      "height": 604,
+      "words": 72,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 0,
+      "right": 0,
+      "textLeft": 20,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [],
+    "edgeText": [
+     {
+      "text": "← DIN 476 MODULAR SYSTEM →",
+      "side": "left",
+      "px": 7
+     }
+    ],
+    "edges": [],
+    "leftBlocks": 0,
+    "bodySize": 10,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.56,
+    1
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 1417,
+     "screens": 1.7,
+     "words": 143,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 17,
+     "sections": 0,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // ZÜRICH",
+     "words": 8,
+     "chars": 46,
+     "lines": 1,
+     "size": 68,
+     "vw": 17.4,
+     "font": "Plus Jakarta Sans",
+     "weight": 800,
+     "tracking": -0.04,
+     "leading": 0.92,
+     "upper": true,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.78,
+     "top": 248,
+     "tag": "div",
+     "kind": "heading"
+    },
+    "h1": null,
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "JetBrains Mono",
+       "share": 0.92,
+       "mono": true
+      },
+      {
+       "family": "Plus Jakarta Sans",
+       "share": 0.06,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-serif",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 4,
+     "sizes": [
+      9,
+      10,
+      11,
+      12,
+      16,
+      68
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 68,
+      "vw": 17.4,
+      "font": "Plus Jakarta Sans",
+      "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // "
+     },
+     "monoShare": 0.92,
+     "monoProseShare": 0.86,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "T/",
+      "11",
+      "Digital Typographic Studio",
+      "EXPORT",
+      "CANVAS_FRAME: [POSTER]",
+      "CALIBRATION: 100% DPI"
+     ],
+     "microLabels": 3,
+     "microLabelShare": 0.117,
+     "microSamples": [
+      "TYPE//LAB 11 EXPERIMENTAL POSTER",
+      "ALLGEMEINE GEWERBESCHULE BASEL // ZÜRICH",
+      "FIG. 11-A"
+     ],
+     "upperShare": 0.85,
+     "centerShare": 0.26,
+     "smallText": 25
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#070809",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.13,
+      "l": 0.03
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#070809",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.13,
+        "l": 0.03
+       }
+      },
+      {
+       "color": "#0a0c10",
+       "top": 57,
+       "hsl": {
+        "h": 220,
+        "s": 0.23,
+        "l": 0.05
+       }
+      },
+      {
+       "color": "#111317",
+       "top": 677,
+       "hsl": {
+        "h": 220,
+        "s": 0.15,
+        "l": 0.08
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#f4f5f7",
+       "share": 0.44
+      },
+      {
+       "color": "#758091",
+       "share": 0.28
+      },
+      {
+       "color": "#8c98ac",
+       "share": 0.13
+      },
+      {
+       "color": "#00ff66",
+       "share": 0.1
+      },
+      {
+       "color": "#3a4354",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#151922",
+      "hsl": {
+       "h": 222,
+       "s": 0.24,
+       "l": 0.11
+      },
+      "fg": "#00ff66"
+     },
+     "lowContrast": [
+      {
+       "text": "46 CHARS",
+       "ratio": 2.6,
+       "need": 4.5,
+       "size": 10,
+       "fg": "#4e5868",
+       "bg": "#111317"
+      },
+      {
+       "text": "SAMPLE:",
+       "ratio": 2.9,
+       "need": 4.5,
+       "size": 10,
+       "fg": "#556072",
+       "bg": "#111317"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 1,
+     "radius": 0,
+     "height": 34,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 3,
+     "upper": 1,
+     "heroLabels": [
+      "AXES & TYPE"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 1,
+     "shadowOverlay": 0,
+     "shadowSamples": [
+      "div#typography-export-target.relative.mx-auto → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0"
+     ],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 9,
+     "hairlineSamples": [
+      "header.sticky.top-0 390px",
+      "div.lg:col-span-7.xl:col-span-8 390px",
+      "div.relative.z-20 305px",
+      "div.relative.z-20 305px",
+      "div.w-full.bg-[#111317] 390px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 57,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "jetbrains mono",
+     "plus jakarta sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 1417,
+    "margins": {
+     "left": 16,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "div.lg:col-span-7.xl:col-span-8",
+      "tag": "div",
+      "top": 57,
+      "height": 620,
+      "words": 37,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 29,
+      "right": 18,
+      "textLeft": 29,
+      "textRight": 18,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.lg:col-span-5.xl:col-span-4",
+      "tag": "div",
+      "top": 677,
+      "height": 740,
+      "words": 61,
+      "media": 0,
+      "middle": 21,
+      "heading": null,
+      "left": 0,
+      "right": 0,
+      "textLeft": 16,
+      "textRight": 0,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [],
+    "edgeText": [
+     {
+      "text": "COLOR & ATMOSPHERE",
+      "side": "right",
+      "px": 0
+     }
+    ],
+    "edges": [],
+    "leftBlocks": 0,
+    "bodySize": 10,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "mono",
+   "width": 1440,
+   "message": "Monospace type outside code: JetBrains Mono, ui-monospace — e.g. \"SYS_ONLINE // ENGINE v2.4\", \"|\", \"COORDINATES: 47.3769° N, 8.5417° E (ZÜRI\", \"|\"",
+   "fix": "Set it in the text face. Monospace is for literal code inside <pre>/<code> only.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "micro-label",
+   "width": 1440,
+   "message": "3 tiny uppercase letter-spaced labels (e.g. \"TYPE//LAB 11 EXPERIMENTAL POSTER\", \"ALLGEMEINE GEWERBESCHULE BASEL // ZÜRICH\", \"FIG. 11-A\").",
+   "fix": "Use sentence-case text at a readable size, or delete the label.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "shadow",
+   "width": 1440,
+   "message": "2 box-shadow(s) on elements at rest: button.flex.items-center → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0 | div#typography-export-target.relative.mx-auto → rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0",
+   "fix": "Remove. Separate surfaces with a tone step or space. Shadows are for things that really float (menus, dialogs, sticky bars).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "hairline",
+   "width": 1440,
+   "message": "22 thin rule(s)/divider line(s): header.sticky.top-0 1440px | div.hidden.lg:flex 1440px | div.lg:col-span-7.xl:col-span-8 960px | div.h-full.border-x 37px",
+   "fix": "Delete. Separate with space, a tone change, or scale. Lines are only for real tables and form fields.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "outlined-box",
+   "width": 1440,
+   "message": "2 box(es) drawn with a 1px outline.",
+   "fix": "Prefer a filled surface or no box.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "contrast",
+   "width": 1440,
+   "message": "Low-contrast text: \"46 CHARS\" 2.6:1 needs 4.5:1; \"SAMPLE:\" 2.9:1 needs 4.5:1",
+   "fix": "Darken or lighten the text colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "few-pictures",
+   "width": 1440,
+   "message": "Only 0 picture(s) on the page (0 photographs, footage or raster images, 0 interface fragments). Drawings in SVG do not count.",
+   "fix": "Find real pictures of the subject's world with scripts/assets.mjs (photographs, archival images, maps, engravings, footage), download them to assets/ and give them room: a hero picture, one per section that has a subject, a full-width band. At least four, usually six to twelve."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "WARN",
+   "id": "side-scroll",
+   "width": 1440,
+   "message": "1 row(s) scroll sideways with content past their edge.",
+   "fix": "Jurors and most visitors read a row cut at the edge as clipped, not as scrollable. Wrap it onto more lines, or end it inside the grid.",
+   "alsoAt": [
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "small-text",
+   "width": 1440,
+   "message": "37 text blocks under 13px.",
+   "fix": "Nothing meant to be read goes below 13px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "no-title",
+   "width": 1440,
+   "message": "The page has no visible h1.",
+   "fix": "Give the first screen a clear title in an h1 that says what this is (a name with what it does, the product with what it is for, the event with its date and place).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "edge-text",
+   "width": 1440,
+   "message": "2 text block(s) sit within 16px of the screen edge: \"← DIN 476 MODULAR SYSTEM →\" (7px from the left); \"PRESETS (08)\" (0px from the right)",
+   "fix": "Keep text inside the page margin (16–32px or more). Only display type deliberately bled past the edge may touch it.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "still-page",
+   "width": 1440,
+   "message": "Only 1 element(s) moved while the page loaded and scrolled.",
+   "fix": "Build the motion layer (SKILL.md step 9, references/motion.md): the signature move, an entrance for the parts of every section, feedback on every control, and one moving picture. Transform and opacity only, with a reduced-motion fallback."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect\\desktop-fold.jpg",
+   "pages": [
+    "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect\\tablet-fold.jpg",
+   "pages": [
+    "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect\\mobile-fold.jpg",
+   "pages": [
+    "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

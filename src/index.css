@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-dark: #070809;
+    --panel-dark: #111317;
+    --border-zinc: #22262e;
+    --neon-green: #00ff66;
+    --text-white: #f4f5f7;
+    --text-muted: #758091;
+  }
+
+  * {
+    border-color: #22262e;
+  }
+
+  body {
+    background-color: #070809;
+    color: #f4f5f7;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+  }
+}
+
+/* Custom Font Family Utilities */
+.font-space { font-family: 'Space Grotesk', sans-serif; }
+.font-syne { font-family: 'Syne', sans-serif; }
+.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+.font-mono-code { font-family: 'JetBrains Mono', monospace; }
+.font-space-mono { font-family: 'Space Mono', monospace; }
+.font-cinzel { font-family: 'Cinzel', serif; }
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-bebas { font-family: 'Bebas Neue', sans-serif; }
+.font-major { font-family: 'Major Mono Display', monospace; }
+.font-outfit { font-family: 'Outfit', sans-serif; }
+.font-gothic { font-family: 'UnifrakturMaguntia', serif; }
+
+/* Custom Sleek Laboratory Range Sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #1a1e26;
+  height: 6px;
+  border-radius: 0px;
+  outline: none;
+  border: 1px solid #282f3c;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+input[type="range"]:hover {
+  border-color: #00ff66;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 18px;
+  background: #00ff66;
+  border: 1px solid #000;
+  cursor: ew-resize;
+  border-radius: 0;
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+  transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scaleY(1.15);
+  background: #4dff95;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 18px;
+  background: #00ff66;
+  border: 1px solid #000;
+  cursor: ew-resize;
+  border-radius: 0;
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
+/* Swiss Grid Canvas Texture */
+.swiss-grid-pattern {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.swiss-grid-pattern-dense {
+  background-image: linear-gradient(to right, rgba(0, 255, 102, 0.06) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 255, 102, 0.06) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+.dots-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Scanline Overlay */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 18s linear infinite;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee 18s linear infinite reverse;
+}
+
+@keyframes breath {
+  0%, 100% {
+    letter-spacing: -0.05em;
+    filter: drop-shadow(0 0 0px transparent);
+  }
+  50% {
+    letter-spacing: 0.15em;
+    filter: drop-shadow(0 0 15px rgba(0, 255, 102, 0.5));
+  }
+}
+
+.animate-breath {
+  animation: breath 4s ease-in-out infinite;
+}
+
+@keyframes skew-wobble {
+  0%, 100% { transform: skewX(0deg); }
+  25% { transform: skewX(-6deg); }
+  75% { transform: skewX(6deg); }
+}
+
+.animate-skew-wobble {
+  animation: skew-wobble 3.5s ease-in-out infinite;
+}
+
+/* Vertical Text Orientation */
+.vertical-writing-rl {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid #00ff66 !important;
+  outline-offset: 2px !important;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0f12;
+}
+::-webkit-scrollbar-thumb {
+  background: #252a33;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff66;
+}

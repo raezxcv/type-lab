@@ -1,0 +1,1364 @@
+{
+ "url": "http://localhost:4173/",
+ "at": "2026-11-07T06:56:04.947Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.52,
+    0.48
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1064,
+     "screens": 1.2,
+     "words": 192,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 17,
+     "sections": 0,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "chars": 12,
+     "lines": 1,
+     "size": 18,
+     "vw": 1.3,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1,
+     "top": 42,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "lines": 1,
+     "size": 18,
+     "font": "Space Grotesk"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "JetBrains Mono",
+       "share": 0.94,
+       "mono": true
+      },
+      {
+       "family": "Plus Jakarta Sans",
+       "share": 0.04,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-serif",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-monospace",
+       "share": 0,
+       "mono": false
+      }
+     ],
+     "familyCount": 5,
+     "sizes": [
+      12,
+      13,
+      18,
+      68
+     ],
+     "sizeCount": 4,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 68,
+      "vw": 4.7,
+      "font": "Plus Jakarta Sans",
+      "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // "
+     },
+     "monoShare": 0.94,
+     "monoProseShare": 0.9,
+     "monoFamilies": [
+      "JetBrains Mono",
+      "ui-monospace"
+     ],
+     "monoSamples": [
+      "SYS_ONLINE // ENGINE v2.4",
+      "|",
+      "COORDINATES: 47.3769° N, 8.5417° E (ZÜRI",
+      "|",
+      "COLOR_SPACE: DCI-P3 // RGB TELEMETRY",
+      "SPECIMENS: 08 ACTIVE"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.58,
+     "centerShare": 0.2,
+     "smallText": 32
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#070809",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.13,
+      "l": 0.03
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#070809",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.13,
+        "l": 0.03
+       }
+      },
+      {
+       "color": "#0a0c10",
+       "top": 94,
+       "hsl": {
+        "h": 220,
+        "s": 0.23,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#f4f5f7",
+       "share": 0.36
+      },
+      {
+       "color": "#a1a1aa",
+       "share": 0.24
+      },
+      {
+       "color": "#9aa2b1",
+       "share": 0.12
+      },
+      {
+       "color": "#00ff66",
+       "share": 0.11
+      },
+      {
+       "color": "#c2cad8",
+       "share": 0.1
+      }
+     ],
+     "button": {
+      "bg": "#151922",
+      "hsl": {
+       "h": 222,
+       "s": 0.24,
+       "l": 0.11
+      },
+      "fg": "#00ff66"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 9,
+     "inHero": 9,
+     "radius": 0,
+     "height": 34,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 9,
+     "upper": 4,
+     "heroLabels": [
+      "01 // PLAYGROUND",
+      "02 // SPECIMENS",
+      "03 // CODEX & ABOUT",
+      "RANDOM",
+      "EXPORT"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 22,
+     "hairlineSamples": [
+      "header.sticky.top-0 1440px",
+      "div.hidden.lg:flex 1440px",
+      "div.lg:col-span-7.xl:col-span-8 960px",
+      "div.h-full.border-x 35px",
+      "div.h-full.border-x 35px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 94,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "jetbrains mono",
+     "plus jakarta sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1064,
+    "margins": {
+     "left": 73,
+     "right": 20
+    },
+    "sections": [],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "TYPE//LAB 11",
+      "size": 18,
+      "top": 42,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [
+     {
+      "text": "PRESETS",
+      "side": "right",
+      "px": 3
+     }
+    ],
+    "edges": [
+     {
+      "x": 160,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 1,
+    "bodySize": 13,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.13,
+    "voidBox": {
+     "x": 0,
+     "y": 300,
+     "w": 960,
+     "h": 180
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#070809",
+    "sidebar": null,
+    "topbar": {
+     "h": 94
+    },
+    "canvas": {
+     "left": 73,
+     "right": -9
+    },
+    "hero": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "chars": 12,
+     "lines": 1,
+     "size": 18,
+     "vw": 1.3,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1,
+     "top": 42,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 2,
+     "firstScreen": 2,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 6,
+     "radii": [
+      [
+       0,
+       6
+      ]
+     ],
+     "heavyBorders": 1,
+     "borderSamples": [
+      "#f3f3f7 on #070809 (18.11:1)"
+     ],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 1,
+     "hues": 1,
+     "samples": [
+      {
+       "hue": 222,
+       "size": 32,
+       "radius": "0px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 0,
+     "kpiMax": 12
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.87,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      13,
+      18,
+      68
+     ]
+    },
+    "title": {
+     "text": "TYPE//LAB 11",
+     "size": 18,
+     "top": 42
+    },
+    "colourShare": 0.011
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.43,
+    0.86
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1680,
+     "screens": 1.6,
+     "words": 166,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 17,
+     "sections": 0,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "chars": 12,
+     "lines": 1,
+     "size": 18,
+     "vw": 2.3,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1,
+     "top": -3,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "lines": 1,
+     "size": 18,
+     "font": "Space Grotesk"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "JetBrains Mono",
+       "share": 0.93,
+       "mono": true
+      },
+      {
+       "family": "Plus Jakarta Sans",
+       "share": 0.05,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-serif",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 4,
+     "sizes": [
+      12,
+      13,
+      18,
+      68
+     ],
+     "sizeCount": 4,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 68,
+      "vw": 8.9,
+      "font": "Plus Jakarta Sans",
+      "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // "
+     },
+     "monoShare": 0.93,
+     "monoProseShare": 0.88,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "T/",
+      "11",
+      "Digital Typographic Studio",
+      "01 // PLAYGROUND",
+      "02 // SPECIMENS",
+      "03 // CODEX & ABOUT"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.54,
+     "centerShare": 0.23,
+     "smallText": 27
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#070809",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.13,
+      "l": 0.03
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#070809",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.13,
+        "l": 0.03
+       }
+      },
+      {
+       "color": "#0a0c10",
+       "top": 65,
+       "hsl": {
+        "h": 220,
+        "s": 0.23,
+        "l": 0.05
+       }
+      },
+      {
+       "color": "#111317",
+       "top": 1003,
+       "hsl": {
+        "h": 220,
+        "s": 0.15,
+        "l": 0.08
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#f4f5f7",
+       "share": 0.39
+      },
+      {
+       "color": "#a1a1aa",
+       "share": 0.28
+      },
+      {
+       "color": "#c2cad8",
+       "share": 0.12
+      },
+      {
+       "color": "#00ff66",
+       "share": 0.1
+      },
+      {
+       "color": "#758091",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#151922",
+      "hsl": {
+       "h": 222,
+       "s": 0.24,
+       "l": 0.11
+      },
+      "fg": "#00ff66"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 8,
+     "inHero": 5,
+     "radius": 0,
+     "height": 50,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 8,
+     "upper": 4,
+     "heroLabels": [
+      "01 // PLAYGROUND",
+      "02 // SPECIMENS",
+      "03 // CODEX & ABOUT",
+      "EXPORT",
+      "AXES & TYPE"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "header.sticky.top-0 768px",
+      "div.lg:col-span-7.xl:col-span-8 768px",
+      "div.h-full.border-x 35px",
+      "div.h-full.border-x 35px",
+      "div.h-full.border-x 35px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "jetbrains mono",
+     "plus jakarta sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1680,
+    "margins": {
+     "left": 24,
+     "right": 24
+    },
+    "sections": [
+     {
+      "sel": "div.lg:col-span-7.xl:col-span-8",
+      "tag": "div",
+      "top": 65,
+      "height": 938,
+      "words": 58,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 41,
+      "right": 42,
+      "textLeft": 41,
+      "textRight": 42,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.lg:col-span-5.xl:col-span-4",
+      "tag": "div",
+      "top": 1003,
+      "height": 677,
+      "words": 64,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 16,
+      "right": 20,
+      "textLeft": 24,
+      "textRight": 24,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "TYPE//LAB 11",
+      "size": 18,
+      "top": -3,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 56,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 1,
+    "bodySize": 13,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#070809",
+    "sidebar": null,
+    "topbar": {
+     "h": 65
+    },
+    "canvas": {
+     "left": 24,
+     "right": 24
+    },
+    "hero": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "chars": 12,
+     "lines": 1,
+     "size": 18,
+     "vw": 2.3,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1,
+     "top": -3,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 2,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 182,
+       "at": 257,
+       "panel": "Type Laboratory Experimental Specimen"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 3,
+     "radii": [
+      [
+       0,
+       3
+      ]
+     ],
+     "heavyBorders": 1,
+     "borderSamples": [
+      "#f3f3f7 on #070809 (18.11:1)"
+     ],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 1,
+     "hues": 1,
+     "samples": [
+      {
+       "hue": 222,
+       "size": 32,
+       "radius": "0px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 0,
+     "kpiMax": 12
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.86,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      13,
+      18,
+      68
+     ]
+    },
+    "title": {
+     "text": "TYPE//LAB 11",
+     "size": 18,
+     "top": -3
+    },
+    "colourShare": 0.009
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.56,
+    0.98
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 1486,
+     "screens": 1.8,
+     "words": 143,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 17,
+     "sections": 0,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 1,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "chars": 12,
+     "lines": 1,
+     "size": 18,
+     "vw": 4.6,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1,
+     "top": 5,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "lines": 1,
+     "size": 18,
+     "font": "Space Grotesk"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "JetBrains Mono",
+       "share": 0.92,
+       "mono": true
+      },
+      {
+       "family": "Plus Jakarta Sans",
+       "share": 0.06,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      },
+      {
+       "family": "ui-serif",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 4,
+     "sizes": [
+      12,
+      13,
+      18,
+      68
+     ],
+     "sizeCount": 4,
+     "notLoaded": [],
+     "body": null,
+     "measureChars": null,
+     "max": {
+      "size": 68,
+      "vw": 17.4,
+      "font": "Plus Jakarta Sans",
+      "text": "DIE NEUE GRAPHIK RASTER SYSTEME 1957 // "
+     },
+     "monoShare": 0.92,
+     "monoProseShare": 0.86,
+     "monoFamilies": [
+      "JetBrains Mono"
+     ],
+     "monoSamples": [
+      "T/",
+      "11",
+      "Digital Typographic Studio",
+      "EXPORT",
+      "CANVAS FRAME: [POSTER]",
+      "Type Laboratory Experimental Specimen"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.53,
+     "centerShare": 0.2,
+     "smallText": 21
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#070809",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.13,
+      "l": 0.03
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#070809",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.13,
+        "l": 0.03
+       }
+      },
+      {
+       "color": "#0a0c10",
+       "top": 65,
+       "hsl": {
+        "h": 220,
+        "s": 0.23,
+        "l": 0.05
+       }
+      },
+      {
+       "color": "#111317",
+       "top": 685,
+       "hsl": {
+        "h": 220,
+        "s": 0.15,
+        "l": 0.08
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#f4f5f7",
+       "share": 0.45
+      },
+      {
+       "color": "#a1a1aa",
+       "share": 0.24
+      },
+      {
+       "color": "#00ff66",
+       "share": 0.1
+      },
+      {
+       "color": "#c2cad8",
+       "share": 0.09
+      },
+      {
+       "color": "#758091",
+       "share": 0.07
+      }
+     ],
+     "button": {
+      "bg": "#00ff66",
+      "hsl": {
+       "h": 144,
+       "s": 1,
+       "l": 0.5
+      },
+      "fg": "#00ff66"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 5,
+     "inHero": 2,
+     "radius": 0,
+     "height": 38,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 5,
+     "upper": 1,
+     "heroLabels": [
+      "EXPORT",
+      "AXES & TYPE"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 1,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 9,
+     "hairlineSamples": [
+      "header.sticky.top-0 390px",
+      "div.lg:col-span-7.xl:col-span-8 390px",
+      "div.relative.z-20 273px",
+      "div.relative.z-20 273px",
+      "div.w-full.bg-[#111317] 390px"
+     ],
+     "outlinedBoxes": 2,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 65,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "jetbrains mono",
+     "plus jakarta sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 1486,
+    "margins": {
+     "left": 16,
+     "right": 12
+    },
+    "sections": [
+     {
+      "sel": "div.lg:col-span-7.xl:col-span-8",
+      "tag": "div",
+      "top": 65,
+      "height": 620,
+      "words": 46,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 25,
+      "right": 58,
+      "textLeft": 25,
+      "textRight": 58,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.lg:col-span-5.xl:col-span-4",
+      "tag": "div",
+      "top": 685,
+      "height": 801,
+      "words": 58,
+      "media": 0,
+      "middle": 76,
+      "heading": null,
+      "left": 16,
+      "right": 0,
+      "textLeft": 16,
+      "textRight": 12,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "TYPE//LAB 11",
+      "size": 18,
+      "top": 5,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [
+     {
+      "text": "ATMOSPHERE",
+      "side": "right",
+      "px": 12
+     }
+    ],
+    "edges": [
+     {
+      "x": 63,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 1,
+    "bodySize": 13,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "dark": true,
+    "ground": "#070809",
+    "sidebar": null,
+    "topbar": {
+     "h": 65
+    },
+    "canvas": {
+     "left": 16,
+     "right": -252
+    },
+    "hero": {
+     "text": "TYPE//LAB 11",
+     "words": 2,
+     "chars": 12,
+     "lines": 1,
+     "size": 18,
+     "vw": 4.6,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1,
+     "top": 5,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 2,
+     "firstScreen": 1,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 3,
+     "radii": [
+      [
+       0,
+       3
+      ]
+     ],
+     "heavyBorders": 1,
+     "borderSamples": [
+      "#f3f3f7 on #070809 (18.11:1)"
+     ],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 1,
+     "hues": 1,
+     "samples": [
+      {
+       "hue": 222,
+       "size": 32,
+       "radius": "0px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 0,
+     "kpiMax": 12
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.86,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      12,
+      13,
+      18,
+      68
+     ]
+    },
+    "title": {
+     "text": "TYPE//LAB 11",
+     "size": 18,
+     "top": 5
+    },
+    "colourShare": 0.016
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "edge-text",
+   "width": 1440,
+   "message": "1 text block(s) sit within 16px of the screen edge: \"PRESETS\" (3px from the right)",
+   "fix": "Keep text inside the page margin (16–32px or more). Only display type deliberately bled past the edge may touch it."
+  },
+  {
+   "level": "WARN",
+   "id": "tiny-text",
+   "width": 1440,
+   "message": "87% of the text is under 13px.",
+   "fix": "Data and labels read at 13–14px; keep 11–12px for sublines and axis ticks.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "edge-text",
+   "width": 390,
+   "message": "1 text block(s) sit 12–15px from the phone's edge: \"ATMOSPHERE\" (12px)",
+   "fix": "The page margin is 16–20px on a phone; the header and the corner labels sit on it too."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect-app-3\\desktop-fold.jpg",
+   "pages": [
+    "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect-app-3\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect-app-3\\tablet-fold.jpg",
+   "pages": [
+    "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect-app-3\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect-app-3\\mobile-fold.jpg",
+   "pages": [
+    "C:\\Users\\User\\20-Day Web Projects\\11 - Type Playground\\.taste-skill\\inspect-app-3\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}
