@@ -20,7 +20,6 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   backgroundTexture,
   canvasRef,
   onAutoFitSize,
-  activeLayer = 'headline',
   onSelectLayer,
 }) => {
   const [zoomLevel, setZoomLevel] = useState<number>(100);
@@ -279,22 +278,15 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             ) : (
               /* PRIMARY DIRECT EDITABLE HEADLINE - 100% UNCLIPPED & EXPANDS DYNAMICALLY */
               <div 
-                className={`w-full relative transition-all duration-200 rounded p-1.5 ${
-                  activeLayer === 'headline' ? 'border border-[#00FF66]/60 bg-[#00FF66]/[0.02]' : 'border border-transparent hover:border-[#00FF66]/30'
-                }`}
+                className="w-full relative transition-all duration-200"
                 onClick={() => onSelectLayer?.('headline')}
               >
-                {activeLayer === 'headline' && (
-                  <div className="absolute -top-3 left-1 px-1.5 py-0.5 bg-[#00FF66] text-black text-xs font-mono-code font-bold select-none pointer-events-none">
-                    Active headline layer
-                  </div>
-                )}
                 <div
                   contentEditable
                   suppressContentEditableWarning
                   onFocus={() => onSelectLayer?.('headline')}
                   onBlur={(e) => onChangeText(e.currentTarget.innerText)}
-                  className="w-full focus:outline-none rounded-none cursor-text transition-all"
+                  className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/30 rounded-none cursor-text transition-all"
                   style={headlineStyle}
                   title="Click directly to edit headline"
                 >
@@ -306,22 +298,15 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             {/* SECONDARY FONT PAIRING TEXT LAYER (SUBHEADLINE / BODY) */}
             {state.showSubText && state.subText && (
               <div 
-                className={`w-full pt-3 mt-2 border-t border-current/15 relative transition-all duration-200 rounded p-1.5 ${
-                  activeLayer === 'secondary' ? 'border border-[#00FF66]/60 bg-[#00FF66]/[0.02]' : 'border border-transparent hover:border-[#00FF66]/30'
-                }`}
+                className="w-full pt-3 mt-2 border-t border-current/15 relative transition-all duration-200"
                 onClick={() => onSelectLayer?.('secondary')}
               >
-                {activeLayer === 'secondary' && (
-                  <div className="absolute -top-3 left-1 px-1.5 py-0.5 bg-[#00FF66] text-black text-xs font-mono-code font-bold select-none pointer-events-none">
-                    Active secondary layer
-                  </div>
-                )}
                 <div
                   contentEditable
                   suppressContentEditableWarning
                   onFocus={() => onSelectLayer?.('secondary')}
                   onBlur={(e) => onChangeSubText(e.currentTarget.innerText)}
-                  className="w-full focus:outline-none rounded-none cursor-text transition-all"
+                  className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/30 rounded-none cursor-text transition-all"
                   style={subTextStyle}
                   title="Click directly to edit secondary pairing text"
                 >
