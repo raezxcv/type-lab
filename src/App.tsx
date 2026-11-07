@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { TypographicState } from './types';
+import type { TypographicState, FontDefinition } from './types';
 import { SPECIMEN_PRESETS } from './data/presets';
 import { AVAILABLE_FONTS } from './data/fonts';
 import { Navbar } from './components/Navbar';
@@ -24,6 +24,13 @@ export const App: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<'playground' | 'specimens' | 'about'>(getInitialTab);
+  const [typoState, setTypoState] = useState<TypographicState>(DEFAULT_STATE);
+  const [customFonts, setCustomFonts] = useState<FontDefinition[]>([]);
+  const [backgroundTexture, setBackgroundTexture] = useState<'none' | 'darkroom' | 'swiss-grid' | 'macro-ink'>('none');
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  
+  const canvasRef = useRef<HTMLDivElement | null>(null);
 
   const handleSelectTab = (tab: 'playground' | 'specimens' | 'about') => {
     setActiveTab(tab);
@@ -31,19 +38,13 @@ export const App: React.FC = () => {
     url.searchParams.set('tab', tab);
     window.history.pushState({}, '', url.toString());
   };
-  const [typoState, setTypoState] = useState<TypographicState>(DEFAULT_STATE);
-  const [backgroundTexture, setBackgroundTexture] = useState<'none' | 'darkroom' | 'swiss-grid' | 'macro-ink'>('none');
-  const [isExportOpen, setIsExportOpen] = useState(false);
-  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
-  
-  const canvasRef = useRef<HTMLDivElement | null>(null);
 
   // Keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger shortcuts if user is typing in an input or textarea
+      // Don't trigger shortcuts if user is typing in an input, textarea or contentEditable
       const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
         return;
       }
 
@@ -95,12 +96,38 @@ export const App: React.FC = () => {
     }));
   };
 
+  // Smart Auto-Fit Size algorithm
+  const handleAutoFitSize = () => {
+    const lines = typoState.text.split('\n').filter(l => l.trim().length > 0);
+    if (lines.length === 0) return;
+
+    // Find the longest line by character count
+    const maxLineLength = Math.max(...lines.map(l => l.length));
+    
+    // In a 480px available inner width:
+    // Character width is roughly 0.58 * fontSize
+    // So targetSize = 460 / (maxLineLength * 0.58)
+    const availableWidth = 460;
+    const availableHeight = 440;
+    
+    const sizeBasedOnWidth = Math.floor(availableWidth / (maxLineLength * 0.58));
+    const sizeBasedOnHeight = Math.floor(availableHeight / (lines.length * (typoState.lineHeight || 1.0) * 1.2));
+    
+    const calculatedSize = Math.max(16, Math.min(sizeBasedOnWidth, sizeBasedOnHeight, 120));
+
+    setTypoState(prev => ({
+      ...prev,
+      fontSize: calculatedSize
+    }));
+  };
+
   const handleRandomize = () => {
-    const randomFont = AVAILABLE_FONTS[Math.floor(Math.random() * AVAILABLE_FONTS.length)];
+    const allAvailableFonts = [...AVAILABLE_FONTS, ...customFonts];
+    const randomFont = allAvailableFonts[Math.floor(Math.random() * allAvailableFonts.length)];
     const randomWeight = randomFont.weights[Math.floor(Math.random() * randomFont.weights.length)];
-    const randomSize = Math.floor(Math.random() * 80) + 36;
-    const randomTracking = Number(((Math.random() * 0.4) - 0.05).toFixed(2));
-    const randomLeading = Number(((Math.random() * 0.8) + 0.8).toFixed(2));
+    const randomSize = Math.floor(Math.random() * 40) + 36;
+    const randomTracking = Number(((Math.random() * 0.3) - 0.04).toFixed(2));
+    const randomLeading = Number(((Math.random() * 0.4) + 0.9).toFixed(2));
     
     const palettes = [
       { text: '#00FF66', bg: '#070809' },
@@ -111,7 +138,7 @@ export const App: React.FC = () => {
       { text: '#070809', bg: '#F4F5F7' },
     ];
     const randomPalette = palettes[Math.floor(Math.random() * palettes.length)];
-    const randomSkew = Math.random() > 0.6 ? Math.floor((Math.random() * 16) - 8) : 0;
+    const randomSkew = Math.random() > 0.7 ? Math.floor((Math.random() * 12) - 6) : 0;
 
     setTypoState(prev => ({
       ...prev,
@@ -128,8 +155,12 @@ export const App: React.FC = () => {
 
   const handleLoadIntoPlayground = (specimenState: Partial<TypographicState>) => {
     setTypoState(prev => ({ ...prev, ...specimenState }));
-    setActiveTab('playground');
+    handleSelectTab('playground');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleUploadCustomFont = (newFont: FontDefinition) => {
+    setCustomFonts(prev => [newFont, ...prev]);
   };
 
   const handleCopyCSS = () => {
@@ -168,8 +199,10 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
               <TypographicCanvas
                 state={typoState}
                 onChangeText={(text) => handleUpdateState({ text })}
+                onChangeSubText={(subText) => handleUpdateState({ subText })}
                 backgroundTexture={backgroundTexture}
                 canvasRef={canvasRef}
+                onAutoFitSize={handleAutoFitSize}
               />
             </div>
 
@@ -182,6 +215,9 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 backgroundTexture={backgroundTexture}
                 onChangeBackgroundTexture={setBackgroundTexture}
                 onCopyCSS={handleCopyCSS}
+                onAutoFitSize={handleAutoFitSize}
+                customFonts={customFonts}
+                onUploadCustomFont={handleUploadCustomFont}
               />
             </div>
 

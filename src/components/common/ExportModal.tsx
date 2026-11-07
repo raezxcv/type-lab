@@ -24,7 +24,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
   // Generate CSS rules
   const cssRules = `/* TYPE//LAB 11 Specimen Export */
-.specimen-text {
+.headline-text {
   font-family: ${state.fontFamily};
   font-size: ${state.fontSize}px;
   font-weight: ${state.fontWeight};
@@ -40,7 +40,17 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   ${state.isVertical ? `writing-mode: vertical-rl;` : ''}
   transform: skewX(${state.skew}deg) rotate(${state.rotation}deg);
   ${state.textShadow ? `text-shadow: 0 0 24px ${state.shadowGlowColor};` : ''}
-}`;
+}
+${state.showSubText ? `
+.secondary-pairing-text {
+  font-family: ${state.subFontFamily};
+  font-size: ${state.subFontSize}px;
+  font-weight: ${state.subFontWeight};
+  letter-spacing: ${state.subLetterSpacing}em;
+  color: ${state.subTextColor};
+  text-align: ${state.textAlign};
+  line-height: 1.5;
+}` : ''}`;
 
   // Generate Tailwind equivalent
   const tailwindSnippet = `<!-- Tailwind CSS & Inline style equivalent -->

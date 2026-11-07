@@ -1,4 +1,4 @@
-export type FontCategory = 'grotesk' | 'monospace' | 'serif' | 'display' | 'experimental';
+export type FontCategory = 'grotesk' | 'monospace' | 'serif' | 'display' | 'experimental' | 'custom';
 
 export interface FontDefinition {
   id: string;
@@ -12,6 +12,23 @@ export interface FontDefinition {
   sampleText: string;
 }
 
+export interface FontPairing {
+  id: string;
+  name: string;
+  category: 'Modernist Swiss' | 'Editorial Serif' | 'Cyber Brutalist' | 'Industrial Minimal' | 'Classical Roman';
+  description: string;
+  headlineFontId: string;
+  headlineFamily: string;
+  headlineWeight: number;
+  headlineTracking: number;
+  bodyFontId: string;
+  bodyFamily: string;
+  bodyWeight: number;
+  bodyTracking: number;
+  headlineSample: string;
+  bodySample: string;
+}
+
 export type KineticMode = 'none' | 'marquee' | 'breath' | 'skew-wobble' | 'stagger-split';
 
 export type CanvasFrame = 'poster' | 'square' | 'ribbon' | 'editorial' | 'fluid';
@@ -20,8 +37,16 @@ export type GridOverlayType = 'modular' | 'baseline' | 'crosshair' | 'none';
 
 export interface TypographicState {
   text: string;
-  fontFamily: string; // CSS family name or ID
-  fontSize: number; // 10 to 240
+  subText: string; // Secondary pairing text
+  showSubText: boolean; // Toggle secondary pairing text layer
+  subFontFamily: string; // Pairing font family
+  subFontSize: number;
+  subFontWeight: number;
+  subLetterSpacing: number;
+  subTextColor: string;
+
+  fontFamily: string; // CSS family name
+  fontSize: number; // 12 to 240
   fontWeight: number; // 100 to 900
   isItalic: boolean;
   letterSpacing: number; // -0.1 to 0.8 in em
@@ -43,6 +68,12 @@ export interface TypographicState {
   opacity: number; // 0.1 to 1.0
   textShadow: boolean;
   shadowGlowColor: string;
+
+  // Visual Watermark Character (Swiss architectural layer)
+  showWatermark: boolean;
+  watermarkText: string;
+  watermarkOpacity: number;
+  watermarkSize: number;
 }
 
 export interface SpecimenPreset {

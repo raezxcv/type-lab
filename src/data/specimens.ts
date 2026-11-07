@@ -218,3 +218,4 @@ export const CURATED_SPECIMENS: SpecimenItem[] = [
     glyphSample: 'SENATVS POPVLVSQVE ROMANVS IMP CAESARI NERVAE'
   }
 ];
+

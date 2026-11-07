@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import type { TypographicState } from '../../types';
+import React, { useState, useRef } from 'react';
+import type { TypographicState, FontDefinition } from '../../types';
 import { AVAILABLE_FONTS } from '../../data/fonts';
 import { SPECIMEN_PRESETS } from '../../data/presets';
+import { CURATED_PAIRINGS } from '../../data/pairings';
 import { 
   Type, 
   Sliders, 
@@ -17,7 +18,9 @@ import {
   ArrowRightLeft,
   Image as ImageIcon,
   Copy,
-  Check
+  Check,
+  Upload,
+  Columns
 } from 'lucide-react';
 
 interface ControlDockProps {
@@ -27,6 +30,9 @@ interface ControlDockProps {
   backgroundTexture: 'none' | 'darkroom' | 'swiss-grid' | 'macro-ink';
   onChangeBackgroundTexture: (texture: 'none' | 'darkroom' | 'swiss-grid' | 'macro-ink') => void;
   onCopyCSS: () => void;
+  onAutoFitSize: () => void;
+  customFonts: FontDefinition[];
+  onUploadCustomFont: (font: FontDefinition) => void;
 }
 
 export const ControlDock: React.FC<ControlDockProps> = ({
@@ -36,9 +42,20 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   backgroundTexture,
   onChangeBackgroundTexture,
   onCopyCSS,
+  onAutoFitSize,
+  customFonts,
+  onUploadCustomFont,
 }) => {
-  const [activeTab, setActiveTab] = useState<'type' | 'layout' | 'color' | 'presets'>('type');
+  const [activeTab, setActiveTab] = useState<'type' | 'pairings' | 'layout' | 'color' | 'presets'>('type');
+  const [fontCategoryFilter, setFontCategoryFilter] = useState<string>('all');
   const [copiedCSS, setCopiedCSS] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const allFonts = [...AVAILABLE_FONTS, ...customFonts];
+
+  const filteredFonts = fontCategoryFilter === 'all'
+    ? allFonts
+    : allFonts.filter(f => f.category === fontCategoryFilter);
 
   const samplePhrases = [
     "FORM FOLLOWS FUNCTION FOLLOWS FORM",
@@ -63,71 +80,81 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     });
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const fontName = file.name.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9 ]/g, ' ');
+      const cssFontFamily = `'${fontName}', sans-serif`;
+
+      const fontFace = new FontFace(fontName, buffer);
+      await fontFace.load();
+      document.fonts.add(fontFace);
+
+      const newFont: FontDefinition = {
+        id: `custom-${Date.now()}`,
+        name: fontName,
+        cssFamily: cssFontFamily,
+        category: 'custom',
+        weights: [400, 700],
+        origin: 'User Local File',
+        designer: 'Custom Upload',
+        bestUse: 'Custom Typographic Testing',
+        sampleText: 'CUSTOM LOADED TYPEFACE'
+      };
+
+      onUploadCustomFont(newFont);
+      onChange({ fontFamily: cssFontFamily });
+    } catch (err) {
+      console.error('Failed to load custom font file', err);
+      alert('Could not parse font file. Please provide a valid .ttf, .otf, or .woff file.');
+    }
+  };
+
   return (
     <div className="w-full bg-[#111317] border-t lg:border-t-0 lg:border-l border-[#22262E] text-xs font-mono-code flex flex-col">
       
       {/* Control Tabs Header */}
-      <div className="flex border-b border-[#22262E] bg-[#0A0C10] px-6 py-1 gap-1.5 overflow-x-auto">
-        <button
-          onClick={() => setActiveTab('type')}
-          className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
-            activeTab === 'type'
-              ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
-              : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7] hover:bg-[#111317]'
-          }`}
-        >
-          <Type className="w-3.5 h-3.5" />
-          <span>AXES & TYPE</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('layout')}
-          className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
-            activeTab === 'layout'
-              ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
-              : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7] hover:bg-[#111317]'
-          }`}
-        >
-          <Sliders className="w-3.5 h-3.5" />
-          <span>TRANSFORMS</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('color')}
-          className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
-            activeTab === 'color'
-              ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
-              : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7] hover:bg-[#111317]'
-          }`}
-        >
-          <Palette className="w-3.5 h-3.5" />
-          <span>ATMOSPHERE</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab('presets')}
-          className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
-            activeTab === 'presets'
-              ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
-              : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7] hover:bg-[#111317]'
-          }`}
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>PRESETS</span>
-        </button>
+      <div className="flex border-b border-[#22262E] bg-[#0A0C10] px-3 py-1 gap-1 overflow-x-auto">
+        {[
+          { id: 'type', label: 'AXES & TYPE', icon: Type },
+          { id: 'pairings', label: 'PAIRINGS', icon: Columns },
+          { id: 'layout', label: 'TRANSFORMS', icon: Sliders },
+          { id: 'color', label: 'ATMOSPHERE', icon: Palette },
+          { id: 'presets', label: 'PRESETS', icon: Sparkles },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`px-3 py-2.5 flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider text-xs whitespace-nowrap transition-colors border-b-2 ${
+                isActive
+                  ? 'border-[#00FF66] text-[#00FF66] bg-[#151922]'
+                  : 'border-transparent text-[#9AA2B1] hover:text-[#F4F5F7] hover:bg-[#111317]'
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              <span>{tab.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Main Control Panel Body */}
-      <div className="p-4 sm:p-6 space-y-6 overflow-y-auto max-h-[700px] flex-1">
+      <div className="p-4 sm:p-5 space-y-5 overflow-y-auto max-h-[700px] flex-1">
 
         {/* 1. TEXT INPUT & PHRASE BANK (Always visible at top for immediate workflow) */}
         <div className="space-y-2.5 pb-4 border-b border-[#1E232E]">
           <div className="flex items-center justify-between text-[#A1A1AA]">
             <span className="font-semibold text-[#F4F5F7] flex items-center gap-2">
               <span className="w-2 h-2 bg-[#00FF66]"></span>
-              SPECIMEN TEXT INPUT
+              HEADLINE TEXT INPUT
             </span>
-            <span className="text-xs text-[#A1A1AA]">{state.text.length} Characters</span>
+            <span className="text-xs text-[#A1A1AA]">{state.text.length} Chars</span>
           </div>
           
           <textarea
@@ -156,17 +183,57 @@ export const ControlDock: React.FC<ControlDockProps> = ({
         {activeTab === 'type' && (
           <div className="space-y-5">
             
-            {/* Font Family Selection */}
-            <div className="space-y-2">
-              <label className="text-[#A1A1AA] block text-xs font-semibold">
-                FONT FAMILY // CURATED TYPE CATALOG
-              </label>
+            {/* Font Family Selection with Category Filter & Upload */}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <label className="text-[#A1A1AA] block text-xs font-semibold">
+                  PRIMARY FONT ({allFonts.length} AVAILABLE)
+                </label>
+                
+                {/* Upload Custom Font Button */}
+                <div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".ttf,.otf,.woff,.woff2"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex items-center gap-1.5 px-2.5 py-1 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 text-xs font-bold transition-colors"
+                    title="Upload local .ttf, .otf, or .woff file"
+                  >
+                    <Upload className="w-3 h-3" />
+                    <span>UPLOAD FONT</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Category Filter Pills */}
+              <div className="flex flex-wrap gap-1 pb-1">
+                {['all', 'grotesk', 'serif', 'monospace', 'display', 'experimental', 'custom'].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setFontCategoryFilter(cat)}
+                    className={`px-2 py-0.5 text-[10px] uppercase font-bold border transition-colors ${
+                      fontCategoryFilter === cat
+                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                        : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+
+              {/* Font Dropdown */}
               <select
                 value={state.fontFamily}
                 onChange={(e) => onChange({ fontFamily: e.target.value })}
                 className="w-full bg-[#0D0F14] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-2.5 text-xs font-mono-code rounded-none focus:outline-none"
               >
-                {AVAILABLE_FONTS.map((font) => (
+                {filteredFonts.map((font) => (
                   <option key={font.id} value={font.cssFamily}>
                     {font.name} [{font.category.toUpperCase()}]
                   </option>
@@ -176,10 +243,19 @@ export const ControlDock: React.FC<ControlDockProps> = ({
 
             {/* Font Size & Weight Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Size Slider */}
+              {/* Size Slider + Auto Fit */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-[#A1A1AA]">
-                  <span>SIZE (PT/PX)</span>
+                  <span className="flex items-center gap-1.5">
+                    SIZE (PT/PX)
+                    <button
+                      onClick={onAutoFitSize}
+                      className="px-1.5 py-0.2 bg-[#1A251E] text-[#00FF66] text-[10px] font-bold border border-[#00FF66]/40 hover:bg-[#00FF66] hover:text-black transition-colors"
+                      title="Auto fit text size to frame"
+                    >
+                      FIT
+                    </button>
+                  </span>
                   <span className="text-[#00FF66] font-bold">{state.fontSize}px</span>
                 </div>
                 <input
@@ -342,7 +418,141 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           </div>
         )}
 
-        {/* ==================== TAB 2: TRANSFORMS & KINETIC ==================== */}
+        {/* ==================== TAB 2: FONT PAIRINGS (NEW!) ==================== */}
+        {activeTab === 'pairings' && (
+          <div className="space-y-5">
+            
+            {/* Secondary Text Layer Toggle */}
+            <div className="flex items-center justify-between p-3 bg-[#0D0F14] border border-[#22262E]">
+              <div>
+                <span className="font-bold text-[#F4F5F7] block text-xs">SECONDARY TEXT LAYER (PAIRING)</span>
+                <span className="text-[11px] text-[#A1A1AA]">Compose headline + subhead/caption simultaneously</span>
+              </div>
+              <button
+                onClick={() => onChange({ showSubText: !state.showSubText })}
+                className={`px-3 py-1 text-xs font-bold border transition-colors ${
+                  state.showSubText
+                    ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                    : 'border-[#22262E] text-[#A1A1AA]'
+                }`}
+              >
+                {state.showSubText ? 'LAYER: ON' : 'LAYER: OFF'}
+              </button>
+            </div>
+
+            {/* Secondary Text Input & Controls if enabled */}
+            {state.showSubText && (
+              <div className="p-3.5 bg-[#0D0F14] border border-[#22262E] space-y-3">
+                <span className="font-bold text-[#00FF66] text-xs block">
+                  SECONDARY PAIRING TEXT & AXES
+                </span>
+
+                <textarea
+                  value={state.subText}
+                  onChange={(e) => onChange({ subText: e.target.value })}
+                  placeholder="Enter secondary subheadline or body text..."
+                  className="w-full bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-2.5 text-xs font-mono-code rounded-none resize-y min-h-[50px] focus:outline-none"
+                />
+
+                <div className="space-y-1.5">
+                  <label className="text-[#A1A1AA] text-xs font-semibold block">PAIRING FONT FAMILY</label>
+                  <select
+                    value={state.subFontFamily}
+                    onChange={(e) => onChange({ subFontFamily: e.target.value })}
+                    className="w-full bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] text-[#F4F5F7] p-2 text-xs font-mono-code rounded-none focus:outline-none"
+                  >
+                    {allFonts.map((f) => (
+                      <option key={f.id} value={f.cssFamily}>
+                        {f.name} [{f.category.toUpperCase()}]
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[#A1A1AA] text-[11px]">
+                      <span>SIZE</span>
+                      <span className="text-[#00FF66]">{state.subFontSize}px</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="10"
+                      max="48"
+                      value={state.subFontSize}
+                      onChange={(e) => onChange({ subFontSize: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[#A1A1AA] text-[11px]">
+                      <span>WEIGHT</span>
+                      <span className="text-[#00FF66]">{state.subFontWeight}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="100"
+                      max="900"
+                      step="100"
+                      value={state.subFontWeight}
+                      onChange={(e) => onChange({ subFontWeight: Number(e.target.value) })}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Curated Font Pairings Catalog */}
+            <div className="space-y-3 pt-2 border-t border-[#1E232E]">
+              <span className="text-[#A1A1AA] block text-xs font-semibold">
+                CURATED CLASSIC & MODERN PAIRINGS (CLICK TO LOAD)
+              </span>
+
+              <div className="space-y-2.5">
+                {CURATED_PAIRINGS.map((pairing) => (
+                  <button
+                    key={pairing.id}
+                    onClick={() => {
+                      onChange({
+                        fontFamily: pairing.headlineFamily,
+                        fontWeight: pairing.headlineWeight,
+                        letterSpacing: pairing.headlineTracking,
+                        subFontFamily: pairing.bodyFamily,
+                        subFontWeight: pairing.bodyWeight,
+                        subLetterSpacing: pairing.bodyTracking,
+                        showSubText: true,
+                        subText: pairing.bodySample,
+                      });
+                    }}
+                    className="w-full text-left p-3.5 border border-[#22262E] bg-[#0D0F14] hover:bg-[#151922] hover:border-[#00FF66] transition-all group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[#F4F5F7] text-xs group-hover:text-[#00FF66] transition-colors">
+                        {pairing.name}
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#1A1F29] text-[#00FF66]">
+                        {pairing.category}
+                      </span>
+                    </div>
+                    <div className="mt-2 text-xs flex items-center gap-2 text-[#C2CAD8]">
+                      <span className="font-bold text-[#F4F5F7]">{pairing.headlineFamily.split(',')[0].replace(/['"]/g, '')}</span>
+                      <span className="text-[#00FF66]">+</span>
+                      <span>{pairing.bodyFamily.split(',')[0].replace(/['"]/g, '')}</span>
+                    </div>
+                    <p className="text-[11px] text-[#A1A1AA] mt-1.5 line-clamp-2 leading-relaxed">
+                      {pairing.description}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* ==================== TAB 3: TRANSFORMS & KINETIC ==================== */}
         {activeTab === 'layout' && (
           <div className="space-y-5">
             
@@ -492,12 +702,12 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             </div>
 
-            {/* Grid Overlay Controls */}
+            {/* Grid Overlay Controls (Controlled opacity behind text) */}
             <div className="space-y-2 pt-3 border-t border-[#1E232E]">
               <div className="flex justify-between items-center">
                 <span className="text-[#A1A1AA] text-xs font-semibold flex items-center gap-2">
                   <Grid className="w-4 h-4 text-[#00FF66]" />
-                  INSPECTION GRID GUIDES
+                  INSPECTION GRID GUIDES (BACKGROUND)
                 </span>
                 <button
                   onClick={() => onChange({ showGrid: !state.showGrid })}
@@ -533,7 +743,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           </div>
         )}
 
-        {/* ==================== TAB 3: COLOR & ATMOSPHERE ==================== */}
+        {/* ==================== TAB 4: COLOR & ATMOSPHERE ==================== */}
         {activeTab === 'color' && (
           <div className="space-y-5">
             
@@ -644,8 +854,63 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             </div>
 
+            {/* Swiss Architectural Watermark Layer Controls */}
+            <div className="p-3.5 bg-[#0D0F14] border border-[#22262E] space-y-3 pt-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-[#F4F5F7] text-xs">SWISS ARCHITECTURAL WATERMARK</span>
+                <button
+                  onClick={() => onChange({ showWatermark: !state.showWatermark })}
+                  className={`px-2.5 py-0.5 text-xs font-bold border transition-colors ${
+                    state.showWatermark ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C]' : 'border-[#22262E] text-[#A1A1AA]'
+                  }`}
+                >
+                  {state.showWatermark ? 'ON' : 'OFF'}
+                </button>
+              </div>
+
+              {state.showWatermark && (
+                <div className="space-y-2.5 pt-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-[#A1A1AA] w-14">GLYPH:</span>
+                    <input
+                      type="text"
+                      maxLength={4}
+                      value={state.watermarkText}
+                      onChange={(e) => onChange({ watermarkText: e.target.value })}
+                      className="w-20 bg-[#08090C] border border-[#22262E] text-[#00FF66] p-1.5 text-center text-xs font-bold"
+                    />
+                    <div className="flex gap-1">
+                      {['57', '11', 'R', 'SPQR', '✦', '№'].map((txt) => (
+                        <button
+                          key={txt}
+                          onClick={() => onChange({ watermarkText: txt })}
+                          className="px-2 py-1 bg-[#151922] text-[#A1A1AA] hover:text-[#00FF66] border border-[#22262E] text-[10px]"
+                        >
+                          {txt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[#A1A1AA] text-[11px]">
+                    <span>OPACITY</span>
+                    <span className="text-[#00FF66] font-bold">{Math.round(state.watermarkOpacity * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.02"
+                    max="0.30"
+                    step="0.01"
+                    value={state.watermarkOpacity}
+                    onChange={(e) => onChange({ watermarkOpacity: Number(e.target.value) })}
+                    className="w-full"
+                  />
+                </div>
+              )}
+            </div>
+
             {/* Text Glow / Phosphor Radiation Toggle */}
-            <div className="space-y-2 pt-3 border-t border-[#1E232E]">
+            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
               <div className="flex justify-between items-center">
                 <span className="text-[#A1A1AA] text-xs font-semibold">PHOSPHOR LASER GLOW</span>
                 <button
@@ -662,7 +927,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
           </div>
         )}
 
-        {/* ==================== TAB 4: PRESETS (08) ==================== */}
+        {/* ==================== TAB 5: PRESETS (08) ==================== */}
         {activeTab === 'presets' && (
           <div className="space-y-3">
             <span className="text-[#A1A1AA] block text-xs font-semibold">

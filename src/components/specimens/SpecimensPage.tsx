@@ -42,8 +42,15 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
 
     onLoadIntoPlayground({
       text: globalTestText.trim() ? globalTestText : specimen.headline,
+      subText: specimen.subhead,
+      showSubText: true,
+      subFontFamily: fontCssMap[specimen.secondaryFontId] || "'JetBrains Mono', monospace",
+      subFontSize: 13,
+      subFontWeight: 400,
+      subLetterSpacing: 0.04,
+      subTextColor: specimen.palette.accent,
       fontFamily: fontCssMap[specimen.primaryFontId] || "'Space Grotesk', sans-serif",
-      fontSize: specimen.metadata.pointSize,
+      fontSize: Math.min(52, specimen.metadata.pointSize),
       fontWeight: specimen.metadata.weight,
       lineHeight: specimen.metadata.leading,
       letterSpacing: specimen.metadata.tracking,
@@ -51,7 +58,7 @@ export const SpecimensPage: React.FC<SpecimensPageProps> = ({ onLoadIntoPlaygrou
       backgroundColor: specimen.palette.bg,
       textAlign: specimen.metadata.alignment,
       canvasFrame: specimen.category === 'Kinetic' ? 'ribbon' : 'poster',
-      showGrid: true,
+      showGrid: false,
       gridType: 'modular'
     });
   };
