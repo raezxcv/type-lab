@@ -22,7 +22,8 @@ import {
   Columns,
   Shuffle,
   ChevronRight,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Eye
 } from 'lucide-react';
 
 interface ControlDockProps {
@@ -35,6 +36,7 @@ interface ControlDockProps {
   onUploadCustomFont: (font: FontDefinition) => void;
   activeLayer?: 'headline' | 'secondary';
   onSelectLayer?: (layer: 'headline' | 'secondary') => void;
+  onViewArtboard?: () => void;
 }
 
 export const ControlDock: React.FC<ControlDockProps> = ({
@@ -47,6 +49,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   onUploadCustomFont,
   activeLayer: externalActiveLayer,
   onSelectLayer,
+  onViewArtboard,
 }) => {
   const [activeMainTab, setActiveMainTab] = useState<'type' | 'pairings' | 'effects' | 'canvas'>('type');
   const [internalActiveLayer, setInternalActiveLayer] = useState<'headline' | 'secondary'>('headline');
@@ -1697,30 +1700,41 @@ export const ControlDock: React.FC<ControlDockProps> = ({
       </div>
 
       {/* Dock Bottom Action Bar */}
-      <div className="p-4 sm:p-5 border-t border-[#22262E] bg-[#0A0C10] flex items-center justify-between gap-3">
+      <div className="p-3 sm:p-5 border-t border-[#22262E] bg-[#0A0C10] flex items-center justify-between gap-2 sm:gap-3 shrink-0">
         <button
           onClick={onReset}
-          className="flex items-center gap-2 px-4 py-2.5 text-[#C2CAD8] hover:text-[#F4F5F7] bg-[#111317] hover:bg-[#1B202A] border border-[#22262E] transition-colors text-xs font-bold"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-[#C2CAD8] hover:text-[#F4F5F7] bg-[#111317] hover:bg-[#1B202A] border border-[#22262E] transition-colors text-xs font-bold shrink-0"
           title="Reset All Parameters to Default (Shortcut: Esc)"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           <span>RESET</span>
         </button>
 
+        {onViewArtboard && (
+          <button
+            onClick={onViewArtboard}
+            className="lg:hidden flex items-center gap-1.5 px-3 py-2 text-[#070809] bg-[#00FF66] hover:bg-[#4DFF95] font-bold text-xs shrink-0"
+            title="View Artboard on Mobile"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            <span>VIEW POSTER</span>
+          </button>
+        )}
+
         <button
           onClick={handleCopyCSS}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-[#00FF66] bg-[#141F18] hover:bg-[#1A2E20] border border-[#00FF66]/50 transition-colors font-bold text-xs"
+          className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-[#00FF66] bg-[#141F18] hover:bg-[#1A2E20] border border-[#00FF66]/50 transition-colors font-bold text-xs"
           title="Copy CSS rules for this composition"
         >
           {copiedCSS ? (
             <>
-              <Check className="w-4 h-4" />
-              <span>COPIED CSS RULES!</span>
+              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>COPIED!</span>
             </>
           ) : (
             <>
-              <Copy className="w-4 h-4" />
-              <span>COPY CSS RULES</span>
+              <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span className="truncate">COPY CSS</span>
             </>
           )}
         </button>

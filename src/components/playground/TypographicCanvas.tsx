@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { TypographicState } from '../../types';
 import { ZoomIn, ZoomOut, Sparkles } from 'lucide-react';
 
@@ -43,6 +43,14 @@ const TINT_COLORS: Record<string, string> = {
   monochrome: '#FFFFFF',
 };
 
+const FRAME_BASE_DIMENSIONS: Record<TypographicState['canvasFrame'], { w: number; h: number }> = {
+  poster: { w: 500, h: 700 },      // Classic Swiss A4 proportion (1:1.4)
+  square: { w: 540, h: 540 },      // 1:1
+  editorial: { w: 520, h: 650 },   // 4:5
+  ribbon: { w: 720, h: 300 },      // 21:9
+  fluid: { w: 600, h: 480 },       // Fluid
+};
+
 export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   state,
   onChangeText,
@@ -53,18 +61,45 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   onSelectLayer,
 }) => {
   const [zoomLevel, setZoomLevel] = useState<number>(100);
+  const [isFitMode, setIsFitMode] = useState<boolean>(true);
+  const stageRef = useRef<HTMLDivElement | null>(null);
   const textContainerRef = useRef<HTMLDivElement | null>(null);
+  const [stageSize, setStageSize] = useState<{ width: number; height: number }>({ width: 700, height: 600 });
+
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const updateSize = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        setStageSize({ width: rect.width, height: rect.height });
+      }
+    };
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(el);
+    window.addEventListener('resize', updateSize);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', updateSize);
+    };
+  }, []);
 
   const currentTextureUrl = TEXTURE_ASSETS[state.backgroundTexture] || '';
+  const baseDims = FRAME_BASE_DIMENSIONS[state.canvasFrame] || { w: 500, h: 700 };
 
-  // Dynamic aspect ratio classes with flexible vertical breathing room
-  const frameClasses = {
-    poster: 'max-w-[560px] min-h-[720px] w-full',
-    square: 'max-w-[560px] min-h-[560px] w-full',
-    ribbon: 'max-w-full min-h-[300px] w-full',
-    editorial: 'max-w-[580px] min-h-[680px] w-full',
-    fluid: 'w-full min-h-[500px]',
-  }[state.canvasFrame];
+  // Responsive padding buffer: 24px on desktop, 12px on mobile
+  const bufferX = stageSize.width < 640 ? 12 : 24;
+  const bufferY = stageSize.height < 640 ? 12 : 24;
+
+  const availableW = Math.max(160, stageSize.width - bufferX);
+  const availableH = Math.max(160, stageSize.height - bufferY);
+
+  // Auto-fit scale factor: fits both width and height exactly within available viewport stage
+  const autoFitScale = Math.min(availableW / baseDims.w, availableH / baseDims.h);
+  
+  // Effective scale applied
+  const effectiveScale = isFitMode ? autoFitScale : (zoomLevel / 100);
 
   // Primary Headline typographic styles
   const headlineStyle: React.CSSProperties = {
@@ -91,14 +126,15 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   // Helper to render inline graphic plates (above, between, below typography)
   const renderInlineImagePlate = (position: 'above' | 'between' | 'below') => {
     if (!state.showImageLayer || !state.imageUrl || state.imagePlacement !== position) return null;
+    const maxPlateHeight = Math.min(state.imageHeight || 180, Math.round(baseDims.h * 0.28));
     return (
-      <div className="w-full my-2 border border-current/25 overflow-hidden relative group">
+      <div className="w-full my-1.5 border border-current/25 overflow-hidden relative group shrink-0">
         <img
           src={state.imageUrl}
           alt={state.imageCaption || "Graphic Plate"}
           className="w-full object-cover transition-all"
           style={{
-            maxHeight: `${state.imageHeight || 200}px`,
+            maxHeight: `${maxPlateHeight}px`,
             opacity: state.imageOpacity ?? 0.85,
             mixBlendMode: (state.imageBlendMode as any) || 'normal',
             filter: state.imageFilter === 'grayscale' ? 'grayscale(1)' :
@@ -108,7 +144,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           }}
         />
         {state.imageCaption && (
-          <div className="text-[10px] font-mono-code uppercase px-2.5 py-1 bg-black/75 text-[#F4F5F7] border-t border-current/20 flex justify-between items-center">
+          <div className="text-[10px] font-mono-code uppercase px-2 py-0.5 bg-black/75 text-[#F4F5F7] border-t border-current/20 flex justify-between items-center">
             <span className="truncate pr-2">{state.imageCaption}</span>
             <span className="text-[#00FF66] shrink-0 font-bold">PLATE // REF</span>
           </div>
@@ -131,24 +167,24 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   };
 
   return (
-    <div className="relative w-full flex flex-col items-center justify-start p-4 sm:p-8 lg:p-10 min-h-[640px] bg-[#070809] overflow-hidden select-none">
+    <div className="relative w-full h-full flex flex-col justify-between items-center p-2 sm:p-3 bg-[#070809] overflow-hidden select-none">
       
       {/* Background subtle laboratory grid */}
       <div className="absolute inset-0 swiss-grid-pattern opacity-25 pointer-events-none" />
 
       {/* Canvas Top Toolbar & Viewport Controls */}
-      <div className="w-full max-w-4xl flex flex-wrap items-center justify-between gap-3 pb-4 text-xs font-mono-code text-[#A1A1AA] z-10 border-b border-[#1A1F29] mb-4">
+      <div className="w-full max-w-4xl flex items-center justify-between gap-2 pb-2 px-3 sm:px-4 text-xs font-mono-code text-[#A1A1AA] z-10 border-b border-[#1A1F29] mb-1 shrink-0">
         
         {/* Dimensions & Active Metrics */}
-        <div className="flex items-center space-x-3">
-          <h1 className="flex items-center gap-2 text-[#00FF66] font-bold text-xs uppercase m-0">
+        <div className="flex items-center space-x-2 sm:space-x-3 overflow-hidden">
+          <h1 className="flex items-center gap-1.5 text-[#00FF66] font-bold text-xs uppercase m-0 shrink-0">
             <span className="w-2 h-2 bg-[#00FF66] inline-block animate-pulse"></span>
-            TYPE//LAB 11 STUDIO
+            <span className="hidden sm:inline">TYPE//LAB 11</span>
           </h1>
-          <span className="text-[#3A4354]">|</span>
-          <span className="text-xs">FRAME: [{state.canvasFrame.toUpperCase()}]</span>
-          <span className="text-[#3A4354]">|</span>
-          <span className="text-xs">SCALE: {state.fontSize}px</span>
+          <span className="text-[#3A4354] hidden sm:inline">|</span>
+          <span className="text-xs truncate font-semibold">[{state.canvasFrame.toUpperCase()}]</span>
+          <span className="text-[#3A4354] hidden md:inline">|</span>
+          <span className="text-xs hidden md:inline">{state.fontSize}px</span>
           <span className="text-[#3A4354]">|</span>
           <button
             onClick={() => {
@@ -162,75 +198,96 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
               const next = textures[(idx + 1) % textures.length];
               onChangeTexture?.(next);
             }}
-            className="flex items-center gap-1.5 px-2 py-0.5 bg-[#12161F] hover:bg-[#1A222F] text-[#00FF66] border border-[#232B3B] transition-colors text-[11px] font-bold"
+            className="flex items-center gap-1 px-1.5 py-0.5 bg-[#12161F] hover:bg-[#1A222F] text-[#00FF66] border border-[#232B3B] transition-colors text-[11px] font-bold shrink-0"
             title="Cycle background texture plate"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#00FF66]"></span>
-            <span>BG: {state.backgroundTexture.toUpperCase()}</span>
+            <span className="truncate max-w-[90px] sm:max-w-none">BG: {state.backgroundTexture.toUpperCase()}</span>
             <span className="text-[#8E97A8] text-[10px]">⇄</span>
           </button>
         </div>
 
-        {/* Action controls: Auto-fit text & Zoom */}
-        <div className="flex items-center space-x-2">
+        {/* Action controls: Auto-fit text & Screen-Fit Zoom */}
+        <div className="flex items-center space-x-1.5 shrink-0">
           <button
             onClick={onAutoFitSize}
-            className="flex items-center gap-1.5 px-3 py-1 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 transition-colors font-bold text-xs"
+            className="flex items-center gap-1 px-2 sm:px-2.5 py-1 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 transition-colors font-bold text-xs"
             title="Automatically scale font size so all lines fit within canvas"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>FIT TEXT TO FRAME</span>
+            <span className="hidden sm:inline">FIT TEXT</span>
           </button>
 
-          <div className="flex items-center border border-[#262C3A] bg-[#0E1117]">
+          <div className="flex items-center border border-[#262C3A] bg-[#0E1117] p-0.5">
             <button
-              onClick={() => setZoomLevel(prev => Math.max(50, prev - 10))}
-              className="px-2 py-1 hover:text-[#00FF66] text-[#A1A1AA]"
+              onClick={() => setIsFitMode(true)}
+              className={`px-2 py-0.5 text-[11px] font-bold font-mono-code transition-colors ${
+                isFitMode ? 'bg-[#00FF66] text-[#070809]' : 'text-[#A1A1AA] hover:text-[#00FF66]'
+              }`}
+              title="Fit poster perfectly to screen height (No scroll)"
+            >
+              FIT
+            </button>
+            <button
+              onClick={() => {
+                setIsFitMode(false);
+                setZoomLevel(prev => Math.max(40, prev - 10));
+              }}
+              className="px-1.5 py-0.5 hover:text-[#00FF66] text-[#A1A1AA]"
               title="Zoom out"
               aria-label="Zoom out"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="px-2 py-1 text-[11px] text-[#C2CAD8] min-w-[42px] text-center">
-              {zoomLevel}%
+            <span className="px-1 py-0.5 text-[11px] text-[#C2CAD8] min-w-[38px] text-center">
+              {Math.round(effectiveScale * 100)}%
             </span>
             <button
-              onClick={() => setZoomLevel(prev => Math.min(150, prev + 10))}
-              className="px-2 py-1 hover:text-[#00FF66] text-[#A1A1AA]"
+              onClick={() => {
+                setIsFitMode(false);
+                setZoomLevel(prev => Math.min(160, prev + 10));
+              }}
+              className="px-1.5 py-0.5 hover:text-[#00FF66] text-[#A1A1AA]"
               title="Zoom in"
               aria-label="Zoom in"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
-            {zoomLevel !== 100 && (
-              <button
-                onClick={() => setZoomLevel(100)}
-                className="px-1.5 py-1 text-[11px] text-[#00FF66] border-l border-[#262C3A]"
-                title="Reset zoom to 100%"
-              >
-                100%
-              </button>
-            )}
           </div>
         </div>
 
       </div>
 
-      {/* Zoomable Canvas Viewport Container */}
+      {/* Viewport Artboard Stage — Always fits screen height without scrolling */}
       <div 
-        className="w-full flex justify-center items-start overflow-x-auto py-2 transition-transform duration-200"
-        style={{ transform: zoomLevel !== 100 ? `scale(${zoomLevel / 100})` : undefined, transformOrigin: 'top center' }}
+        ref={stageRef}
+        className="flex-1 min-h-0 w-full flex items-center justify-center relative overflow-hidden my-auto"
       >
-        
-        {/* THE CORE ARTBOARD POSTER CONTAINER */}
-        <div
-          ref={canvasRef}
-          id="typography-export-target"
-          className={`relative transition-all duration-300 flex flex-col justify-between p-8 sm:p-12 border border-[#262C3A] shadow-2xl overflow-hidden ${frameClasses}`}
+        <div 
+          className="flex items-center justify-center relative select-none shadow-2xl transition-all duration-150"
           style={{
-            backgroundColor: state.backgroundColor,
+            width: `${Math.round(baseDims.w * effectiveScale)}px`,
+            height: `${Math.round(baseDims.h * effectiveScale)}px`,
           }}
         >
+          <div
+            style={{
+              width: `${baseDims.w}px`,
+              height: `${baseDims.h}px`,
+              transform: `scale(${effectiveScale})`,
+              transformOrigin: 'top left',
+            }}
+            className="absolute top-0 left-0"
+          >
+            {/* THE CORE ARTBOARD POSTER CONTAINER */}
+            <div
+              ref={canvasRef}
+              id="typography-export-target"
+              className="w-full h-full relative transition-all duration-200 flex flex-col justify-between p-6 sm:p-8 border border-[#262C3A] overflow-hidden shadow-2xl"
+              style={{
+                backgroundColor: state.backgroundColor,
+              }}
+            >
           
           {/* CUSTOMIZABLE ORIGINAL GRAPHIC TEXTURE LAYER */}
           {state.backgroundTexture !== 'none' && currentTextureUrl && (
@@ -472,14 +529,15 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             </div>
           </div>
 
+            </div>
+          </div>
         </div>
-
       </div>
 
       {/* Bottom coordinate note */}
-      <div className="w-full max-w-4xl flex items-center justify-between pt-4 text-xs font-mono-code text-[#758091]">
-        <span>DIN 476 Modular System Standard</span>
-        <span>X: 000.00mm // Y: 000.00mm</span>
+      <div className="w-full max-w-4xl flex items-center justify-between pt-1.5 px-5 sm:px-6 text-[11px] font-mono-code text-[#758091] shrink-0 border-t border-[#161B24]">
+        <span className="truncate">DIN 476 Modular System Standard</span>
+        <span className="hidden sm:inline shrink-0">X: 000.00mm // Y: 000.00mm</span>
       </div>
 
     </div>

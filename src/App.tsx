@@ -9,6 +9,7 @@ import { SpecimensPage } from './components/specimens/SpecimensPage';
 import { AboutPage } from './components/about/AboutPage';
 import { ExportModal } from './components/common/ExportModal';
 import { ShortcutsModal } from './components/common/ShortcutsModal';
+import { Eye, Sliders, Shuffle } from 'lucide-react';
 
 const DEFAULT_STATE: TypographicState = SPECIMEN_PRESETS[0].state;
 
@@ -24,6 +25,7 @@ export const App: React.FC = () => {
   };
 
   const [activeTab, setActiveTab] = useState<'playground' | 'specimens' | 'about'>(getInitialTab);
+  const [mobilePlaygroundView, setMobilePlaygroundView] = useState<'canvas' | 'controls'>('canvas');
   const [activeLayer, setActiveLayer] = useState<'headline' | 'secondary'>('headline');
   const [typoState, setTypoState] = useState<TypographicState>(DEFAULT_STATE);
   const [customFonts, setCustomFonts] = useState<FontDefinition[]>([]);
@@ -311,10 +313,48 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
       {/* Main Content View Switcher — 100vh full-bleed studio */}
       <main className="flex-1 min-h-0 w-full overflow-hidden flex flex-col">
         {activeTab === 'playground' && (
-          <div className="flex-1 min-h-0 w-full grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+          <div className="flex-1 min-h-0 w-full flex flex-col lg:grid lg:grid-cols-12 gap-0 overflow-hidden relative">
             
-            {/* Visual Canvas Artboard (7-8 cols on large screens, scrollable viewport) */}
-            <div className="lg:col-span-7 xl:col-span-8 h-full min-h-0 overflow-y-auto flex flex-col justify-start bg-[#070809] border-r border-[#1E232E]">
+            {/* Mobile Workspace Segmented Mode Switcher (Visible strictly on screens < lg) */}
+            <div className="lg:hidden flex items-center justify-between px-3 py-1.5 bg-[#090B0F] border-b border-[#1E232E] shrink-0 z-20">
+              <div className="flex items-center gap-1 bg-[#12161F] p-0.5 border border-[#232B3B] flex-1 mr-2">
+                <button
+                  onClick={() => setMobilePlaygroundView('canvas')}
+                  className={`flex-1 py-1 px-2 text-xs font-bold font-mono-code transition-all flex items-center justify-center gap-1.5 ${
+                    mobilePlaygroundView === 'canvas'
+                      ? 'bg-[#00FF66] text-[#070809] shadow-sm font-extrabold'
+                      : 'text-[#9AA2B1] hover:text-[#F4F5F7]'
+                  }`}
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>01 ARTBOARD</span>
+                </button>
+                <button
+                  onClick={() => setMobilePlaygroundView('controls')}
+                  className={`flex-1 py-1 px-2 text-xs font-bold font-mono-code transition-all flex items-center justify-center gap-1.5 ${
+                    mobilePlaygroundView === 'controls'
+                      ? 'bg-[#00FF66] text-[#070809] shadow-sm font-extrabold'
+                      : 'text-[#9AA2B1] hover:text-[#F4F5F7]'
+                  }`}
+                >
+                  <Sliders className="w-3.5 h-3.5" />
+                  <span>02 CONTROLS</span>
+                </button>
+              </div>
+              <button
+                onClick={handleRandomize}
+                className="px-2.5 py-1.5 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 text-xs font-bold flex items-center gap-1 shrink-0"
+                title="Shuffle composition"
+              >
+                <Shuffle className="w-3 h-3" />
+                <span>RANDOM</span>
+              </button>
+            </div>
+
+            {/* Visual Canvas Artboard (7-8 cols on large screens, fits screen height without scroll) */}
+            <div className={`lg:col-span-7 xl:col-span-8 h-full min-h-0 flex-col justify-between bg-[#070809] lg:border-r border-[#1E232E] relative ${
+              mobilePlaygroundView === 'canvas' ? 'flex flex-1' : 'hidden lg:flex'
+            }`}>
               <TypographicCanvas
                 state={typoState}
                 onChangeText={(text) => handleUpdateState({ text })}
@@ -325,10 +365,21 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 activeLayer={activeLayer}
                 onSelectLayer={setActiveLayer}
               />
+              
+              {/* Floating Quick Action Button on Mobile to jump into controls */}
+              <button
+                onClick={() => setMobilePlaygroundView('controls')}
+                className="lg:hidden fixed bottom-4 right-4 z-30 px-3.5 py-2 bg-[#00FF66] text-[#070809] font-mono-code font-bold text-xs shadow-2xl flex items-center gap-2 border border-black/30 hover:bg-[#4DFF95] transition-all"
+              >
+                <Sliders className="w-4 h-4" />
+                <span>OPEN CONTROLS</span>
+              </button>
             </div>
 
             {/* Interactive Control Dock (4-5 cols on large screens, fixed studio height) */}
-            <div className="lg:col-span-5 xl:col-span-4 h-full min-h-0 flex flex-col overflow-hidden bg-[#111317]">
+            <div className={`lg:col-span-5 xl:col-span-4 h-full min-h-0 flex-col overflow-hidden bg-[#111317] relative ${
+              mobilePlaygroundView === 'controls' ? 'flex flex-1' : 'hidden lg:flex'
+            }`}>
               <ControlDock
                 state={typoState}
                 onChange={handleUpdateState}
@@ -339,6 +390,7 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 onUploadCustomFont={handleUploadCustomFont}
                 activeLayer={activeLayer}
                 onSelectLayer={setActiveLayer}
+                onViewArtboard={() => setMobilePlaygroundView('canvas')}
               />
             </div>
 
