@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import type { TypographicState, FontDefinition, FontPairing } from '../../types';
+import type { TypographicState, FontDefinition, FontPairing, ColorPalette } from '../../types';
 import { AVAILABLE_FONTS } from '../../data/fonts';
 import { SPECIMEN_PRESETS } from '../../data/presets';
 import { CURATED_PAIRINGS } from '../../data/pairings';
+import { CURATED_PALETTES, STUDIO_SWATCHES } from '../../data/palettes';
 import { VisualFontPicker } from './VisualFontPicker';
 import { 
   Type, 
@@ -55,6 +56,9 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   const [internalActiveLayer, setInternalActiveLayer] = useState<'headline' | 'secondary'>('headline');
   const [fontPickerTarget, setFontPickerTarget] = useState<'headline' | 'secondary' | null>(null);
   const [copiedCSS, setCopiedCSS] = useState(false);
+  const [pairingCategoryFilter, setPairingCategoryFilter] = useState<'ALL' | FontPairing['category']>('ALL');
+  const [paletteCategoryFilter, setPaletteCategoryFilter] = useState<'ALL' | ColorPalette['category']>('ALL');
+  const [textureCategoryFilter, setTextureCategoryFilter] = useState<string>('ALL');
 
   const activeLayer = externalActiveLayer !== undefined ? externalActiveLayer : internalActiveLayer;
   const setActiveLayer = (layer: 'headline' | 'secondary') => {
@@ -118,6 +122,22 @@ export const ControlDock: React.FC<ControlDockProps> = ({
     handleApplyPairing(randomPairing);
   };
 
+  const handleApplyPalette = (palette: ColorPalette) => {
+    onChange({
+      backgroundColor: palette.backgroundColor,
+      textColor: palette.textColor,
+      subTextColor: palette.subTextColor,
+      strokeColor: palette.strokeColor,
+      shadowGlowColor: palette.shadowGlowColor,
+      textureTint: palette.textureTint,
+    });
+  };
+
+  const handleShufflePalette = () => {
+    const randomPalette = CURATED_PALETTES[Math.floor(Math.random() * CURATED_PALETTES.length)];
+    handleApplyPalette(randomPalette);
+  };
+
   const handleShuffleSecondary = () => {
     const eligibleFonts = allFonts.filter(f => f.cssFamily !== state.fontFamily);
     const randomFont = eligibleFonts.length > 0 ? eligibleFonts[Math.floor(Math.random() * eligibleFonts.length)] : allFonts[0];
@@ -160,7 +180,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
       'overlay', 'screen', 'multiply', 'hard-light', 'soft-light', 'difference', 'color-dodge'
     ];
     const tints: Array<TypographicState['textureTint']> = [
-      'none', 'green', 'amber', 'cyan', 'crimson', 'monochrome'
+      'none', 'green', 'amber', 'cyan', 'crimson', 'violet', 'cobalt', 'acid-lime', 'copper', 'monochrome'
     ];
     const randomBlend = blendModes[Math.floor(Math.random() * blendModes.length)];
     const randomTint = tints[Math.floor(Math.random() * tints.length)];
@@ -518,23 +538,30 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   </div>
 
                   {/* Headline Color */}
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-[#A1A1AA] text-xs font-semibold">HEADLINE COLOR</span>
+                  <div className="space-y-2 pt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#A1A1AA] text-xs font-semibold">HEADLINE COLOR</span>
+                      <span className="text-[#00FF66] font-bold uppercase text-xs">{state.textColor}</span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <input
                         type="color"
                         value={state.textColor}
                         onChange={(e) => onChange({ textColor: e.target.value })}
-                        className="w-7 h-7 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
+                        className="w-7 h-7 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0 shrink-0"
                       />
-                      <div className="flex gap-1.5">
-                        {['#F4F5F7', '#00FF66', '#FFB800', '#00E5FF', '#070809'].map((hex) => (
+                      <div className="flex flex-wrap gap-1.5">
+                        {STUDIO_SWATCHES.slice(0, 14).map((s) => (
                           <button
-                            key={hex}
-                            onClick={() => onChange({ textColor: hex })}
-                            className="w-6 h-6 border border-[#2B3342] hover:scale-110 transition-transform"
-                            style={{ backgroundColor: hex }}
-                            title={hex}
+                            key={s.hex}
+                            onClick={() => onChange({ textColor: s.hex })}
+                            className={`w-5 h-5 border transition-transform hover:scale-110 ${
+                              state.textColor.toLowerCase() === s.hex.toLowerCase()
+                                ? 'border-[#00FF66] ring-1 ring-[#00FF66]'
+                                : 'border-[#2B3342]'
+                            }`}
+                            style={{ backgroundColor: s.hex }}
+                            title={`${s.label} (${s.hex})`}
                           />
                         ))}
                       </div>
@@ -706,16 +733,20 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         type="color"
                         value={state.subTextColor}
                         onChange={(e) => onChange({ subTextColor: e.target.value })}
-                        className="w-7 h-7 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
+                        className="w-7 h-7 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0 shrink-0"
                       />
-                      <div className="flex gap-1">
-                        {['#00FF66', '#F4F5F7', '#FFB800', '#00E5FF', '#A1A1AA'].map((hex) => (
+                      <div className="flex flex-wrap gap-1">
+                        {STUDIO_SWATCHES.slice(0, 12).map((s) => (
                           <button
-                            key={hex}
-                            onClick={() => onChange({ subTextColor: hex })}
-                            className="w-5 h-5 border border-[#2B3342] hover:scale-110 transition-transform"
-                            style={{ backgroundColor: hex }}
-                            title={hex}
+                            key={s.hex}
+                            onClick={() => onChange({ subTextColor: s.hex })}
+                            className={`w-5 h-5 border hover:scale-110 transition-transform ${
+                              state.subTextColor.toLowerCase() === s.hex.toLowerCase()
+                                ? 'border-[#00FF66] ring-1 ring-[#00FF66]'
+                                : 'border-[#2B3342]'
+                            }`}
+                            style={{ backgroundColor: s.hex }}
+                            title={`${s.label} (${s.hex})`}
                           />
                         ))}
                       </div>
@@ -736,7 +767,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
             <div className="flex items-center justify-between p-3 bg-[#0D0F14] border border-[#22262E]">
               <div>
                 <span className="font-bold text-[#F4F5F7] block text-xs">STUDIO PAIRING ENGINE</span>
-                <span className="text-[11px] text-[#A1A1AA]">12 curated historical & contemporary duos</span>
+                <span className="text-[11px] text-[#A1A1AA]">{CURATED_PAIRINGS.length} curated historical & contemporary duos</span>
               </div>
               <button
                 onClick={handleShufflePairing}
@@ -748,9 +779,26 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </button>
             </div>
 
+            {/* Category Filter Bar */}
+            <div className="flex flex-wrap gap-1.5">
+              {(['ALL', 'Modernist Swiss', 'Editorial Serif', 'Cyber Brutalist', 'Industrial Minimal', 'Classical Roman'] as const).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setPairingCategoryFilter(cat)}
+                  className={`px-2.5 py-1 text-xs font-mono-code border transition-colors ${
+                    pairingCategoryFilter === cat
+                      ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                      : 'border-[#22262E] bg-[#0D0F14] text-[#9AA2B1] hover:text-[#F4F5F7]'
+                  }`}
+                >
+                  {cat === 'ALL' ? `ALL (${CURATED_PAIRINGS.length})` : cat.toUpperCase()}
+                </button>
+              ))}
+            </div>
+
             {/* Curated Pairing Cards */}
             <div className="space-y-3">
-              {CURATED_PAIRINGS.map((pairing) => (
+              {CURATED_PAIRINGS.filter(p => pairingCategoryFilter === 'ALL' || p.category === pairingCategoryFilter).map((pairing) => (
                 <div
                   key={pairing.id}
                   className="p-4 border border-[#22262E] bg-[#0A0C10] hover:border-[#00FF66] transition-all space-y-3 group"
@@ -812,14 +860,16 @@ export const ControlDock: React.FC<ControlDockProps> = ({
             <div className="space-y-2">
               <label className="text-[#A1A1AA] block text-xs font-semibold flex items-center gap-2">
                 <Zap className="w-4 h-4 text-[#00FF66]" />
-                KINETIC MOTION ENGINE
+                KINETIC MOTION ENGINE (06 MODES)
               </label>
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'none', label: 'STATIC STATE' },
                   { id: 'marquee', label: 'KINETIC MARQUEE' },
                   { id: 'breath', label: 'VARIABLE BREATH' },
                   { id: 'skew-wobble', label: 'SKEW OSCILLATION' },
+                  { id: 'stagger-split', label: 'STAGGER SPLIT' },
+                  { id: 'glitch-pulse', label: 'CHROMATIC GLITCH' },
                 ].map((mode) => (
                   <button
                     key={mode.id}
@@ -1040,35 +1090,107 @@ export const ControlDock: React.FC<ControlDockProps> = ({
             </div>
 
             {/* Background Color Picker */}
-            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
+            <div className="space-y-2.5 pt-2 border-t border-[#1E232E]">
               <div className="flex justify-between items-center text-[#A1A1AA]">
-                <span>BACKGROUND COLOR</span>
+                <span>BACKGROUND COLOR (24 SWATCHES)</span>
                 <span className="text-[#00FF66] font-bold uppercase">{state.backgroundColor}</span>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
                 <input
                   type="color"
                   value={state.backgroundColor}
                   onChange={(e) => onChange({ backgroundColor: e.target.value })}
-                  className="w-8 h-8 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0"
+                  className="w-8 h-8 bg-transparent border border-[#22262E] cursor-pointer rounded-none p-0 shrink-0"
                 />
                 <div className="flex flex-wrap gap-1.5 flex-1">
-                  {[
-                    { hex: '#070809', label: 'Pitch Obsidian' },
-                    { hex: '#111317', label: 'Deep Monolith' },
-                    { hex: '#F4F5F7', label: 'Laboratory White' },
-                    { hex: '#00FF66', label: 'Electric Strobe' },
-                    { hex: '#1E232B', label: 'Graphite Zinc' },
-                  ].map((item) => (
+                  {STUDIO_SWATCHES.map((item) => (
                     <button
                       key={item.hex}
                       onClick={() => onChange({ backgroundColor: item.hex })}
-                      className="w-6 h-6 border border-[#2B3342] relative hover:scale-110 transition-transform"
+                      className={`w-6 h-6 border relative hover:scale-110 transition-transform ${
+                        state.backgroundColor.toLowerCase() === item.hex.toLowerCase()
+                          ? 'border-[#00FF66] ring-1 ring-[#00FF66]'
+                          : 'border-[#2B3342]'
+                      }`}
                       style={{ backgroundColor: item.hex }}
-                      title={item.label}
+                      title={`${item.label} (${item.hex})`}
                     />
                   ))}
                 </div>
+              </div>
+            </div>
+
+            {/* ==================== STUDIO COLOR PALETTE ENGINE (20 PALETTES) ==================== */}
+            <div className="space-y-3 pt-3 border-t border-[#1E232E]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
+                    <Palette className="w-4 h-4 text-[#00FF66]" />
+                    <span>STUDIO COLOR PALETTES ({CURATED_PALETTES.length})</span>
+                  </label>
+                  <span className="text-[11px] text-[#A1A1AA] block mt-0.5">
+                    Harmonized background, headline, pairing & tint schemes
+                  </span>
+                </div>
+                <button
+                  onClick={handleShufflePalette}
+                  className="flex items-center gap-1.5 px-2.5 py-1 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 font-bold text-xs transition-colors"
+                  title="Shuffle studio color palette"
+                >
+                  <Shuffle className="w-3.5 h-3.5" />
+                  <span>SHUFFLE</span>
+                </button>
+              </div>
+
+              {/* Palette Category Filter */}
+              <div className="flex flex-wrap gap-1">
+                {(['ALL', 'Swiss Modernist', 'Editorial Print', 'Cyber Brutalist', 'Risograph Ink', 'Darkroom Monochrome'] as const).map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setPaletteCategoryFilter(cat)}
+                    className={`px-2 py-1 text-[11px] font-mono-code border transition-colors ${
+                      paletteCategoryFilter === cat
+                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                        : 'border-[#22262E] bg-[#0D0F14] text-[#9AA2B1] hover:text-[#F4F5F7]'
+                    }`}
+                  >
+                    {cat === 'ALL' ? `ALL (${CURATED_PALETTES.length})` : cat.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+
+              {/* Palette Grid */}
+              <div className="grid grid-cols-2 gap-2">
+                {CURATED_PALETTES.filter(p => paletteCategoryFilter === 'ALL' || p.category === paletteCategoryFilter).map((pal) => {
+                  const isActivePalette =
+                    state.backgroundColor.toLowerCase() === pal.backgroundColor.toLowerCase() &&
+                    state.textColor.toLowerCase() === pal.textColor.toLowerCase();
+                  return (
+                    <button
+                      key={pal.id}
+                      onClick={() => handleApplyPalette(pal)}
+                      className={`p-2.5 text-left border transition-all flex flex-col justify-between gap-2 ${
+                        isActivePalette
+                          ? 'border-[#00FF66] bg-[#16221C] ring-1 ring-[#00FF66]/40'
+                          : 'border-[#22262E] bg-[#0D0F14] hover:border-[#3A4354]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full gap-1">
+                        <span className={`text-xs font-bold truncate ${isActivePalette ? 'text-[#00FF66]' : 'text-[#F4F5F7]'}`}>
+                          {pal.name}
+                        </span>
+                      </div>
+                      {/* 4-Color Chip Bar */}
+                      <div className="flex items-center h-4 w-full border border-[#2B3342] overflow-hidden">
+                        <div className="h-full flex-1" style={{ backgroundColor: pal.backgroundColor }} title={`BG: ${pal.backgroundColor}`} />
+                        <div className="h-full flex-1" style={{ backgroundColor: pal.textColor }} title={`Text: ${pal.textColor}`} />
+                        <div className="h-full flex-1" style={{ backgroundColor: pal.subTextColor }} title={`Sub: ${pal.subTextColor}`} />
+                        <div className="h-full w-4" style={{ backgroundColor: pal.strokeColor }} title={`Stroke: ${pal.strokeColor}`} />
+                      </div>
+                      <span className="text-[11px] text-[#9AA2B1] line-clamp-1">{pal.category}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -1314,11 +1436,28 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               <div className="flex items-center justify-between">
                 <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
                   <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                  <span>ORIGINAL GRAPHIC TEXTURES (16)</span>
+                  <span>ORIGINAL GRAPHIC TEXTURES (24)</span>
                 </label>
-                <span className="text-[10px] px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
-                  {state.backgroundTexture !== 'none' ? 'ACTIVE' : 'OFF'}
+                <span className="text-xs px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
+                  {state.backgroundTexture !== 'none' ? state.backgroundTexture.toUpperCase() : 'OFF'}
                 </span>
+              </div>
+
+              {/* Texture Category Filter Pills */}
+              <div className="flex flex-wrap gap-1">
+                {['ALL', 'PHOTO', 'VECTOR', 'PRINT', 'DIGITAL', 'TACTILE'].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setTextureCategoryFilter(cat)}
+                    className={`px-2 py-1 text-[11px] font-mono-code border transition-colors ${
+                      textureCategoryFilter === cat
+                        ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                        : 'border-[#22262E] bg-[#0D0F14] text-[#9AA2B1] hover:text-[#F4F5F7]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
               </div>
 
               {/* Texture Selection Grid */}
@@ -1331,16 +1470,24 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Monolithic concrete shadow study', category: 'PHOTO' },
                   { id: 'macro-ink', label: 'MACRO INK BLEED', desc: 'Lithographic capillary paper bleed', category: 'PHOTO' },
                   { id: 'risograph', label: 'RISOGRAPH HALFTONE', desc: 'Macro dual-drum screen mesh & ink gain', category: 'PHOTO' },
-                  { id: 'marbled-ink', label: 'MARBLED SUMINAGASHI', desc: 'Fluid turbulence & organic marbled trails', category: 'ORGANIC' },
-                  { id: 'distressed-xerox', label: 'DISTRESSED XEROX', desc: 'High-contrast photocopier toner abrasion', category: 'GRUNGE' },
+                  { id: 'marbled-ink', label: 'MARBLED SUMINAGASHI', desc: 'Fluid turbulence & organic marbled trails', category: 'PRINT' },
+                  { id: 'distressed-xerox', label: 'DISTRESSED XEROX', desc: 'High-contrast photocopier toner abrasion', category: 'PRINT' },
                   { id: 'glitch-matrix', label: 'GLITCH RGB MATRIX', desc: 'Chromatic channel split & digital artifact', category: 'DIGITAL' },
                   { id: 'woodcut-hatch', label: 'WOODCUT CROSSHATCH', desc: 'Linocut relief hatching & woodblock bite', category: 'PRINT' },
-                  { id: 'thermal-fax', label: 'THERMAL RECEIPT FAX', desc: 'Micro dot-matrix thermal print line raster', category: 'LO-FI' },
+                  { id: 'thermal-fax', label: 'THERMAL RECEIPT FAX', desc: 'Micro dot-matrix thermal print line raster', category: 'PRINT' },
                   { id: 'halftone-dots', label: 'VECTOR HALFTONE', desc: 'Procedural geometric dot raster matrix', category: 'VECTOR' },
-                  { id: 'cyber-scanline', label: 'CRT SCANLINES', desc: 'Phosphor cathode ray line interference', category: 'CRT' },
+                  { id: 'cyber-scanline', label: 'CRT SCANLINES', desc: 'Phosphor cathode ray line interference', category: 'DIGITAL' },
                   { id: 'blueprint-grid', label: 'BLUEPRINT MATRIX', desc: 'Drafting coordinate grid with marks', category: 'VECTOR' },
-                  { id: 'film-grain', label: 'FILM ISO NOISE', desc: 'Silver halide micro-emulsion noise', category: 'VECTOR' },
-                ].map((item) => {
+                  { id: 'film-grain', label: 'FILM ISO NOISE', desc: 'Silver halide micro-emulsion noise', category: 'PHOTO' },
+                  { id: 'topo-contour', label: 'TOPOGRAPHIC ISOLINE', desc: 'Cartographic elevation contour vectors', category: 'VECTOR' },
+                  { id: 'microfiche-grid', label: 'MICROFICHE ARCHIVE', desc: 'Optical calibration ticks & index frame', category: 'VECTOR' },
+                  { id: 'ascii-matrix', label: 'BINARY PUNCH MATRIX', desc: 'Mainframe punch-card perforated grid', category: 'DIGITAL' },
+                  { id: 'linen-weave', label: 'BOOKBINDER LINEN', desc: 'Fine cross-woven archival cloth texture', category: 'TACTILE' },
+                  { id: 'carbon-fiber', label: 'CARBON TWILL WEAVE', desc: 'High-density diagonal industrial weave', category: 'TACTILE' },
+                  { id: 'moire-wave', label: 'OPTICAL MOIRÉ WAVE', desc: 'Concentric op-art interference harmonics', category: 'VECTOR' },
+                  { id: 'terrazzo-stone', label: 'TERRAZZO AGGREGATE', desc: 'Brutalist mineral stone chip speckle', category: 'TACTILE' },
+                  { id: 'bauhaus-grid', label: 'BAUHAUS GEOMETRIC', desc: 'Modular nested circles & diagonals', category: 'VECTOR' },
+                ].filter(item => textureCategoryFilter === 'ALL' || item.id === 'none' || item.category === textureCategoryFilter).map((item) => {
                   const isSelected = state.backgroundTexture === item.id;
                   return (
                     <button
@@ -1570,16 +1717,20 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   {/* 6. DUOTONE PROCESS TINT */}
                   <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="text-[#C2CAD8] font-semibold">DUOTONE PROCESS TINT</span>
+                      <span className="text-[#C2CAD8] font-semibold">DUOTONE PROCESS TINT (10)</span>
                       <span className="text-[#00FF66] font-bold uppercase">{state.textureTint ?? 'none'}</span>
                     </div>
-                    <div className="grid grid-cols-6 gap-1.5">
+                    <div className="grid grid-cols-5 gap-1.5">
                       {[
                         { id: 'none', label: 'OFF', color: '#333B4A' },
                         { id: 'green', label: 'GREEN', color: '#00FF66' },
                         { id: 'amber', label: 'AMBER', color: '#FFB800' },
                         { id: 'cyan', label: 'CYAN', color: '#00E5FF' },
                         { id: 'crimson', label: 'RED', color: '#FF3366' },
+                        { id: 'violet', label: 'VIOLET', color: '#8B5CF6' },
+                        { id: 'cobalt', label: 'COBALT', color: '#0051FF' },
+                        { id: 'acid-lime', label: 'LIME', color: '#CCFF00' },
+                        { id: 'copper', label: 'COPPER', color: '#EA580C' },
                         { id: 'monochrome', label: 'B&W', color: '#FFFFFF' },
                       ].map((t) => (
                         <button
@@ -1648,18 +1799,18 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
 
               {state.showGrid && (
-                <div className="grid grid-cols-3 gap-2 pt-1">
-                  {(['modular', 'baseline', 'crosshair'] as const).map((type) => (
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 pt-1">
+                  {(['modular', 'baseline', 'crosshair', 'golden-ratio', 'diagonal'] as const).map((type) => (
                     <button
                       key={type}
                       onClick={() => onChange({ gridType: type })}
-                      className={`p-2 text-center text-xs uppercase border transition-colors ${
+                      className={`p-2 text-center text-xs uppercase border transition-colors truncate ${
                         state.gridType === type
                           ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C] font-bold'
                           : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA]'
                       }`}
                     >
-                      {type}
+                      {type === 'golden-ratio' ? 'GOLDEN' : type}
                     </button>
                   ))}
                 </div>
@@ -1669,7 +1820,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
             {/* Presets List */}
             <div className="space-y-3 pt-3 border-t border-[#1E232E]">
               <span className="text-[#A1A1AA] block text-xs font-semibold">
-                COMPLETE HISTORICAL PRESETS (08)
+                COMPLETE HISTORICAL PRESETS ({SPECIMEN_PRESETS.length})
               </span>
               <div className="space-y-2">
                 {SPECIMEN_PRESETS.map((preset) => (

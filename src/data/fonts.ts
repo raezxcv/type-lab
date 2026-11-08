@@ -713,5 +713,271 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     designer: 'David Jonathan Ross',
     bestUse: '3D cast shadow signage, retro urban murals, brutalist comic typography',
     sampleText: 'DIMENSIONAL CAST SHADOW SIGNAGE'
+  },
+
+  // --- STUDIO EXPANSION: GROTESK, SERIF, MONO & AVANT-GARDE ---
+  {
+    id: 'bricolage-grotesque',
+    name: 'Bricolage Grotesque',
+    cssFamily: "'Bricolage Grotesque', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Mathieu Triay, blending French May 1968 Antique Olive grotesque with English Windsor character',
+    designer: 'Mathieu Triay',
+    bestUse: 'Expressive neo-brutalist headlines, indie studio identity, warm grotesque layouts',
+    sampleText: 'Expressive French-British Grotesque Synthesis'
+  },
+  {
+    id: 'schibsted-grotesk',
+    name: 'Schibsted Grotesk',
+    cssFamily: "'Schibsted Grotesk', sans-serif",
+    category: 'grotesk',
+    weights: [400, 500, 600, 700, 800, 900],
+    origin: 'Bakken & Bæck / Henrik Kubel, Nordic digital-first neo-grotesque grounded in 19th-century German reality',
+    designer: 'Henrik Kubel & Bakken & Bæck',
+    bestUse: 'Nordic editorial architecture, Swiss-Scandinavian grids, crisp UI systems',
+    sampleText: 'Nordic Precision & Neo-Grotesque Discipline'
+  },
+  {
+    id: 'instrument-sans',
+    name: 'Instrument Sans',
+    cssFamily: "'Instrument Sans', sans-serif",
+    category: 'grotesk',
+    weights: [400, 500, 600, 700],
+    origin: 'Rodrigo Fuenzalida & Jordan Egstad, variable neo-grotesque balancing Swiss sobriety with quirky details',
+    designer: 'Rodrigo Fuenzalida',
+    bestUse: 'Design studio portfolios, creative technology manifestos, contemporary posters',
+    sampleText: 'Contemporary Studio Neo-Grotesque Vector'
+  },
+  {
+    id: 'montserrat',
+    name: 'Montserrat',
+    cssFamily: "'Montserrat', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Julieta Ulanovsky, rescued from early 20th-century urban posters and signage of Buenos Aires',
+    designer: 'Julieta Ulanovsky',
+    bestUse: 'Geometric urban signage, architectural banners, modernist display',
+    sampleText: 'URBAN ARCHITECTURAL GEOMETRY OF BUENOS AIRES'
+  },
+  {
+    id: 'poppins',
+    name: 'Poppins',
+    cssFamily: "'Poppins', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Indian Type Foundry (Jonny Pinhorn), pure monolinear geometric sans built on near-perfect circles',
+    designer: 'Jonny Pinhorn (ITF)',
+    bestUse: 'Bauhaus circular geometry, modernist product packaging, bold headlines',
+    sampleText: 'Monolinear Circular Bauhaus Proportions'
+  },
+  {
+    id: 'gabarito',
+    name: 'Gabarito',
+    cssFamily: "'Gabarito', sans-serif",
+    category: 'grotesk',
+    weights: [400, 500, 600, 700, 800, 900],
+    origin: 'Leandro Assis & Álvaro Franca, friendly yet punchy geometric sans for educational and cultural institutions',
+    designer: 'Leandro Assis & Álvaro Franca',
+    bestUse: 'High-impact cultural posters, bold grotesque badges, exhibition systems',
+    sampleText: 'High-Impact Cultural Exhibition Grotesque'
+  },
+  {
+    id: 'onest',
+    name: 'Onest',
+    cssFamily: "'Onest', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Dmitri Voloshin & Andrey Kudryavtsev, hybrid geometric-humanist sans engineered for extreme legibility',
+    designer: 'Andrey Kudryavtsev',
+    bestUse: 'Dense civic typography, multi-column technical specifications, clean UI',
+    sampleText: 'Hybrid Geometric-Humanist Legibility'
+  },
+  {
+    id: 'instrument-serif',
+    name: 'Instrument Serif',
+    cssFamily: "'Instrument Serif', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Rodrigo Fuenzalida, condensed old-style editorial serif reviving 1970s Apple Garamond & ITC aesthetics',
+    designer: 'Rodrigo Fuenzalida',
+    bestUse: 'Iconic condensed editorial headlines, literary journals, tech-humanist posters',
+    sampleText: 'Condensed Editorial Elegance & Poetic Cadence'
+  },
+  {
+    id: 'eb-garamond',
+    name: 'EB Garamond',
+    cssFamily: "'EB Garamond', serif",
+    category: 'serif',
+    weights: [400, 500, 600, 700, 800],
+    origin: 'Georg Duffner & Octavio Pardo, faithful revival of Claude Garamont’s 1592 Berner specimen sheet',
+    designer: 'Claude Garamont / Georg Duffner',
+    bestUse: 'Renaissance book typography, scholarly monographs, classical literary contrast',
+    sampleText: '1592 Frankfurt Specimen of Claude Garamont'
+  },
+  {
+    id: 'libre-baskerville',
+    name: 'Libre Baskerville',
+    cssFamily: "'Libre Baskerville', serif",
+    category: 'serif',
+    weights: [400, 700],
+    origin: 'Impallari Type, based on the 1941 American Type Founders Baskerville and John Baskerville’s 1757 types',
+    designer: 'Pablo Impallari',
+    bestUse: 'Enlightenment transitional book composition, manifesto body copy, academic authority',
+    sampleText: 'Birmingham 1757 Transitional Enlightenment Press'
+  },
+  {
+    id: 'cardo',
+    name: 'Cardo',
+    cssFamily: "'Cardo', serif",
+    category: 'serif',
+    weights: [400, 700],
+    origin: 'David Perry, Aldine Renaissance humanist serif modeled after Aldus Manutius & Francesco Griffo',
+    designer: 'David Perry',
+    bestUse: 'Venetian Renaissance humanism, classical philology, museum plaques',
+    sampleText: 'Venetian Aldine Humanist Press 1499'
+  },
+  {
+    id: 'gloock',
+    name: 'Gloock',
+    cssFamily: "'Gloock', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Janisep, contemporary high-contrast Scotch Roman with razor-thin horizontal serifs and deep ball terminals',
+    designer: 'Hardiboy Design',
+    bestUse: 'Dramatic theatrical posters, luxury packaging, high-contrast display',
+    sampleText: 'Razor-Sharp Scotch Roman Display Drama'
+  },
+  {
+    id: 'oranienbaum',
+    name: 'Oranienbaum',
+    cssFamily: "'Oranienbaum', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Oleg Poskh & Jovanny Lemonad, early 20th-century Antiqua blending Bodoni geometry with Russian constructivist press',
+    designer: 'Oleg Poskh & Jovanny Lemonad',
+    bestUse: 'Early 20th-century newspaper headlines, architectural monographs',
+    sampleText: 'Constructivist Antiqua & Imperial Press'
+  },
+  {
+    id: 'rozha-one',
+    name: 'Rozha One',
+    cssFamily: "'Rozha One', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Indian Type Foundry, ultra-thick vertical stems contrasted against hairline horizontal serifs',
+    designer: 'Indian Type Foundry',
+    bestUse: 'Extreme Didone poster display, high-fashion editorial, sculptural monogramming',
+    sampleText: 'EXTREME DIDONE STEM CONTRAST'
+  },
+  {
+    id: 'martian-mono',
+    name: 'Martian Mono',
+    cssFamily: "'Martian Mono', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500, 600, 700, 800],
+    origin: 'Roman Shamin (Evil Martians), brutalist grotesque monospace inheriting from 19th-century wood & metal type',
+    designer: 'Roman Shamin',
+    bestUse: 'Brutalist code posters, industrial labels, high-impact technical grids',
+    sampleText: 'BRUTALIST_MONO // EVIL_MARTIANS_LAB'
+  },
+  {
+    id: 'vt323',
+    name: 'VT323',
+    cssFamily: "'VT323', monospace",
+    category: 'monospace',
+    weights: [400],
+    origin: 'Peter Hull, pixel-accurate recreation of the DEC VT320 video terminal glyph ROM (1987)',
+    designer: 'Peter Hull',
+    bestUse: 'CRT phosphor terminal simulations, mainframe logs, retro-cybernetic telemetry',
+    sampleText: 'DEC VT320 TERMINAL PHOSPHOR MATRIX [1987]'
+  },
+  {
+    id: 'victor-mono',
+    name: 'Victor Mono',
+    cssFamily: "'Victor Mono', monospace",
+    category: 'monospace',
+    weights: [300, 400, 500, 600, 700],
+    origin: 'Rune Bjørnerås, crisp programming monospace with distinctive cursive italic forms',
+    designer: 'Rune Bjørnerås',
+    bestUse: 'Poetic code specimens, technical-calligraphic contrast, algorithmic art',
+    sampleText: 'Algorithmic Poetry & Cursive Monospace'
+  },
+  {
+    id: 'ubuntu-mono',
+    name: 'Ubuntu Mono',
+    cssFamily: "'Ubuntu Mono', monospace",
+    category: 'monospace',
+    weights: [400, 700],
+    origin: 'Dalton Maag, humanist monospaced font designed for the Canonical Ubuntu Linux operating system',
+    designer: 'Dalton Maag',
+    bestUse: 'Open-source system logs, terminal command prompts, compact telemetry',
+    sampleText: 'root@typelab-11:~# ./calibrate_vectors.sh'
+  },
+  {
+    id: 'dela-gothic-one',
+    name: 'Dela Gothic One',
+    cssFamily: "'Dela Gothic One', display",
+    category: 'display',
+    weights: [400],
+    origin: 'Arata Kana, ultra-heavy Japanese-inspired flat-sided black gothic poster face',
+    designer: 'Arata Kana',
+    bestUse: 'Tokyo brutalist posters, vinyl record sleeves, monolithic street graphics',
+    sampleText: 'TOKYO ULTRA-HEAVY GOTHIC MONOLITH'
+  },
+  {
+    id: 'ultra',
+    name: 'Ultra',
+    cssFamily: "'Ultra', serif",
+    category: 'display',
+    weights: [400],
+    origin: 'Astigmatic (Brian J. Bonislawsky), ultra-bold wood-type slab serif inspired by 19th-century Clarendon & Egyptian',
+    designer: 'Brian J. Bonislawsky',
+    bestUse: 'Heavy wood-block broadsides, industrial slab headlines, punchy badges',
+    sampleText: 'HEAVY CLARENDON WOOD-TYPE BROADSIDES'
+  },
+  {
+    id: 'tourney',
+    name: 'Tourney',
+    cssFamily: "'Tourney', display",
+    category: 'experimental',
+    weights: [300, 400, 600, 700, 900],
+    origin: 'Tyler Finck, inline layered geometric octagonal display font with athletic & futuristic vector channels',
+    designer: 'Tyler Finck',
+    bestUse: 'Inline wireframe headlines, kinetic sports telemetry, geometric vector overlays',
+    sampleText: 'INLINE OCTAGONAL VECTOR WIREFRAME'
+  },
+  {
+    id: 'wallpoet',
+    name: 'Wallpoet',
+    cssFamily: "'Wallpoet', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Lars Berggren, brutalist industrial cargo stencil with notched diagonal counters',
+    designer: 'Lars Berggren',
+    bestUse: 'Industrial shipping crates, military-spec warnings, brutalist stencil art',
+    sampleText: 'INDUSTRIAL CARGO STENCIL // SPEC-11'
+  },
+  {
+    id: 'audiowide',
+    name: 'Audiowide',
+    cssFamily: "'Audiowide', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Astigmatic, techno-futuristic tubular display font inspired by synthesizer faceplates and sci-fi hardware',
+    designer: 'Brian J. Bonislawsky',
+    bestUse: 'Modular synthesizer panels, retro-futurist audio gear, cybernetic headers',
+    sampleText: 'MODULAR SYNTHESIZER OSCILLATOR BANK'
+  },
+  {
+    id: 'nabla',
+    name: 'Nabla',
+    cssFamily: "'Nabla', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Typearture (Arthur Reinders Folmer) & Just van Rossum, isometric COLRv1 3D color font inspired by 90s computer games',
+    designer: 'Arthur Reinders Folmer & Just van Rossum',
+    bestUse: 'Isometric 3D typography, experimental color-font specimens, architectural blocks',
+    sampleText: 'ISOMETRIC 3D VECTOR ARCHITECTURE'
   }
 ];

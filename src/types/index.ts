@@ -29,11 +29,11 @@ export interface FontPairing {
   bodySample: string;
 }
 
-export type KineticMode = 'none' | 'marquee' | 'breath' | 'skew-wobble' | 'stagger-split';
+export type KineticMode = 'none' | 'marquee' | 'breath' | 'skew-wobble' | 'stagger-split' | 'glitch-pulse';
 
 export type CanvasFrame = 'poster' | 'square' | 'ribbon' | 'editorial' | 'fluid';
 
-export type GridOverlayType = 'modular' | 'baseline' | 'crosshair' | 'none';
+export type GridOverlayType = 'modular' | 'baseline' | 'crosshair' | 'golden-ratio' | 'diagonal' | 'none';
 
 export type TextureId = 
   | 'none'
@@ -51,7 +51,15 @@ export type TextureId =
   | 'halftone-dots'
   | 'cyber-scanline'
   | 'blueprint-grid'
-  | 'film-grain';
+  | 'film-grain'
+  | 'topo-contour'
+  | 'microfiche-grid'
+  | 'ascii-matrix'
+  | 'linen-weave'
+  | 'carbon-fiber'
+  | 'moire-wave'
+  | 'terrazzo-stone'
+  | 'bauhaus-grid';
 
 export type TextureBlendMode = 
   | 'normal' 
@@ -63,7 +71,30 @@ export type TextureBlendMode =
   | 'difference' 
   | 'color-dodge';
 
-export type TextureTint = 'none' | 'green' | 'amber' | 'cyan' | 'monochrome' | 'crimson';
+export type TextureTint = 
+  | 'none' 
+  | 'green' 
+  | 'amber' 
+  | 'cyan' 
+  | 'monochrome' 
+  | 'crimson' 
+  | 'violet' 
+  | 'cobalt' 
+  | 'acid-lime' 
+  | 'copper';
+
+export interface ColorPalette {
+  id: string;
+  name: string;
+  category: 'Swiss Modernist' | 'Editorial Print' | 'Cyber Brutalist' | 'Risograph Ink' | 'Darkroom Monochrome';
+  description: string;
+  backgroundColor: string;
+  textColor: string;
+  subTextColor: string;
+  strokeColor: string;
+  shadowGlowColor: string;
+  textureTint: TextureTint;
+}
 
 export interface TypographicState {
   text: string;

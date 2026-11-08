@@ -31,7 +31,15 @@ const TEXTURE_ASSETS: Record<string, string> = {
   'halftone-dots': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3.5" fill="#ffffff" opacity="0.85"/><circle cx="0" cy="0" r="1.5" fill="#ffffff" opacity="0.5"/><circle cx="20" cy="20" r="1.5" fill="#ffffff" opacity="0.5"/></svg>`),
   'cyber-scanline': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6"><rect width="6" height="3" fill="#ffffff" opacity="0.5"/><rect y="3" width="6" height="3" fill="#000000" opacity="0.5"/></svg>`),
   'blueprint-grid': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path d="M 48 0 L 0 0 0 48" fill="none" stroke="#00FF66" stroke-width="0.8" opacity="0.45"/><circle cx="48" cy="48" r="2" fill="#00FF66" opacity="0.85"/></svg>`),
-  'film-grain': encodeSvg(`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.75"/></svg>`)
+  'film-grain': encodeSvg(`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.75"/></svg>`),
+  'topo-contour': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><g fill="none" stroke="#ffffff" stroke-width="1" opacity="0.45"><path d="M-20,40 C40,10 90,80 160,30 C210,-5 240,50 260,30"/><path d="M-20,80 C50,45 100,120 170,65 C215,30 240,85 260,70"/><path d="M-20,125 C60,90 110,165 180,105 C220,70 245,125 260,115"/><path d="M-20,170 C70,135 120,210 190,150 C225,115 245,170 260,160"/><path d="M-20,215 C80,180 130,250 200,195 C230,160 250,215 260,205"/><ellipse cx="120" cy="120" rx="70" ry="38" stroke-dasharray="4 2"/><ellipse cx="120" cy="120" rx="42" ry="20"/><circle cx="120" cy="120" r="4" fill="#ffffff"/></g></svg>`),
+  'microfiche-grid': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="none" stroke="#ffffff" stroke-width="0.6" opacity="0.35"/><path d="M 0,40 L 10,40 M 70,40 L 80,40 M 40,0 L 40,10 M 40,70 L 40,80" stroke="#00FF66" stroke-width="0.9" opacity="0.6"/><circle cx="40" cy="40" r="14" fill="none" stroke="#ffffff" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.4"/><path d="M 36,40 L 44,40 M 40,36 L 40,44" stroke="#00FF66" stroke-width="0.8" opacity="0.7"/></svg>`),
+  'ascii-matrix': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="3" y="3" width="6" height="3" fill="#ffffff" opacity="0.4"/><rect x="13" y="3" width="3" height="3" fill="#00FF66" opacity="0.5"/><rect x="21" y="3" width="8" height="3" fill="#ffffff" opacity="0.25"/><rect x="3" y="11" width="3" height="3" fill="#ffffff" opacity="0.3"/><rect x="11" y="11" width="10" height="3" fill="#ffffff" opacity="0.45"/><rect x="25" y="11" width="4" height="3" fill="#00FF66" opacity="0.5"/><rect x="3" y="19" width="8" height="3" fill="#00FF66" opacity="0.4"/><rect x="15" y="19" width="4" height="3" fill="#ffffff" opacity="0.3"/><rect x="23" y="19" width="6" height="3" fill="#ffffff" opacity="0.5"/><rect x="3" y="27" width="4" height="3" fill="#ffffff" opacity="0.35"/><rect x="11" y="27" width="6" height="3" fill="#ffffff" opacity="0.25"/><rect x="21" y="27" width="8" height="3" fill="#00FF66" opacity="0.45"/></svg>`),
+  'linen-weave': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M0,3 L12,3 M0,9 L12,9" stroke="#ffffff" stroke-width="0.7" opacity="0.32"/><path d="M3,0 L3,12 M9,0 L9,12" stroke="#ffffff" stroke-width="0.7" opacity="0.28"/><rect x="2" y="2" width="2" height="2" fill="#000000" opacity="0.25"/><rect x="8" y="8" width="2" height="2" fill="#000000" opacity="0.25"/></svg>`),
+  'carbon-fiber': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><rect width="16" height="16" fill="#090b10" opacity="0.4"/><polygon points="0,0 8,0 8,8 0,8" fill="#ffffff" opacity="0.22"/><polygon points="8,8 16,8 16,16 8,16" fill="#ffffff" opacity="0.22"/><line x1="0" y1="0" x2="16" y2="16" stroke="#000000" stroke-width="1.5" opacity="0.45"/><line x1="8" y1="0" x2="16" y2="8" stroke="#ffffff" stroke-width="0.8" opacity="0.3"/><line x1="0" y1="8" x2="8" y2="16" stroke="#ffffff" stroke-width="0.8" opacity="0.3"/></svg>`),
+  'moire-wave': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><g fill="none" stroke="#ffffff" stroke-width="0.9" opacity="0.4"><circle cx="80" cy="80" r="12"/><circle cx="80" cy="80" r="24"/><circle cx="80" cy="80" r="36"/><circle cx="80" cy="80" r="48"/><circle cx="80" cy="80" r="60"/><circle cx="80" cy="80" r="72"/><circle cx="92" cy="80" r="16" stroke="#00FF66"/><circle cx="92" cy="80" r="32" stroke="#00FF66"/><circle cx="92" cy="80" r="48" stroke="#00FF66"/><circle cx="92" cy="80" r="64" stroke="#00FF66"/></g></svg>`),
+  'terrazzo-stone': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><polygon points="15,12 32,8 28,26 12,22" fill="#ffffff" opacity="0.45"/><polygon points="75,18 96,12 92,32 70,28" fill="#00FF66" opacity="0.4"/><polygon points="115,42 132,38 128,58 110,50" fill="#ffffff" opacity="0.3"/><polygon points="28,68 48,60 54,82 24,78" fill="#FFB800" opacity="0.4"/><polygon points="88,75 112,68 106,94 82,88" fill="#ffffff" opacity="0.5"/><polygon points="18,112 42,105 36,128 14,124" fill="#00E5FF" opacity="0.35"/><polygon points="64,115 84,108 88,130 60,126" fill="#ffffff" opacity="0.35"/><circle cx="58" cy="36" r="4" fill="#ffffff" opacity="0.4"/><circle cx="122" cy="112" r="6" fill="#00FF66" opacity="0.35"/></svg>`),
+  'bauhaus-grid': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><g fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.42"><rect x="0" y="0" width="160" height="160"/><line x1="80" y1="0" x2="80" y2="160"/><line x1="0" y1="80" x2="160" y2="80"/><line x1="0" y1="0" x2="160" y2="160" stroke-width="0.8"/><circle cx="80" cy="80" r="56"/><path d="M 0,80 A 80,80 0 0,1 80,0" stroke="#00FF66" stroke-width="1.5"/><path d="M 80,160 A 80,80 0 0,1 160,80" stroke="#00FF66" stroke-width="1.5"/></g></svg>`)
 };
 
 const TINT_COLORS: Record<string, string> = {
@@ -40,6 +48,10 @@ const TINT_COLORS: Record<string, string> = {
   amber: '#FFB800',
   cyan: '#00E5FF',
   crimson: '#FF3366',
+  violet: '#8B5CF6',
+  cobalt: '#0051FF',
+  'acid-lime': '#CCFF00',
+  copper: '#EA580C',
   monochrome: '#FFFFFF',
 };
 
@@ -192,7 +204,9 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                 'none', 'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph',
                 'crumpled-paper', 'marbled-ink', 'distressed-xerox', 'glitch-matrix',
                 'woodcut-hatch', 'thermal-fax', 'halftone-dots', 'cyber-scanline',
-                'blueprint-grid', 'film-grain'
+                'blueprint-grid', 'film-grain', 'topo-contour', 'microfiche-grid',
+                'ascii-matrix', 'linen-weave', 'carbon-fiber', 'moire-wave',
+                'terrazzo-stone', 'bauhaus-grid'
               ];
               const idx = textures.indexOf(state.backgroundTexture);
               const next = textures[(idx + 1) % textures.length];
@@ -401,6 +415,32 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             </div>
           )}
 
+          {state.showGrid && state.gridType === 'golden-ratio' && (
+            <div className="absolute inset-0 pointer-events-none z-0 opacity-30">
+              <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <rect x="0" y="0" width="61.8" height="100" fill="none" stroke="#00FF66" strokeWidth="0.4" />
+                <rect x="61.8" y="0" width="38.2" height="61.8" fill="none" stroke="#00FF66" strokeWidth="0.4" />
+                <rect x="76.4" y="61.8" width="23.6" height="38.2" fill="none" stroke="#00FF66" strokeWidth="0.4" />
+                <rect x="61.8" y="76.4" width="14.6" height="23.6" fill="none" stroke="#00FF66" strokeWidth="0.4" />
+                <path d="M 0,100 A 61.8,100 0 0,1 61.8,0 A 38.2,61.8 0 0,1 100,61.8 A 23.6,38.2 0 0,1 76.4,100" fill="none" stroke="#00FF66" strokeWidth="0.5" strokeDasharray="1.5 1" />
+              </svg>
+            </div>
+          )}
+
+          {state.showGrid && state.gridType === 'diagonal' && (
+            <div className="absolute inset-0 pointer-events-none z-0 opacity-25">
+              <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line x1="0" y1="0" x2="100" y2="100" stroke="#00FF66" strokeWidth="0.4" />
+                <line x1="100" y1="0" x2="0" y2="100" stroke="#00FF66" strokeWidth="0.4" />
+                <line x1="0" y1="50" x2="50" y2="0" stroke="#00FF66" strokeWidth="0.3" strokeDasharray="1.5 1.5" />
+                <line x1="50" y1="0" x2="100" y2="50" stroke="#00FF66" strokeWidth="0.3" strokeDasharray="1.5 1.5" />
+                <line x1="100" y1="50" x2="50" y2="100" stroke="#00FF66" strokeWidth="0.3" strokeDasharray="1.5 1.5" />
+                <line x1="50" y1="100" x2="0" y2="50" stroke="#00FF66" strokeWidth="0.3" strokeDasharray="1.5 1.5" />
+                <rect x="14.6" y="14.6" width="70.8" height="70.8" fill="none" stroke="#00FF66" strokeWidth="0.35" />
+              </svg>
+            </div>
+          )}
+
           {/* Top Poster Header Metadata - Safe spacing, clear of text */}
           <div 
             className="relative z-10 flex justify-between items-start text-xs font-mono-code border-b border-current/25 pb-3 mb-6" 
@@ -461,6 +501,60 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onChangeText(e.currentTarget.innerText)}
+                >
+                  {state.text}
+                </div>
+              </div>
+            ) : state.kineticMode === 'stagger-split' ? (
+              /* STAGGER SPLIT LINE DISPLACEMENT MODE */
+              <div className="w-full space-y-1">
+                {state.text.split('\n').map((line, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      ...headlineStyle,
+                      transform: `translateX(${idx % 2 === 0 ? '-10px' : '10px'}) skewX(${state.skew}deg)`,
+                    }}
+                    className="w-full transition-transform duration-500 animate-pulse"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+            ) : state.kineticMode === 'glitch-pulse' ? (
+              /* CHROMATIC ABERRATION GLITCH PULSE MODE */
+              <div className="w-full relative">
+                <div
+                  aria-hidden="true"
+                  className="w-full absolute top-0 left-0 pointer-events-none select-none opacity-65 animate-pulse"
+                  style={{
+                    ...headlineStyle,
+                    color: '#FF2A6D',
+                    transform: `translate(-3px, -1px) skewX(${state.skew}deg) rotate(${state.rotation}deg)`,
+                    mixBlendMode: 'screen',
+                  }}
+                >
+                  {state.text}
+                </div>
+                <div
+                  aria-hidden="true"
+                  className="w-full absolute top-0 left-0 pointer-events-none select-none opacity-65 animate-pulse"
+                  style={{
+                    ...headlineStyle,
+                    color: '#00E5FF',
+                    transform: `translate(3px, 1px) skewX(${state.skew}deg) rotate(${state.rotation}deg)`,
+                    mixBlendMode: 'screen',
+                  }}
+                >
+                  {state.text}
+                </div>
+                <div
+                  contentEditable
+                  suppressContentEditableWarning
+                  onFocus={() => onSelectLayer?.('headline')}
+                  onBlur={(e) => onChangeText(e.currentTarget.innerText)}
+                  className="w-full relative z-10 focus:outline-none cursor-text"
+                  style={headlineStyle}
                 >
                   {state.text}
                 </div>

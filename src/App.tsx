@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import type { TypographicState, FontDefinition } from './types';
 import { SPECIMEN_PRESETS } from './data/presets';
 import { AVAILABLE_FONTS } from './data/fonts';
+import { CURATED_PALETTES } from './data/palettes';
 import { Navbar } from './components/Navbar';
 import { TypographicCanvas } from './components/playground/TypographicCanvas';
 import { ControlDock } from './components/playground/ControlDock';
@@ -184,34 +185,27 @@ export const App: React.FC = () => {
     ];
     const randomSecondaryText = secondaryPhrases[Math.floor(Math.random() * secondaryPhrases.length)];
 
-    // 3. Harmonized Palette (Headline text, Background, Secondary text)
-    const palettes = [
-      { text: '#F4F5F7', bg: '#070809', sub: '#00FF66' },
-      { text: '#00FF66', bg: '#070809', sub: '#F4F5F7' },
-      { text: '#FFFFFF', bg: '#10141D', sub: '#00E5FF' },
-      { text: '#FFB800', bg: '#08080A', sub: '#00FF66' },
-      { text: '#070809', bg: '#00FF66', sub: '#111317' },
-      { text: '#070809', bg: '#F4F5F7', sub: '#262D38' },
-      { text: '#F4F5F7', bg: '#0A0E17', sub: '#FFB800' },
-      { text: '#FFFFFF', bg: '#18121E', sub: '#FF3366' },
-      { text: '#00FF66', bg: '#111915', sub: '#00E5FF' },
-    ];
-    const randomPalette = palettes[Math.floor(Math.random() * palettes.length)];
+    // 3. Harmonized Studio Color Palette (20 curated studio palettes)
+    const randomPalette = CURATED_PALETTES[Math.floor(Math.random() * CURATED_PALETTES.length)];
     const randomSkew = Math.random() > 0.7 ? Math.floor((Math.random() * 16) - 8) : 0;
-    const watermarks = ["57", "11", "№", "§", "R", "SPQR", "M", "AXIOM"];
+    const watermarks = ["57", "11", "№", "§", "R", "SPQR", "M", "AXIOM", "68", "09"];
     const randomWatermark = watermarks[Math.floor(Math.random() * watermarks.length)];
 
-    // 4. Random Texture & Modifiers
+    // 4. Random Texture & Modifiers (All 23 Graphic Textures)
     const allTextures: Array<TypographicState['backgroundTexture']> = [
       'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph', 
       'crumpled-paper', 'marbled-ink', 'distressed-xerox', 'glitch-matrix', 
-      'woodcut-hatch', 'thermal-fax', 'halftone-dots', 'cyber-scanline', 'blueprint-grid', 'film-grain'
+      'woodcut-hatch', 'thermal-fax', 'halftone-dots', 'cyber-scanline', 'blueprint-grid', 'film-grain',
+      'topo-contour', 'microfiche-grid', 'ascii-matrix', 'linen-weave', 'carbon-fiber',
+      'moire-wave', 'terrazzo-stone', 'bauhaus-grid'
     ];
     const randomTexture = allTextures[Math.floor(Math.random() * allTextures.length)];
     const blendModes: Array<TypographicState['textureBlendMode']> = ['normal', 'screen', 'overlay', 'hard-light', 'difference'];
     const randomBlend = blendModes[Math.floor(Math.random() * blendModes.length)];
-    const tints: Array<TypographicState['textureTint']> = ['none', 'green', 'amber', 'cyan', 'crimson', 'monochrome'];
-    const randomTint = tints[Math.floor(Math.random() * tints.length)];
+    const tints: Array<TypographicState['textureTint']> = [
+      'none', 'green', 'amber', 'cyan', 'crimson', 'violet', 'cobalt', 'acid-lime', 'copper', 'monochrome'
+    ];
+    const randomTint = Math.random() > 0.4 ? randomPalette.textureTint : tints[Math.floor(Math.random() * tints.length)];
     const frames: Array<TypographicState['canvasFrame']> = ['poster', 'square', 'editorial', 'ribbon'];
     const randomFrame = frames[Math.floor(Math.random() * frames.length)];
 
@@ -240,8 +234,10 @@ export const App: React.FC = () => {
       lineHeight: randomHeadlineLeading,
       textAlign: randomAlign,
       textTransform: randomTransform,
-      textColor: randomPalette.text,
-      backgroundColor: randomPalette.bg,
+      textColor: randomPalette.textColor,
+      backgroundColor: randomPalette.backgroundColor,
+      strokeColor: randomPalette.strokeColor,
+      shadowGlowColor: randomPalette.shadowGlowColor,
       skew: randomSkew,
       canvasFrame: randomFrame,
       // Secondary Pairing Layer
@@ -251,7 +247,7 @@ export const App: React.FC = () => {
       subFontWeight: randomSecondaryWeight,
       subFontSize: randomSecondarySize,
       subLetterSpacing: randomSecondaryTracking,
-      subTextColor: randomPalette.sub,
+      subTextColor: randomPalette.subTextColor,
       // Ambient Watermark
       watermarkText: randomWatermark,
       // Graphic Texture & Modifiers
