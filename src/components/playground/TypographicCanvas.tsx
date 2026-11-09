@@ -32,6 +32,14 @@ const TEXTURE_ASSETS: Record<string, string> = {
   'kraft-collage': '/images/torn-kraft-collage.jpg',
   'oxidized-etching': '/images/oxidized-etching-plate.jpg',
   'brutalist-facade': '/images/swiss-brutalist-facade.jpg',
+  'cyanotype-plate': '/images/cyanotype-botanical-plate.jpg',
+  'charcoal-frottage': '/images/charcoal-frottage-rubbing.jpg',
+  'wet-collodion': '/images/wet-collodion-tintype.jpg',
+  'concrete-coffer': '/images/concrete-coffer-brutalist.jpg',
+  'litho-stone': '/images/litho-stone-graining.jpg',
+  'burnt-vellum': '/images/burnt-vellum-parchment.jpg',
+  'newsprint-micro': '/images/halftone-newsprint-micro.jpg',
+  'silver-solarize': '/images/silver-gelatin-solarize.jpg',
   'distressed-xerox': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="distress"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="linear" slope="1.8" intercept="-0.35"/><feFuncG type="linear" slope="1.8" intercept="-0.35"/><feFuncB type="linear" slope="1.8" intercept="-0.35"/><feFuncA type="linear" slope="0.55" intercept="0"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#distress)" opacity="0.5"/><line x1="0" y1="28" x2="160" y2="28" stroke="#ffffff" stroke-width="0.6" opacity="0.22"/><line x1="0" y1="112" x2="160" y2="112" stroke="#ffffff" stroke-width="0.4" opacity="0.18"/></svg>`),
   'glitch-matrix': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><rect width="3" height="12" fill="#ffffff" opacity="0.32"/><rect x="4" width="3" height="12" fill="#888888" opacity="0.28"/><rect x="8" width="3" height="12" fill="#ffffff" opacity="0.22"/><line y1="6" x2="12" y2="6" stroke="#000" stroke-width="1" opacity="0.35"/></svg>`),
   'woodcut-hatch': encodeSvg(`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><line x1="0" y1="16" x2="16" y2="0" stroke="#ffffff" stroke-width="1.2" opacity="0.45"/><line x1="-4" y1="12" x2="12" y2="-4" stroke="#ffffff" stroke-width="0.8" opacity="0.25"/><line x1="4" y1="20" x2="20" y2="4" stroke="#ffffff" stroke-width="0.8" opacity="0.25"/></svg>`),
@@ -162,6 +170,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   const baseDims = FRAME_BASE_DIMENSIONS[state.canvasFrame] || { w: 500, h: 700 };
   const currentLayout: PosterLayout = state.posterLayout || 'classic-stack';
   const isWideShortFrame = baseDims.h <= 400; // ribbon (300px) & cinema (382px)
+  const isCompactHeight = baseDims.h <= 550; // square (540px), landscape (480px), fluid (480px), cinema (382px), ribbon (300px)
   const tileBaseSize = TEXTURE_TILE_SIZES[state.backgroundTexture];
 
   // Responsive padding buffer: 24px on desktop, 12px on mobile
@@ -177,8 +186,28 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
   // Effective scale applied
   const effectiveScale = isFitMode ? autoFitScale : (zoomLevel / 100);
 
-  // Primary Headline typographic styles (caps scale in short wide frames so text never overflows)
-  const effectiveFontSize = isWideShortFrame ? Math.min(state.fontSize, 44) : state.fontSize;
+  // Proactive Height-Budget Allocation: guarantees Header + Body + Inline Plate + Subtext + Footer never overlap
+  const hasInlinePlate = Boolean(state.showImageLayer && state.imageUrl && state.imagePlacement !== 'background');
+  const posterPadY = isWideShortFrame ? 32 : (isCompactHeight && hasInlinePlate ? 36 : 48);
+  const posterInnerH = Math.max(200, baseDims.h - posterPadY);
+  const headerBudget = state.showHeader !== false ? (isWideShortFrame ? 36 : 46) : 0;
+  const footerBudget = state.showFooter !== false ? (isWideShortFrame ? 36 : 46) : 0;
+  const subTextBudget = state.showSubText && state.subText ? (isWideShortFrame ? 42 : 64) : 0;
+  const layoutChromeBudget = currentLayout === 'brutalist-frame' ? 76 : (currentLayout === 'index-catalog' || currentLayout === 'center-monolith' ? 54 : 28);
+  const maxPlateHeight = isWideShortFrame
+    ? Math.min(state.imageHeight || 110, Math.round(baseDims.h * 0.36))
+    : Math.min(
+        state.imageHeight || 170,
+        Math.round((posterInnerH - headerBudget - footerBudget) * (currentLayout === 'brutalist-frame' ? 0.27 : 0.32))
+      );
+  const plateBudget = hasInlinePlate && !(isWideShortFrame && currentLayout === 'classic-stack') ? maxPlateHeight + 28 : 0;
+  const lineCount = Math.max(1, (state.text || '').split('\n').length);
+  const remainingForHeadline = Math.max(44, posterInnerH - headerBudget - footerBudget - subTextBudget - layoutChromeBudget - plateBudget);
+  const maxSafeFontSize = Math.max(22, Math.floor(remainingForHeadline / (lineCount * Math.max(0.92, state.lineHeight) * 1.15)));
+  const effectiveFontSize = (hasInlinePlate || currentLayout === 'brutalist-frame' || isCompactHeight)
+    ? Math.min(state.fontSize, maxSafeFontSize)
+    : state.fontSize;
+
   const headlineStyle: React.CSSProperties = {
     fontFamily: state.fontFamily,
     fontSize: `${effectiveFontSize}px`,
@@ -208,7 +237,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
     letterSpacing: `${state.subLetterSpacing}em`,
     color: state.subTextColor,
     textAlign: currentLayout === 'center-monolith' ? 'center' : state.textAlign,
-    lineHeight: isWideShortFrame ? 1.35 : 1.5,
+    lineHeight: isWideShortFrame || (isCompactHeight && hasInlinePlate) ? 1.32 : 1.48,
     wordBreak: 'break-word',
     whiteSpace: 'pre-wrap',
   };
@@ -219,9 +248,6 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
     if (position !== 'any' && state.imagePlacement !== position) return null;
     if (position === 'any' && state.imagePlacement === 'background') return null;
 
-    const maxPlateHeight = isWideShortFrame
-      ? Math.min(state.imageHeight || 130, Math.round(baseDims.h * 0.42))
-      : Math.min(state.imageHeight || 180, Math.round(baseDims.h * 0.28));
     return (
       <div className="w-full my-1 border border-current/25 overflow-hidden relative group shrink-0" style={{ color: state.textColor }}>
         <img
@@ -244,26 +270,44 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
               contentEditable
               suppressContentEditableWarning
               onBlur={(e) => onUpdateState?.({ imageCaption: e.currentTarget.innerText })}
-              className="truncate pr-2 focus:outline-none focus:text-[#00FF66] cursor-text"
+              className="truncate pr-2 focus:outline-none focus:text-[#00FF66] hover:bg-white/10 cursor-text"
               title="Click to edit plate caption"
             >
               {state.imageCaption}
             </span>
-            <span className="shrink-0 font-bold opacity-85" style={{ color: state.subTextColor || state.textColor }}>PLATE // REF</span>
+            <span
+              contentEditable
+              suppressContentEditableWarning
+              className="shrink-0 font-bold opacity-85 focus:outline-none hover:bg-white/10 cursor-text"
+              style={{ color: state.subTextColor || state.textColor }}
+              title="Click to edit plate reference tag"
+            >
+              PLATE // REF
+            </span>
           </div>
         )}
       </div>
     );
   };
 
-  // Render Headline Block (Supporting all 6 Kinetic Modes + Direct Editing)
+  // Render Headline Block (Supporting all 6 Kinetic Modes + Direct Editing on all modes)
   const renderHeadlineBlock = () => {
     if (state.kineticMode === 'marquee') {
       return (
         <div className="w-full overflow-hidden whitespace-nowrap">
-          <div className="animate-marquee py-2">
-            <span style={headlineStyle} className="pr-12 inline-block">{state.text}</span>
-            <span style={headlineStyle} className="pr-12 inline-block">{state.text}</span>
+          <div className="animate-marquee py-1">
+            <span
+              style={headlineStyle}
+              className="pr-12 inline-block focus:outline-none cursor-text"
+              contentEditable
+              suppressContentEditableWarning
+              onFocus={() => onSelectLayer?.('headline')}
+              onBlur={(e) => onChangeText(e.currentTarget.innerText)}
+              title="Click directly to edit headline"
+            >
+              {state.text}
+            </span>
+            <span style={headlineStyle} className="pr-12 inline-block" aria-hidden="true">{state.text}</span>
           </div>
         </div>
       );
@@ -272,11 +316,13 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
       return (
         <div className="w-full text-center">
           <div
-            className="animate-breath inline-block w-full focus:outline-none"
+            className="animate-breath inline-block w-full focus:outline-none cursor-text"
             style={headlineStyle}
             contentEditable
             suppressContentEditableWarning
+            onFocus={() => onSelectLayer?.('headline')}
             onBlur={(e) => onChangeText(e.currentTarget.innerText)}
+            title="Click directly to edit headline"
           >
             {state.text}
           </div>
@@ -287,11 +333,13 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
       return (
         <div className="w-full text-center">
           <div
-            className="animate-skew-wobble inline-block w-full focus:outline-none"
+            className="animate-skew-wobble inline-block w-full focus:outline-none cursor-text"
             style={headlineStyle}
             contentEditable
             suppressContentEditableWarning
+            onFocus={() => onSelectLayer?.('headline')}
             onBlur={(e) => onChangeText(e.currentTarget.innerText)}
+            title="Click directly to edit headline"
           >
             {state.text}
           </div>
@@ -300,7 +348,14 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
     }
     if (state.kineticMode === 'stagger-split') {
       return (
-        <div className="w-full space-y-1">
+        <div
+          contentEditable
+          suppressContentEditableWarning
+          onFocus={() => onSelectLayer?.('headline')}
+          onBlur={(e) => onChangeText(e.currentTarget.innerText)}
+          className="w-full space-y-1 focus:outline-none cursor-text"
+          title="Click directly to edit headline"
+        >
           {state.text.split('\n').map((line, idx) => (
             <div
               key={idx}
@@ -350,6 +405,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             onBlur={(e) => onChangeText(e.currentTarget.innerText)}
             className="w-full relative z-10 focus:outline-none cursor-text"
             style={headlineStyle}
+            title="Click directly to edit headline"
           >
             {state.text}
           </div>
@@ -367,7 +423,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           suppressContentEditableWarning
           onFocus={() => onSelectLayer?.('headline')}
           onBlur={(e) => onChangeText(e.currentTarget.innerText)}
-          className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/30 rounded-none cursor-text transition-all"
+          className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/30 hover:bg-current/5 rounded-none cursor-text transition-all"
           style={headlineStyle}
           title="Click directly to edit headline"
         >
@@ -382,7 +438,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
     if (!state.showSubText || !state.subText) return null;
     return (
       <div
-        className={`w-full relative transition-all duration-200 ${noTopBorder ? '' : 'pt-3 mt-2 border-t border-current/15'}`}
+        className={`w-full relative transition-all duration-200 ${noTopBorder ? '' : 'pt-2.5 mt-1.5 border-t border-current/15'}`}
         style={{ borderColor: `${state.textColor}26` }}
         onClick={() => onSelectLayer?.('secondary')}
       >
@@ -391,7 +447,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           suppressContentEditableWarning
           onFocus={() => onSelectLayer?.('secondary')}
           onBlur={(e) => onChangeSubText(e.currentTarget.innerText)}
-          className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/30 rounded-none cursor-text transition-all"
+          className="w-full focus:outline-none focus:ring-1 focus:ring-[#00FF66]/30 hover:bg-current/5 rounded-none cursor-text transition-all"
           style={subTextStyle}
           title="Click directly to edit secondary pairing text"
         >
@@ -415,15 +471,15 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
       {/* Canvas Top Toolbar & Viewport Controls */}
       <div className="w-full max-w-4xl flex items-center justify-between gap-2 pb-2 px-3 sm:px-4 text-xs font-mono-code text-[#A1A1AA] z-10 border-b border-[#1A1F29] mb-1 shrink-0">
         
-        {/* Dimensions, Layout & Active Texture */}
-        <div className="flex items-center space-x-1 sm:space-x-2 overflow-hidden">
+        {/* Dimensions, Layout, Texture & Quick Header/Footer Toggles */}
+        <div className="flex items-center space-x-1 sm:space-x-1.5 overflow-hidden">
           <h1 className="flex items-center gap-1 text-[#00FF66] font-bold text-xs uppercase m-0 shrink-0">
             <span className="w-2 h-2 bg-[#00FF66] inline-block animate-pulse"></span>
-            <span className="hidden md:inline">TYPE//LAB 11</span>
+            <span className="hidden lg:inline">TYPE//LAB 11</span>
           </h1>
+          <span className="text-[#3A4354] hidden lg:inline">|</span>
+          <span className="text-xs truncate font-semibold hidden md:inline">[{state.canvasFrame.toUpperCase()}]</span>
           <span className="text-[#3A4354] hidden md:inline">|</span>
-          <span className="text-xs truncate font-semibold hidden sm:inline">[{state.canvasFrame.toUpperCase()}]</span>
-          <span className="text-[#3A4354] hidden sm:inline">|</span>
 
           {/* Quick Layout Architecture Cycle Button */}
           <button
@@ -437,7 +493,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           >
             <Layout className="w-3 h-3 text-[#00FF66] shrink-0" />
             <span className="hidden sm:inline">LAYOUT:</span>
-            <span className="truncate max-w-[52px] sm:max-w-none">{currentLayout.toUpperCase()}</span>
+            <span className="truncate max-w-[48px] sm:max-w-[95px]">{currentLayout.toUpperCase()}</span>
             <span className="text-[#8E97A8] text-[10px]">⇄</span>
           </button>
 
@@ -448,7 +504,9 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                 'none', 'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph',
                 'crumpled-paper', 'ferrofluid-bloom', 'brutalist-vault', 'wheatpaste-fold',
                 'suminagashi-ink', 'celluloid-burn', 'kraft-collage', 'oxidized-etching',
-                'brutalist-facade', 'marbled-ink', 'distressed-xerox', 'glitch-matrix',
+                'brutalist-facade', 'cyanotype-plate', 'charcoal-frottage', 'wet-collodion',
+                'concrete-coffer', 'litho-stone', 'burnt-vellum', 'newsprint-micro',
+                'silver-solarize', 'marbled-ink', 'distressed-xerox', 'glitch-matrix',
                 'woodcut-hatch', 'thermal-fax', 'halftone-dots', 'cyber-scanline',
                 'blueprint-grid', 'film-grain', 'topo-contour', 'microfiche-grid',
                 'ascii-matrix', 'linen-weave', 'carbon-fiber', 'moire-wave',
@@ -465,8 +523,32 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#00FF66] hidden sm:inline-block shrink-0"></span>
             <span className="hidden sm:inline">BG:</span>
-            <span className="truncate max-w-[52px] sm:max-w-none">{state.backgroundTexture.toUpperCase()}</span>
+            <span className="truncate max-w-[48px] sm:max-w-[95px]">{state.backgroundTexture.toUpperCase()}</span>
             <span className="text-[#8E97A8] text-[10px]">⇄</span>
+          </button>
+
+          {/* Quick Header / Footer Visibility Toggles */}
+          <button
+            onClick={() => onUpdateState?.({ showHeader: state.showHeader === false })}
+            className={`hidden sm:inline-flex items-center px-1.5 py-0.5 border text-[10px] font-bold transition-colors shrink-0 ${
+              state.showHeader !== false
+                ? 'border-[#00FF66]/50 bg-[#142319] text-[#00FF66]'
+                : 'border-[#232B3B] bg-[#12161F] text-[#758091] hover:text-[#F4F5F7]'
+            }`}
+            title="Toggle top poster header metadata on/off"
+          >
+            HDR
+          </button>
+          <button
+            onClick={() => onUpdateState?.({ showFooter: state.showFooter === false })}
+            className={`hidden sm:inline-flex items-center px-1.5 py-0.5 border text-[10px] font-bold transition-colors shrink-0 ${
+              state.showFooter !== false
+                ? 'border-[#00FF66]/50 bg-[#142319] text-[#00FF66]'
+                : 'border-[#232B3B] bg-[#12161F] text-[#758091] hover:text-[#F4F5F7]'
+            }`}
+            title="Toggle bottom poster footer metadata on/off"
+          >
+            FTR
           </button>
         </div>
 
@@ -697,8 +779,8 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           {/* ==================== EDITABLE TOP POSTER HEADER METADATA ==================== */}
           {state.showHeader !== false && (
             <div 
-              className={`relative z-10 flex justify-between items-start text-xs font-mono-code ${
-                isWideShortFrame ? 'pb-1.5 mb-1.5' : 'pb-3 mb-3'
+              className={`relative z-10 shrink-0 flex justify-between items-start text-xs font-mono-code ${
+                isWideShortFrame ? 'pb-1.5 mb-2' : 'pb-2.5 mb-2.5'
               } ${
                 currentLayout === 'diagonal-construct' ? 'border-b-4 border-current' : 'border-b border-current/25'
               }`}
@@ -709,7 +791,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ headerLeftTitle: e.currentTarget.innerText })}
-                  className="font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit top-left header title"
                 >
                   {state.headerLeftTitle ?? "Type Laboratory Experimental Specimen"}
@@ -718,7 +800,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ headerLeftSubtitle: e.currentTarget.innerText })}
-                  className="opacity-75 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="opacity-75 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit top-left header subtitle"
                 >
                   {state.headerLeftSubtitle ?? "Series: Kinetic Swiss Modernism"}
@@ -729,7 +811,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ headerRightTitle: e.currentTarget.innerText })}
-                  className="font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit top-right header title"
                 >
                   {state.headerRightTitle || defaultRightTitle}
@@ -738,7 +820,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ headerRightSubtitle: e.currentTarget.innerText })}
-                  className="opacity-75 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="opacity-75 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit top-right header subtitle"
                 >
                   {state.headerRightSubtitle || defaultRightSubtitle}
@@ -747,10 +829,10 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             </div>
           )}
 
-          {/* ==================== ARCHITECTURAL POSTER BODY (8 LAYOUT MODES) ==================== */}
+          {/* ==================== ARCHITECTURAL POSTER BODY (8 LAYOUT MODES — ZERO-OVERFLOW SHRINK-0) ==================== */}
           <div 
             ref={textContainerRef}
-            className="relative z-10 my-auto flex flex-col justify-center w-full py-1 flex-1 min-h-0"
+            className="relative z-10 shrink-0 my-auto flex flex-col justify-center w-full py-1"
             style={{ color: state.textColor }}
           >
             {/* LAYOUT 1: CLASSIC SWISS STACK (Auto horizontal split on wide short ribbon/cinema frames with plate) */}
@@ -766,7 +848,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col justify-center w-full space-y-3">
+                <div className="flex flex-col justify-center w-full space-y-2.5">
                   {renderInlineImagePlate('above')}
                   {renderHeadlineBlock()}
                   {renderInlineImagePlate('between')}
@@ -778,17 +860,22 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
 
             {/* LAYOUT 2: ASYMMETRIC SWISS SPLIT (2-COLUMN RASTER) */}
             {currentLayout === 'swiss-split' && (
-              <div className="grid grid-cols-12 gap-4 w-full h-full items-stretch my-auto py-1">
+              <div className="grid grid-cols-12 gap-4 w-full items-stretch my-auto py-1">
                 <div className="col-span-4 border-r border-current/25 pr-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="text-[10px] font-mono-code uppercase tracking-wider opacity-70 border-b border-current/20 pb-1">
+                    <div
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="text-[10px] font-mono-code uppercase tracking-wider opacity-70 border-b border-current/20 pb-1 focus:outline-none hover:bg-current/10 cursor-text"
+                      title="Click to edit section label"
+                    >
                       01 // INDEX & NOTES
                     </div>
                     {renderSecondaryBlock(true)}
                   </div>
                   <div className="pt-2 border-t border-current/20 text-[10px] font-mono-code opacity-65 space-y-0.5">
-                    <div>GRID // 12-COL ASYMMETRIC</div>
-                    <div>SCALE // {effectiveFontSize}PX : {state.subFontSize}PX</div>
+                    <div contentEditable suppressContentEditableWarning className="focus:outline-none hover:bg-current/10 cursor-text">GRID // 12-COL ASYMMETRIC</div>
+                    <div contentEditable suppressContentEditableWarning className="focus:outline-none hover:bg-current/10 cursor-text">SCALE // {effectiveFontSize}PX : {state.subFontSize}PX</div>
                   </div>
                 </div>
                 <div className="col-span-8 pl-1 flex flex-col justify-between space-y-2">
@@ -802,13 +889,20 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
 
             {/* LAYOUT 3: EDITORIAL MAGAZINE MONOGRAPH */}
             {currentLayout === 'editorial-magazine' && (
-              <div className="flex flex-col justify-between w-full h-full space-y-3 py-1">
+              <div className="flex flex-col justify-between w-full space-y-2.5 py-1">
                 <div className="w-full pb-2 border-b-2 border-current/30">
                   {renderHeadlineBlock()}
                 </div>
                 <div className="grid grid-cols-12 gap-4 items-start pt-1 my-auto">
                   <div className={state.showImageLayer && state.imagePlacement !== 'background' ? 'col-span-6 pr-2 border-r border-current/20' : 'col-span-12'}>
-                    <div className="text-[10px] font-mono-code uppercase opacity-65 mb-1">EDITORIAL FOLIO // ESSAY</div>
+                    <div
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="text-[10px] font-mono-code uppercase opacity-65 mb-1 focus:outline-none hover:bg-current/10 cursor-text"
+                      title="Click to edit section label"
+                    >
+                      EDITORIAL FOLIO // ESSAY
+                    </div>
                     {renderSecondaryBlock(true)}
                   </div>
                   {state.showImageLayer && state.imagePlacement !== 'background' && (
@@ -824,20 +918,39 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             {currentLayout === 'brutalist-frame' && (
               <div className="w-full border-2 border-current/40 divide-y-2 divide-current/40 my-auto">
                 <div className="px-3 py-1 flex items-center justify-between text-[10px] font-mono-code uppercase bg-current/5">
-                  <span>COMPARTMENT // A — PRIMARY DISPLAY</span>
-                  <span>[{state.fontWeight} WT]</span>
+                  <span
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="focus:outline-none hover:bg-current/10 cursor-text"
+                    title="Click to edit compartment header"
+                  >
+                    COMPARTMENT // A — PRIMARY DISPLAY
+                  </span>
+                  <span
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="focus:outline-none hover:bg-current/10 cursor-text"
+                    title="Click to edit weight label"
+                  >
+                    [{state.fontWeight} WT]
+                  </span>
                 </div>
-                <div className={isWideShortFrame ? 'p-2.5' : 'p-4'}>
+                <div className={isWideShortFrame || (isCompactHeight && hasInlinePlate) ? 'p-2.5' : 'p-3.5'}>
                   {renderHeadlineBlock()}
                 </div>
                 {state.showImageLayer && state.imagePlacement !== 'background' && (
-                  <div className="p-2.5 bg-current/5">
+                  <div className="p-2 bg-current/5">
                     {renderInlineImagePlate('any')}
                   </div>
                 )}
                 {state.showSubText && state.subText && (
-                  <div className="p-3 grid grid-cols-12 gap-3 items-start">
-                    <div className="col-span-3 text-[10px] font-mono-code uppercase opacity-75 border-r border-current/25 pr-2">
+                  <div className="p-2.5 grid grid-cols-12 gap-3 items-start">
+                    <div
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="col-span-3 text-[10px] font-mono-code uppercase opacity-75 border-r border-current/25 pr-2 focus:outline-none hover:bg-current/10 cursor-text"
+                      title="Click to edit section label"
+                    >
                       SEC // 02<br />CAPTION
                     </div>
                     <div className="col-span-9">
@@ -850,8 +963,13 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
 
             {/* LAYOUT 5: CENTERED GALLERY MONOLITH */}
             {currentLayout === 'center-monolith' && (
-              <div className="flex flex-col items-center justify-center text-center w-full space-y-2.5 my-auto px-4">
-                <div className="px-3 py-0.5 border border-current/40 text-[10px] font-mono-code uppercase tracking-widest">
+              <div className="flex flex-col items-center justify-center text-center w-full space-y-2 my-auto px-4">
+                <div
+                  contentEditable
+                  suppressContentEditableWarning
+                  className="px-3 py-0.5 border border-current/40 text-[10px] font-mono-code uppercase tracking-widest focus:outline-none hover:bg-current/10 cursor-text"
+                  title="Click to edit monolith badge"
+                >
                   EXHIBITION MONOLITH // {state.canvasFrame.toUpperCase()}
                 </div>
                 {renderInlineImagePlate('above')}
@@ -883,19 +1001,37 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
             {/* LAYOUT 7: ARCHIVAL SPECIMEN SHEET (INDEX CATALOG) */}
             {currentLayout === 'index-catalog' && (
               <div className="w-full border-t border-current/35 divide-y divide-current/25 my-auto">
-                <div className="py-2.5 grid grid-cols-12 gap-2 items-baseline">
-                  <span className="col-span-2 text-[10px] font-mono-code opacity-65">01 // TYPE</span>
+                <div className="py-2 grid grid-cols-12 gap-2 items-baseline">
+                  <span
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="col-span-2 text-[10px] font-mono-code opacity-65 focus:outline-none hover:bg-current/10 cursor-text"
+                  >
+                    01 // TYPE
+                  </span>
                   <div className="col-span-10">{renderHeadlineBlock()}</div>
                 </div>
                 {state.showImageLayer && state.imagePlacement !== 'background' && (
                   <div className="py-2 grid grid-cols-12 gap-2 items-center">
-                    <span className="col-span-2 text-[10px] font-mono-code opacity-65">02 // PLATE</span>
+                    <span
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="col-span-2 text-[10px] font-mono-code opacity-65 focus:outline-none hover:bg-current/10 cursor-text"
+                    >
+                      02 // PLATE
+                    </span>
                     <div className="col-span-10">{renderInlineImagePlate('any')}</div>
                   </div>
                 )}
                 {state.showSubText && state.subText && (
-                  <div className="py-2.5 grid grid-cols-12 gap-2 items-baseline">
-                    <span className="col-span-2 text-[10px] font-mono-code opacity-65">03 // NOTE</span>
+                  <div className="py-2 grid grid-cols-12 gap-2 items-baseline">
+                    <span
+                      contentEditable
+                      suppressContentEditableWarning
+                      className="col-span-2 text-[10px] font-mono-code opacity-65 focus:outline-none hover:bg-current/10 cursor-text"
+                    >
+                      03 // NOTE
+                    </span>
                     <div className="col-span-10">{renderSecondaryBlock(true)}</div>
                   </div>
                 )}
@@ -921,8 +1057,8 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
           {/* ==================== EDITABLE BOTTOM POSTER FOOTER METADATA ==================== */}
           {state.showFooter !== false && (
             <div 
-              className={`relative z-10 flex justify-between items-end text-xs font-mono-code ${
-                isWideShortFrame ? 'pt-1.5 mt-1.5' : 'pt-3 mt-3'
+              className={`relative z-10 shrink-0 flex justify-between items-end text-xs font-mono-code ${
+                isWideShortFrame ? 'pt-1.5 mt-2' : 'pt-2.5 mt-2.5'
               } ${
                 currentLayout === 'diagonal-construct' ? 'border-t-4 border-current' : 'border-t border-current/25'
               }`}
@@ -933,7 +1069,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ footerLeftTitle: e.currentTarget.innerText })}
-                  className="font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit bottom-left footer title"
                 >
                   {state.footerLeftTitle ?? "Allgemeine Gewerbeschule Basel // Zürich Tonhalle"}
@@ -942,7 +1078,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ footerLeftSubtitle: e.currentTarget.innerText })}
-                  className="opacity-75 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="opacity-75 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit bottom-left footer subtitle"
                 >
                   {state.footerLeftSubtitle ?? "Type Playground Digital Specimen Engine"}
@@ -953,7 +1089,7 @@ export const TypographicCanvas: React.FC<TypographicCanvasProps> = ({
                   contentEditable
                   suppressContentEditableWarning
                   onBlur={(e) => onUpdateState?.({ footerRightBadge: e.currentTarget.innerText })}
-                  className="inline-block px-2 py-0.5 border border-current text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 cursor-text"
+                  className="inline-block px-2 py-0.5 border border-current text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#00FF66]/40 hover:bg-current/10 cursor-text"
                   title="Click directly to edit bottom-right specimen badge"
                 >
                   {state.footerRightBadge ?? "Specimen Fig. 11-A"}

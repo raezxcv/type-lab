@@ -223,8 +223,8 @@ export const App: React.FC = () => {
 
     // 4. Smart Luminance-Matched Texture & Blend Mode (No jarring difference/invert or washed-out contrast)
     const subtleTextures: Array<TypographicState['backgroundTexture']> = isLightBg
-      ? ['crumpled-paper', 'ferrofluid-bloom', 'suminagashi-ink', 'photostat', 'risograph', 'linen-weave', 'letterpress-bite', 'japanese-washi', 'newsprint-halftone', 'topo-contour', 'bauhaus-grid', 'none']
-      : ['darkroom', 'macro-ink', 'brutalist-vault', 'brutalist-facade', 'wheatpaste-fold', 'kraft-collage', 'oxidized-etching', 'celluloid-burn', 'film-grain', 'topo-contour', 'architectural-draft', 'oscilloscope-harmonic', 'concrete-formwork', 'moire-wave', 'none'];
+      ? ['crumpled-paper', 'ferrofluid-bloom', 'suminagashi-ink', 'cyanotype-plate', 'charcoal-frottage', 'burnt-vellum', 'litho-stone', 'newsprint-micro', 'photostat', 'risograph', 'linen-weave', 'letterpress-bite', 'japanese-washi', 'newsprint-halftone', 'topo-contour', 'bauhaus-grid', 'none']
+      : ['darkroom', 'macro-ink', 'brutalist-vault', 'brutalist-facade', 'concrete-coffer', 'wet-collodion', 'silver-solarize', 'cyanotype-plate', 'charcoal-frottage', 'wheatpaste-fold', 'kraft-collage', 'oxidized-etching', 'celluloid-burn', 'film-grain', 'topo-contour', 'architectural-draft', 'oscilloscope-harmonic', 'concrete-formwork', 'moire-wave', 'none'];
     const randomTexture = subtleTextures[Math.floor(Math.random() * subtleTextures.length)];
     const randomBlend: TypographicState['textureBlendMode'] = isLightBg
       ? (['multiply', 'soft-light'] as const)[Math.floor(Math.random() * 2)]
@@ -255,6 +255,17 @@ export const App: React.FC = () => {
     const frames: Array<TypographicState['canvasFrame']> = ['poster', 'square', 'editorial', 'broadsheet', 'landscape'];
     const randomFrame = frames[Math.floor(Math.random() * frames.length)];
 
+    // Smartly hide Header and/or Footer on self-framed layouts or compact frames with plates so text never crowds
+    const hideHeader =
+      randomLayout === 'brutalist-frame' ||
+      randomLayout === 'index-catalog' ||
+      (randomShowImage && randomFrame === 'landscape') ||
+      Math.random() < 0.4;
+    const hideFooter =
+      randomLayout === 'brutalist-frame' ||
+      (randomShowImage && (randomFrame === 'square' || randomFrame === 'landscape')) ||
+      Math.random() < 0.35;
+
     setTypoState(prev => ({
       ...prev,
       // Headline Layer
@@ -284,13 +295,13 @@ export const App: React.FC = () => {
       subFontSize: Math.floor(Math.random() * 3) + 12, // 12px to 14px
       subLetterSpacing,
       subTextColor: randomPalette.subTextColor,
-      // Editable Header & Footer
-      showHeader: true,
+      // Editable Header & Footer (hidden sometimes to avoid crowding)
+      showHeader: !hideHeader,
       headerLeftTitle: pickedMeta.l1,
       headerLeftSubtitle: pickedMeta.l2,
       headerRightTitle: '',
       headerRightSubtitle: '',
-      showFooter: true,
+      showFooter: !hideFooter,
       footerLeftTitle: pickedMeta.f1,
       footerLeftSubtitle: pickedMeta.f2,
       footerRightBadge: pickedMeta.badge,

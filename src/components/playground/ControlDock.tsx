@@ -1651,7 +1651,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               <div className="flex items-center justify-between">
                 <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
                   <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                  <span>ORIGINAL GRAPHIC TEXTURES (40)</span>
+                  <span>ORIGINAL GRAPHIC TEXTURES (48)</span>
                 </label>
                 <span className="text-xs px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
                   {state.backgroundTexture !== 'none' ? state.backgroundTexture.toUpperCase() : 'OFF'}
@@ -1670,7 +1670,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         : 'border-[#22262E] bg-[#0D0F14] text-[#9AA2B1] hover:text-[#F4F5F7]'
                     }`}
                   >
-                    {cat === 'PHOTO' ? 'PHOTO PLATES (14)' : cat}
+                    {cat === 'PHOTO' ? 'PHOTO PLATES (22)' : cat}
                   </button>
                 ))}
               </div>
@@ -1683,16 +1683,24 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   { id: 'ferrofluid-bloom', label: 'FERROFLUID BLOOM', desc: 'Dendritic sumi ink & magnetic spikes', category: 'PHOTO', thumb: '/images/ferrofluid-ink-bloom.jpg' },
                   { id: 'oxidized-etching', label: 'INK & LINEN FIBERS', desc: 'Iridescent ink in raw hemp fibers', category: 'PHOTO', thumb: '/images/oxidized-etching-plate.jpg' },
                   { id: 'suminagashi-ink', label: 'SUMINAGASHI MARBLE', desc: 'Floating sumi ink fluid waves', category: 'PHOTO', thumb: '/images/suminagashi-marble-ink.jpg' },
+                  { id: 'cyanotype-plate', label: 'PRUSSIAN CYANOTYPE', desc: 'UV iron-salt blueprint contact print', category: 'PHOTO', thumb: '/images/cyanotype-botanical-plate.jpg' },
                   { id: 'crumpled-paper', label: 'CRUMPLED KRAFT', desc: 'Folded editorial paper creases & cracks', category: 'PHOTO', thumb: '/images/crumpled-paper-plate.jpg' },
                   { id: 'wheatpaste-fold', label: 'FOLDED WHEATPASTE', desc: 'Weathered street poster creases & deckle', category: 'PHOTO', thumb: '/images/folded-wheatpaste-poster.jpg' },
                   { id: 'kraft-collage', label: 'TORN KRAFT COLLAGE', desc: 'Sculptural charcoal & kraft paper relief', category: 'PHOTO', thumb: '/images/torn-kraft-collage.jpg' },
+                  { id: 'charcoal-frottage', label: 'CHARCOAL FROTTAGE', desc: 'Graphite rubbing over relief blocks', category: 'PHOTO', thumb: '/images/charcoal-frottage-rubbing.jpg' },
+                  { id: 'burnt-vellum', label: 'CHARRED VELLUM', desc: 'Singed parchment & warm sepia deckle', category: 'PHOTO', thumb: '/images/burnt-vellum-parchment.jpg' },
                   { id: 'swiss-grid', label: 'SWISS BRUTALIST', desc: 'Monolithic concrete shadow study', category: 'PHOTO', thumb: '/images/swiss-grid-abstract-geometry.jpg' },
                   { id: 'brutalist-vault', label: 'BRUTALIST VAULT', desc: 'Cantilevered concrete & alpine light shaft', category: 'PHOTO', thumb: '/images/brutalist-concrete-vault.jpg' },
                   { id: 'brutalist-facade', label: 'CONSTRUCTIVIST FACADE', desc: 'Double-exposure concrete monolith grid', category: 'PHOTO', thumb: '/images/swiss-brutalist-facade.jpg' },
+                  { id: 'concrete-coffer', label: 'COFFERED CONCRETE', desc: 'Board-formed modular ceiling vault', category: 'PHOTO', thumb: '/images/concrete-coffer-brutalist.jpg' },
                   { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics, focal lens & optics', category: 'PHOTO', thumb: '/images/type-lab-darkroom-texture.jpg' },
                   { id: 'celluloid-burn', label: 'CELLULOID FILM BURN', desc: '35mm developer emulsion burn & flare', category: 'PHOTO', thumb: '/images/celluloid-film-burn.jpg' },
+                  { id: 'wet-collodion', label: 'WET COLLODION', desc: 'Silver nitrate glass-plate tintype veil', category: 'PHOTO', thumb: '/images/wet-collodion-tintype.jpg' },
+                  { id: 'silver-solarize', label: 'SABATTIER SOLARIZE', desc: 'Man Ray darkroom edge-reversal halo', category: 'PHOTO', thumb: '/images/silver-gelatin-solarize.jpg' },
                   { id: 'photostat', label: 'PHOTOSTAT GRAIN', desc: '1960s electrostatic toner dust dispersion', category: 'PHOTO', thumb: '/images/photostat-grain-plate.jpg' },
                   { id: 'risograph', label: 'RISOGRAPH HALFTONE', desc: 'Macro dual-drum screen mesh & ink gain', category: 'PHOTO', thumb: '/images/risograph-halftone-mesh.jpg' },
+                  { id: 'litho-stone', label: 'LITHO STONE GRAIN', desc: 'Carborundum-grained Bavarian limestone', category: 'PHOTO', thumb: '/images/litho-stone-graining.jpg' },
+                  { id: 'newsprint-micro', label: 'MACRO ROTOGRAVURE', desc: '45° rosette dots & ink feathering', category: 'PHOTO', thumb: '/images/halftone-newsprint-micro.jpg' },
                   { id: 'marbled-ink', label: 'VECTOR SUMINAGASHI', desc: 'Fluid turbulence & organic marbled trails', category: 'PRINT', thumb: '' },
                   { id: 'distressed-xerox', label: 'DISTRESSED XEROX', desc: 'High-contrast photocopier toner abrasion', category: 'PRINT', thumb: '' },
                   { id: 'glitch-matrix', label: 'GLITCH RGB MATRIX', desc: 'Chromatic channel split & digital artifact', category: 'DIGITAL', thumb: '' },

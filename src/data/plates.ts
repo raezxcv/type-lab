@@ -108,6 +108,62 @@ export const STUDIO_PLATES: StudioPlate[] = [
     caption: 'Fig. 14 // Electrostatic Toner Transfer',
     url: '/images/photostat-grain-plate.jpg',
   },
+  {
+    id: 'cyanotype-plate',
+    label: 'PRUSSIAN CYANOTYPE',
+    category: 'Photographic',
+    caption: 'Fig. 15 // Ferricyanide Dendritic Sunprint 1842',
+    url: '/images/cyanotype-botanical-plate.jpg',
+  },
+  {
+    id: 'charcoal-frottage',
+    label: 'CHARCOAL FROTTAGE',
+    category: 'Photographic',
+    caption: 'Fig. 16 // Studio Graphite & Charcoal Rubbing',
+    url: '/images/charcoal-frottage-rubbing.jpg',
+  },
+  {
+    id: 'wet-collodion',
+    label: 'WET COLLODION PLATE',
+    category: 'Photographic',
+    caption: 'Fig. 17 // Silver-Nitrate Ambrotype Emulsion Bloom',
+    url: '/images/wet-collodion-tintype.jpg',
+  },
+  {
+    id: 'concrete-coffer',
+    label: 'COFFERED CONCRETE',
+    category: 'Photographic',
+    caption: 'Fig. 18 // Zürich Brutalist Coffer Shadow Matrix',
+    url: '/images/concrete-coffer-brutalist.jpg',
+  },
+  {
+    id: 'litho-stone',
+    label: 'BAVARIAN LITHO STONE',
+    category: 'Photographic',
+    caption: 'Fig. 19 // Grained Limestone & Tusche Ink Wash',
+    url: '/images/litho-stone-graining.jpg',
+  },
+  {
+    id: 'burnt-vellum',
+    label: 'CHARRED VELLUM',
+    category: 'Photographic',
+    caption: 'Fig. 20 // Smoked Archival Parchment Relief',
+    url: '/images/burnt-vellum-parchment.jpg',
+  },
+  {
+    id: 'newsprint-micro',
+    label: 'MACRO ROTOGRAVURE',
+    category: 'Photographic',
+    caption: 'Fig. 21 // 1960s Newsprint Halftone Ink Bleed',
+    url: '/images/halftone-newsprint-micro.jpg',
+  },
+  {
+    id: 'silver-solarize',
+    label: 'SABATTIER SOLARIZE',
+    category: 'Photographic',
+    caption: 'Fig. 22 // Darkroom Solarized Silver-Gelatin Study',
+    url: '/images/silver-gelatin-solarize.jpg',
+  },
 
   // 2. SWISS CONSTRUCT PLATES (High-precision vector artwork)
   {
