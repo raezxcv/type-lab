@@ -283,3 +283,4 @@ export const CURATED_PALETTES: ColorPalette[] = [
     textureTint: 'amber',
   },
 ];
+

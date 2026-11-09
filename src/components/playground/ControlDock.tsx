@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import type { TypographicState, FontDefinition, FontPairing, ColorPalette } from '../../types';
+import type { TypographicState, FontDefinition, FontPairing, ColorPalette, PosterLayout } from '../../types';
 import { AVAILABLE_FONTS } from '../../data/fonts';
 import { SPECIMEN_PRESETS } from '../../data/presets';
 import { CURATED_PAIRINGS } from '../../data/pairings';
 import { CURATED_PALETTES, STUDIO_SWATCHES } from '../../data/palettes';
+import { STUDIO_PLATES } from '../../data/plates';
 import { VisualFontPicker } from './VisualFontPicker';
 import { 
   Type, 
@@ -59,6 +60,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
   const [pairingCategoryFilter, setPairingCategoryFilter] = useState<'ALL' | FontPairing['category']>('ALL');
   const [paletteCategoryFilter, setPaletteCategoryFilter] = useState<'ALL' | ColorPalette['category']>('ALL');
   const [textureCategoryFilter, setTextureCategoryFilter] = useState<string>('ALL');
+  const [plateCategoryFilter, setPlateCategoryFilter] = useState<string>('ALL');
 
   const activeLayer = externalActiveLayer !== undefined ? externalActiveLayer : internalActiveLayer;
   const setActiveLayer = (layer: 'headline' | 'secondary') => {
@@ -757,6 +759,129 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               </div>
             )}
 
+            {/* --- EDITABLE HEADER & FOOTER METADATA CONTROLLER --- */}
+            <div className="p-3.5 bg-[#0D0F14] border border-[#22262E] space-y-3 mt-4">
+              <div className="flex items-center justify-between border-b border-[#1E232E] pb-2">
+                <div>
+                  <span className="font-bold text-[#F4F5F7] text-xs block">POSTER HEADER & FOOTER METADATA</span>
+                  <span className="text-[11px] text-[#A1A1AA]">Editable here or directly on the poster artboard</span>
+                </div>
+                <button
+                  onClick={() => {
+                    const headers = [
+                      { l1: 'Kunsthalle Zürich // Exhibition Series', l2: 'International Typographic Style 1957', f1: 'Allgemeine Gewerbeschule Basel // Archiv', f2: 'Swiss Modular Grid System DIN 476', badge: 'Specimen Fig. 11-A' },
+                      { l1: 'Staatliches Bauhaus Dessau // Werkstätten', l2: 'Elementare Typographie & Photographie', f1: 'Moholy-Nagy & Herbert Bayer Press', f2: 'Constructivist Monograph Series', badge: 'Katalog Nr. 26' },
+                      { l1: 'Tokyo Zine & Risograph Overprint Lab', l2: 'Dual-Drum Soy Ink Separation Study', f1: 'Shibuya Graphic Press // Sector 09', f2: 'Experimental Printmaking & Halftones', badge: 'Plate // RISO-09' },
+                      { l1: 'Radio Astronomy Telemetry Console', l2: 'Hydrogen Line 1420.405 MHz Calibration', f1: 'Observatory Vector Display Terminal', f2: 'Oscilloscope Phase-Lock Matrix', badge: 'SYS_LOCK [OK]' },
+                      { l1: 'Edizioni Milano // Architettura & Forma', l2: 'Collezione Tipografica Contemporanea', f1: 'Triennale di Milano // Sezione Grafica', f2: 'Proporzione Aurea & Spazio Negativo', badge: 'Tavola IV' },
+                    ];
+                    const pick = headers[Math.floor(Math.random() * headers.length)];
+                    onChange({
+                      showHeader: true,
+                      showFooter: true,
+                      headerLeftTitle: pick.l1,
+                      headerLeftSubtitle: pick.l2,
+                      footerLeftTitle: pick.f1,
+                      footerLeftSubtitle: pick.f2,
+                      footerRightBadge: pick.badge,
+                    });
+                  }}
+                  className="px-2.5 py-1 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 text-xs font-bold flex items-center gap-1 transition-colors"
+                  title="Randomize archival header and footer metadata"
+                >
+                  <Shuffle className="w-3 h-3" />
+                  <span>SHUFFLE</span>
+                </button>
+              </div>
+
+              {/* Header Toggle & Inputs */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#C2CAD8]">TOP HEADER BAR</span>
+                  <button
+                    onClick={() => onChange({ showHeader: state.showHeader === false ? true : false })}
+                    className={`px-2 py-0.5 text-xs font-bold border ${
+                      state.showHeader !== false ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C]' : 'border-[#22262E] text-[#808898]'
+                    }`}
+                  >
+                    {state.showHeader !== false ? 'VISIBLE' : 'HIDDEN'}
+                  </button>
+                </div>
+                {state.showHeader !== false && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={state.headerLeftTitle ?? "Type Laboratory Experimental Specimen"}
+                      onChange={(e) => onChange({ headerLeftTitle: e.target.value })}
+                      placeholder="Header Left Title"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#F4F5F7] focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      value={state.headerLeftSubtitle ?? "Series: Kinetic Swiss Modernism"}
+                      onChange={(e) => onChange({ headerLeftSubtitle: e.target.value })}
+                      placeholder="Header Left Subtitle"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#A1A1AA] focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      value={state.headerRightTitle ?? ""}
+                      onChange={(e) => onChange({ headerRightTitle: e.target.value })}
+                      placeholder="Header Right (Leave blank for auto Font Name)"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#F4F5F7] focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      value={state.headerRightSubtitle ?? ""}
+                      onChange={(e) => onChange({ headerRightSubtitle: e.target.value })}
+                      placeholder="Right Sub (Leave blank for auto Size/Leading)"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#A1A1AA] focus:outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Footer Toggle & Inputs */}
+              <div className="space-y-2 pt-2 border-t border-[#1A1F29]">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#C2CAD8]">BOTTOM FOOTER BAR</span>
+                  <button
+                    onClick={() => onChange({ showFooter: state.showFooter === false ? true : false })}
+                    className={`px-2 py-0.5 text-xs font-bold border ${
+                      state.showFooter !== false ? 'border-[#00FF66] text-[#00FF66] bg-[#16221C]' : 'border-[#22262E] text-[#808898]'
+                    }`}
+                  >
+                    {state.showFooter !== false ? 'VISIBLE' : 'HIDDEN'}
+                  </button>
+                </div>
+                {state.showFooter !== false && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <input
+                      type="text"
+                      value={state.footerLeftTitle ?? "Allgemeine Gewerbeschule Basel // Zürich Tonhalle"}
+                      onChange={(e) => onChange({ footerLeftTitle: e.target.value })}
+                      placeholder="Footer Left Title"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#F4F5F7] focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      value={state.footerLeftSubtitle ?? "Type Playground Digital Specimen Engine"}
+                      onChange={(e) => onChange({ footerLeftSubtitle: e.target.value })}
+                      placeholder="Footer Left Subtitle"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#A1A1AA] focus:outline-none"
+                    />
+                    <input
+                      type="text"
+                      value={state.footerRightBadge ?? "Specimen Fig. 11-A"}
+                      onChange={(e) => onChange({ footerRightBadge: e.target.value })}
+                      placeholder="Footer Right Badge"
+                      className="bg-[#08090C] border border-[#22262E] focus:border-[#00FF66] px-2.5 py-1.5 text-xs text-[#00FF66] font-bold focus:outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         )}
 
@@ -1061,23 +1186,77 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               <span>INVERT FOREGROUND ⇄ BACKGROUND</span>
             </button>
 
-            {/* Canvas Aspect Ratio Framing */}
+            {/* Poster Architectural Layout Templates (8 Layouts) */}
             <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[#F4F5F7] block text-xs font-semibold">
+                  POSTER LAYOUT ARCHITECTURE (08)
+                </label>
+                <button
+                  onClick={() => {
+                    const layouts: PosterLayout[] = [
+                      'classic-stack', 'swiss-split', 'editorial-magazine', 'brutalist-frame',
+                      'center-monolith', 'diagonal-construct', 'index-catalog', 'kinetic-banner'
+                    ];
+                    const next = layouts[Math.floor(Math.random() * layouts.length)];
+                    onChange({ posterLayout: next });
+                  }}
+                  className="text-xs text-[#00FF66] hover:text-[#4DFF95] flex items-center gap-1 font-bold"
+                >
+                  <Shuffle className="w-3 h-3" />
+                  <span>SHUFFLE LAYOUT</span>
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { id: 'classic-stack', label: '01 // CLASSIC STACK', desc: 'Vertical Swiss hierarchy' },
+                  { id: 'swiss-split', label: '02 // ASYMMETRIC SPLIT', desc: '2-col index & display grid' },
+                  { id: 'editorial-magazine', label: '03 // EDITORIAL FOLIO', desc: 'Masthead + 2-col essay' },
+                  { id: 'brutalist-frame', label: '04 // COMPARTMENT BOX', desc: 'Bordered structural cells' },
+                  { id: 'center-monolith', label: '05 // GALLERY MONOLITH', desc: 'Centered axial symmetry' },
+                  { id: 'diagonal-construct', label: '06 // CONSTRUCTIVIST', desc: 'Heavy rule bars & offset' },
+                  { id: 'index-catalog', label: '07 // ARCHIVAL SHEET', desc: 'Numbered table rows' },
+                  { id: 'kinetic-banner', label: '08 // BANDED STRIPS', desc: 'Full-width ruled bands' },
+                ].map((lyt) => {
+                  const isSelected = (state.posterLayout || 'classic-stack') === lyt.id;
+                  return (
+                    <button
+                      key={lyt.id}
+                      onClick={() => onChange({ posterLayout: lyt.id as PosterLayout })}
+                      className={`p-2 text-left border transition-colors ${
+                        isSelected
+                          ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
+                          : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
+                      }`}
+                    >
+                      <div className="text-xs font-bold truncate">{lyt.label}</div>
+                      <div className="text-[11px] text-[#8E97A8] truncate mt-0.5">{lyt.desc}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Canvas Aspect Ratio Framing (8 Ratios) */}
+            <div className="space-y-2 pt-2 border-t border-[#1E232E]">
               <label className="text-[#A1A1AA] block text-xs font-semibold">
-                CANVAS PROPORTIONS & RATIO
+                CANVAS PROPORTIONS & RATIO (08)
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                 {[
                   { id: 'poster', label: 'A4 (1:1.41)' },
                   { id: 'square', label: 'SQUARE (1:1)' },
+                  { id: 'editorial', label: 'MAGAZINE (4:5)' },
+                  { id: 'broadsheet', label: 'MONOLITH (9:16)' },
+                  { id: 'cinema', label: 'CINEMA (16:9)' },
                   { id: 'ribbon', label: 'RIBBON (21:9)' },
-                  { id: 'editorial', label: 'EDITORIAL (4:5)' },
-                  { id: 'fluid', label: 'FLUID RESPONSIVE' },
+                  { id: 'landscape', label: 'LANDSCAPE' },
+                  { id: 'fluid', label: 'FLUID (5:4)' },
                 ].map((frame) => (
                   <button
                     key={frame.id}
                     onClick={() => onChange({ canvasFrame: frame.id as any })}
-                    className={`p-2 text-center text-xs border transition-colors ${
+                    className={`p-2 text-center text-xs border transition-colors truncate ${
                       state.canvasFrame === frame.id
                         ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                         : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7]'
@@ -1244,29 +1423,62 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                     </div>
                   </div>
 
-                  {/* 2. Studio Plates Library Preset Chips */}
-                  <div className="space-y-1.5 pt-1 border-t border-[#181D26]">
-                    <span className="text-[#808898] text-xs font-semibold block">STUDIO SPECIMEN PLATES</span>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {[
-                        { label: 'CRUMPLED KRAFT', url: '/images/crumpled-paper-plate.jpg' },
-                        { label: 'SWISS BRUTALIST', url: '/images/swiss-grid-abstract-geometry.jpg' },
-                        { label: 'DARKROOM OPTICS', url: '/images/type-lab-darkroom-texture.jpg' },
-                        { label: 'MACRO INK BLEED', url: '/images/macro-ink-interference-plate.jpg' },
-                        { label: 'RISOGRAPH MESH', url: '/images/risograph-halftone-mesh.jpg' },
-                        { label: 'PHOTOSTAT GRAIN', url: '/images/photostat-grain-plate.jpg' },
-                      ].map((plate) => (
+                  {/* 2. Studio Plates Library Preset Chips (18 Plates) */}
+                  <div className="space-y-2 pt-1 border-t border-[#181D26]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#C2CAD8] text-xs font-semibold block">
+                        STUDIO SPECIMEN PLATES ({STUDIO_PLATES.length})
+                      </span>
+                      <button
+                        onClick={() => {
+                          const pick = STUDIO_PLATES[Math.floor(Math.random() * STUDIO_PLATES.length)];
+                          onChange({
+                            imageUrl: pick.url,
+                            imageCaption: pick.caption,
+                            showImageLayer: true,
+                          });
+                        }}
+                        className="flex items-center gap-1 px-2 py-0.5 bg-[#142319] hover:bg-[#1E3627] text-[#00FF66] border border-[#00FF66]/40 text-[11px] font-bold"
+                        title="Randomize studio specimen plate"
+                      >
+                        <Shuffle className="w-3 h-3" />
+                        <span>SHUFFLE PLATE</span>
+                      </button>
+                    </div>
+
+                    {/* Plate Category Filter */}
+                    <div className="flex flex-wrap gap-1">
+                      {['ALL', 'Photographic', 'Swiss Construct', 'Technical / Radar', 'Op-Art & Kinetic'].map((cat) => (
                         <button
-                          key={plate.url}
-                          onClick={() => onChange({ imageUrl: plate.url, showImageLayer: true })}
-                          className={`py-1.5 px-2 text-left text-xs border transition-colors flex items-center justify-between ${
+                          key={cat}
+                          onClick={() => setPlateCategoryFilter(cat)}
+                          className={`px-2 py-0.5 text-[11px] font-mono-code border transition-colors ${
+                            plateCategoryFilter === cat
+                              ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
+                              : 'border-[#1E2430] bg-[#11141A] text-[#9AA2B1] hover:text-[#F4F5F7]'
+                          }`}
+                        >
+                          {cat === 'ALL' ? `ALL (${STUDIO_PLATES.length})` : cat.toUpperCase()}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 max-h-[210px] overflow-y-auto pr-0.5">
+                      {STUDIO_PLATES.filter(p => plateCategoryFilter === 'ALL' || p.category === plateCategoryFilter).map((plate) => (
+                        <button
+                          key={plate.id}
+                          onClick={() => onChange({ imageUrl: plate.url, imageCaption: plate.caption, showImageLayer: true })}
+                          className={`py-1.5 px-2 text-left text-xs border transition-colors flex flex-col justify-between ${
                             state.imageUrl === plate.url
                               ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                               : 'border-[#1E2430] bg-[#11141A] text-[#A1A1AA] hover:text-[#F4F5F7]'
                           }`}
                         >
-                          <span className="truncate">{plate.label}</span>
-                          {state.imageUrl === plate.url && <span className="text-[#00FF66] text-xs">✓</span>}
+                          <div className="flex items-center justify-between w-full">
+                            <span className="truncate font-bold">{plate.label}</span>
+                            {state.imageUrl === plate.url && <span className="text-[#00FF66] text-xs shrink-0">✓</span>}
+                          </div>
+                          <span className="text-[10px] text-[#808898] truncate mt-0.5">{plate.category}</span>
                         </button>
                       ))}
                     </div>
@@ -1436,7 +1648,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               <div className="flex items-center justify-between">
                 <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
                   <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                  <span>ORIGINAL GRAPHIC TEXTURES (24)</span>
+                  <span>ORIGINAL GRAPHIC TEXTURES (32)</span>
                 </label>
                 <span className="text-xs px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
                   {state.backgroundTexture !== 'none' ? state.backgroundTexture.toUpperCase() : 'OFF'}
@@ -1487,6 +1699,14 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                   { id: 'moire-wave', label: 'OPTICAL MOIRÉ WAVE', desc: 'Concentric op-art interference harmonics', category: 'VECTOR' },
                   { id: 'terrazzo-stone', label: 'TERRAZZO AGGREGATE', desc: 'Brutalist mineral stone chip speckle', category: 'TACTILE' },
                   { id: 'bauhaus-grid', label: 'BAUHAUS GEOMETRIC', desc: 'Modular nested circles & diagonals', category: 'VECTOR' },
+                  { id: 'letterpress-bite', label: 'LETTERPRESS COTTON', desc: 'Archival cotton pulp & ink impression', category: 'PRINT' },
+                  { id: 'newsprint-halftone', label: 'NEWSPRINT GRAVURE', desc: '1970s tabloid 45° halftone screen', category: 'PRINT' },
+                  { id: 'architectural-draft', label: 'AXONOMETRIC DRAFT', desc: '30°/60° isometric drafting grid', category: 'VECTOR' },
+                  { id: 'oscilloscope-harmonic', label: 'LISSAJOUS HARMONIC', desc: 'Phase-locked sinusoidal wave curves', category: 'VECTOR' },
+                  { id: 'concrete-formwork', label: 'SHUTTERED CONCRETE', desc: 'Board-formed brutalist tie-rod grain', category: 'TACTILE' },
+                  { id: 'vhs-tracking', label: 'MAGNETIC TAPE NOISE', desc: 'Helical-scan analog dropout bands', category: 'DIGITAL' },
+                  { id: 'japanese-washi', label: 'KOZO WASHI PAPER', desc: 'Organic mulberry deckle fiber weave', category: 'TACTILE' },
+                  { id: 'swiss-cross-matrix', label: 'HELVETIC PLUS GRID', desc: 'Precision Swiss micro-plus registration', category: 'VECTOR' },
                 ].filter(item => textureCategoryFilter === 'ALL' || item.id === 'none' || item.category === textureCategoryFilter).map((item) => {
                   const isSelected = state.backgroundTexture === item.id;
                   return (

@@ -979,5 +979,227 @@ export const AVAILABLE_FONTS: FontDefinition[] = [
     designer: 'Arthur Reinders Folmer & Just van Rossum',
     bestUse: 'Isometric 3D typography, experimental color-font specimens, architectural blocks',
     sampleText: 'ISOMETRIC 3D VECTOR ARCHITECTURE'
+  },
+
+  // --- STUDIO EXPANSION WAVE II: 20 ICONIC DESIGNER FONTS ---
+  {
+    id: 'hanken-grotesk',
+    name: 'Hanken Grotesk',
+    cssFamily: "'Hanken Grotesk', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Alfredo Marco Pradil (Hanken Design Co.), contemporary neo-grotesque inspired by Stephenson Blake’s classic Grotesque',
+    designer: 'Alfredo Marco Pradil',
+    bestUse: 'Swiss editorial grids, exhibition identity, clean modernist UI systems',
+    sampleText: 'Stephenson Blake Neo-Grotesque Discipline'
+  },
+  {
+    id: 'rethink-sans',
+    name: 'Rethink Sans',
+    cssFamily: "'Rethink Sans', sans-serif",
+    category: 'grotesk',
+    weights: [400, 500, 600, 700, 800],
+    origin: 'Hans Thiessen & Rethink Studio, expressive neo-grotesque engineered for bold design studio communication',
+    designer: 'Hans Thiessen (Rethink)',
+    bestUse: 'Design agency manifestos, high-impact grotesque headlines, identity systems',
+    sampleText: 'Expressive Studio Grotesque Architecture'
+  },
+  {
+    id: 'geologica',
+    name: 'Geologica',
+    cssFamily: "'Geologica', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Monokrom (Sindre Bremnes), sharp-stressed geometric-humanist grotesque with geological structural stability',
+    designer: 'Sindre Bremnes (Monokrom)',
+    bestUse: 'Architectural signage, tectonic poster headlines, technical publications',
+    sampleText: 'Tectonic Stress & Monokrom Geometry'
+  },
+  {
+    id: 'familjen-grotesk',
+    name: 'Familjen Grotesk',
+    cssFamily: "'Familjen Grotesk', sans-serif",
+    category: 'grotesk',
+    weights: [400, 500, 600, 700],
+    origin: 'Anders Wikström, contemporary Swedish grotesque with curved ink-traps and playful terminal swells',
+    designer: 'Anders Wikström',
+    bestUse: 'Stockholm studio posters, contemporary art monographs, kinetic headlines',
+    sampleText: 'Swedish Contemporary Ink-Trap Grotesque'
+  },
+  {
+    id: 'league-spartan',
+    name: 'League Spartan',
+    cssFamily: "'League Spartan', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'The League of Moveable Type, bold revival of American Type Founders’ 1939 geometric Spartan',
+    designer: 'Matt Bailey & Tyler Finck',
+    bestUse: 'Constructivist geometric banners, punchy modernist badges, Bauhaus titles',
+    sampleText: 'AMERICAN GEOMETRIC SPARTAN 1939'
+  },
+  {
+    id: 'readex-pro',
+    name: 'Readex Pro',
+    cssFamily: "'Readex Pro', sans-serif",
+    category: 'grotesk',
+    weights: [300, 400, 500, 600, 700],
+    origin: 'Thomas Jockin & Nadine Chahine, optical-clarity geometric sans expanded from the Lexend reading system',
+    designer: 'Thomas Jockin & Nadine Chahine',
+    bestUse: 'High-legibility information architecture, modernist transit tables, clean captions',
+    sampleText: 'Optical Clarity & Geometric Precision'
+  },
+  {
+    id: 'crimson-pro',
+    name: 'Crimson Pro',
+    cssFamily: "'Crimson Pro', serif",
+    category: 'serif',
+    weights: [300, 400, 500, 600, 700, 800, 900],
+    origin: 'Jacques Le Bailly & Sebastian Kosch, old-style Renaissance book face in the tradition of Garamond and Sabon',
+    designer: 'Jacques Le Bailly & Sebastian Kosch',
+    bestUse: 'Jan Tschichold book composition, literary broadsides, classical essays',
+    sampleText: 'Renaissance Sabon & Garamond Book Tradition'
+  },
+  {
+    id: 'vollkorn',
+    name: 'Vollkorn',
+    cssFamily: "'Vollkorn', serif",
+    category: 'serif',
+    weights: [400, 500, 600, 700, 800, 900],
+    origin: 'Friedrich Althausen, sturdy German "whole-grain" workhorse serif with muscular serifs and warm organic rhythm',
+    designer: 'Friedrich Althausen',
+    bestUse: 'Tactile letterpress posters, literary journals, warm archival typography',
+    sampleText: 'Sturdy German Letterpress Workhorse Serif'
+  },
+  {
+    id: 'lora',
+    name: 'Lora',
+    cssFamily: "'Lora', serif",
+    category: 'serif',
+    weights: [400, 500, 600, 700],
+    origin: 'Cyreal (Olga Karpushina & Alexei Vanyashin), contemporary literary serif with brushed calligraphic roots',
+    designer: 'Olga Karpushina (Cyreal)',
+    bestUse: 'Art house exhibition catalogs, poetic subheads, editorial storytelling',
+    sampleText: 'Calligraphic Brushed Literary Cadence'
+  },
+  {
+    id: 'bona-nova',
+    name: 'Bona Nova',
+    cssFamily: "'Bona Nova', serif",
+    category: 'serif',
+    weights: [400, 700],
+    origin: 'Andrzej Heidrich & Mateusz Machalski, digitization of the iconic 1971 Polish monumental book antiqua Bona',
+    designer: 'Andrzej Heidrich & Mateusz Machalski',
+    bestUse: 'Warsaw poster school homages, classical-modernist contrast, book covers',
+    sampleText: 'Warsaw 1971 Monumental Antiqua Revival'
+  },
+  {
+    id: 'yeseva-one',
+    name: 'Yeseva One',
+    cssFamily: "'Yeseva One', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'Jovanny Lemonad, high-contrast display serif with sweeping bracketed terminals and lyrical poise',
+    designer: 'Jovanny Lemonad',
+    bestUse: 'Editorial magazine mastheads, gallery invitations, dramatic display',
+    sampleText: 'Sweeping Bracketed Display Serif Poise'
+  },
+  {
+    id: 'castoro',
+    name: 'Castoro',
+    cssFamily: "'Castoro', serif",
+    category: 'serif',
+    weights: [400],
+    origin: 'John Hudson (Tiro Typeworks), Dutch Baroque serif synthesizing 16th–18th century punchcutters Kis and Fleischman',
+    designer: 'John Hudson (Tiro Typeworks)',
+    bestUse: 'Dutch Baroque philology, museum archives, scholarly monographs',
+    sampleText: 'Dutch Baroque Punchcutting of Kis & Fleischman'
+  },
+  {
+    id: 'fragment-mono',
+    name: 'Fragment Mono',
+    cssFamily: "'Fragment Mono', monospace",
+    category: 'monospace',
+    weights: [400],
+    origin: 'Wei Huang, Swiss neo-grotesque monospaced font built directly on 1957 Helvetica / Nimbus Sans proportions',
+    designer: 'Wei Huang',
+    bestUse: 'Swiss modernist code grids, architectural coordinates, technical colophons',
+    sampleText: 'HELVETIC_MONO // ZÜRICH_GRID_1957'
+  },
+  {
+    id: 'cutive-mono',
+    name: 'Cutive Mono',
+    cssFamily: "'Cutive Mono', monospace",
+    category: 'monospace',
+    weights: [400],
+    origin: 'Vernon Adams, executive IBM Selectric and classic correspondence typewriter face with slab terminals',
+    designer: 'Vernon Adams',
+    bestUse: 'Declassified archival dossiers, typewriter concrete poetry, zine captions',
+    sampleText: 'DECLASSIFIED ARCHIVAL DOSSIER // REF-11'
+  },
+  {
+    id: 'nova-mono',
+    name: 'Nova Mono',
+    cssFamily: "'Nova Mono', monospace",
+    category: 'monospace',
+    weights: [400],
+    origin: 'Wojciech Kalinowski, geometric architectural monospaced display with distinctive diagonal terminals',
+    designer: 'Wojciech Kalinowski',
+    bestUse: 'Futurist telemetry headers, geometric code art, technical diagrams',
+    sampleText: 'GEOMETRIC ARCHITECTURAL MONO MATRIX'
+  },
+  {
+    id: 'big-shoulders-stencil',
+    name: 'Big Shoulders Stencil',
+    cssFamily: "'Big Shoulders Stencil Display', display",
+    category: 'display',
+    weights: [400, 600, 700, 800, 900],
+    origin: 'Patric King (Xoetrope), tall condensed American industrial stencil gothic inspired by Chicago civic signage',
+    designer: 'Patric King',
+    bestUse: 'Industrial brutalist posters, stencil freight typography, vertical pillars',
+    sampleText: 'CHICAGO INDUSTRIAL STENCIL MONOLITH'
+  },
+  {
+    id: 'climate-crisis',
+    name: 'Climate Crisis',
+    cssFamily: "'Climate Crisis', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Daniel Coull & Eino Korkala (Helsingin Sanomat), ultra-dense monumental display with glacial ink-traps',
+    designer: 'Daniel Coull & Eino Korkala',
+    bestUse: 'Monumental brutalist statements, ultra-black poster blocks, kinetic scale',
+    sampleText: 'ULTRA-MASSIVE GLACIAL DISPLAY WEIGHT'
+  },
+  {
+    id: 'krona-one',
+    name: 'Krona One',
+    cssFamily: "'Krona One', sans-serif",
+    category: 'display',
+    weights: [400],
+    origin: 'Yvonne Schüttler, low-x-height ultra-extended Scandinavian semi-rounded display sans inspired by hand-cut lettering',
+    designer: 'Yvonne Schüttler',
+    bestUse: 'Ultra-wide horizontal bands, Nordic avant-garde titles, modernist badges',
+    sampleText: 'EXTENDED NORDIC HORIZONTAL DISPLAY'
+  },
+  {
+    id: 'zen-dots',
+    name: 'Zen Dots',
+    cssFamily: "'Zen Dots', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Yoshimichi Ohira, futuristic Japanese micro-squared techno display with circular dot accents',
+    designer: 'Yoshimichi Ohira',
+    bestUse: 'Cybernetic Tokyo interfaces, futuristic hardware labels, techno posters',
+    sampleText: 'TOKYO CYBERNETIC DOT-MATRIX DISPLAY'
+  },
+  {
+    id: 'pirata-one',
+    name: 'Pirata One',
+    cssFamily: "'Pirata One', display",
+    category: 'experimental',
+    weights: [400],
+    origin: 'Rodrigo Fuenzalida, high-legibility modern blackletter Fraktur simplified for contemporary poster display',
+    designer: 'Rodrigo Fuenzalida',
+    bestUse: 'Neo-gothic brutalist contrast, heavy metal & subcultural zines, crest titles',
+    sampleText: 'Modernist Blackletter Fraktur Synthesis'
   }
 ];

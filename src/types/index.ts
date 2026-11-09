@@ -31,7 +31,17 @@ export interface FontPairing {
 
 export type KineticMode = 'none' | 'marquee' | 'breath' | 'skew-wobble' | 'stagger-split' | 'glitch-pulse';
 
-export type CanvasFrame = 'poster' | 'square' | 'ribbon' | 'editorial' | 'fluid';
+export type CanvasFrame = 'poster' | 'square' | 'ribbon' | 'editorial' | 'broadsheet' | 'cinema' | 'landscape' | 'fluid';
+
+export type PosterLayout = 
+  | 'classic-stack'
+  | 'swiss-split'
+  | 'editorial-magazine'
+  | 'brutalist-frame'
+  | 'center-monolith'
+  | 'diagonal-construct'
+  | 'index-catalog'
+  | 'kinetic-banner';
 
 export type GridOverlayType = 'modular' | 'baseline' | 'crosshair' | 'golden-ratio' | 'diagonal' | 'none';
 
@@ -59,7 +69,15 @@ export type TextureId =
   | 'carbon-fiber'
   | 'moire-wave'
   | 'terrazzo-stone'
-  | 'bauhaus-grid';
+  | 'bauhaus-grid'
+  | 'letterpress-bite'
+  | 'newsprint-halftone'
+  | 'architectural-draft'
+  | 'oscilloscope-harmonic'
+  | 'concrete-formwork'
+  | 'vhs-tracking'
+  | 'japanese-washi'
+  | 'swiss-cross-matrix';
 
 export type TextureBlendMode = 
   | 'normal' 
@@ -124,11 +142,23 @@ export interface TypographicState {
   rotation: number; // -180 to 180 deg
   kineticMode: KineticMode;
   canvasFrame: CanvasFrame;
+  posterLayout?: PosterLayout;
   showGrid: boolean;
   gridType: GridOverlayType;
   opacity: number; // 0.1 to 1.0
   textShadow: boolean;
   shadowGlowColor: string;
+
+  // Editable Poster Header & Footer Metadata
+  showHeader?: boolean;
+  headerLeftTitle?: string;
+  headerLeftSubtitle?: string;
+  headerRightTitle?: string;
+  headerRightSubtitle?: string;
+  showFooter?: boolean;
+  footerLeftTitle?: string;
+  footerLeftSubtitle?: string;
+  footerRightBadge?: string;
 
   // Visual Watermark Character (Swiss architectural layer)
   showWatermark: boolean;

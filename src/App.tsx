@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import type { TypographicState, FontDefinition } from './types';
+import type { TypographicState, FontDefinition, PosterLayout } from './types';
 import { SPECIMEN_PRESETS } from './data/presets';
 import { AVAILABLE_FONTS } from './data/fonts';
 import { CURATED_PALETTES } from './data/palettes';
+import { CURATED_PAIRINGS } from './data/pairings';
+import { STUDIO_PLATES } from './data/plates';
 import { Navbar } from './components/Navbar';
 import { TypographicCanvas } from './components/playground/TypographicCanvas';
 import { ControlDock } from './components/playground/ControlDock';
@@ -126,16 +128,68 @@ export const App: React.FC = () => {
   const handleRandomize = () => {
     const allAvailableFonts = [...AVAILABLE_FONTS, ...customFonts];
 
-    // 1. Headline Layer Randomization
+    // Helper: compute relative luminance from hex color to pick smart blend modes & contrast
+    const isLightColor = (hex: string): boolean => {
+      const clean = hex.replace('#', '');
+      if (clean.length !== 6) return false;
+      const r = parseInt(clean.slice(0, 2), 16) / 255;
+      const g = parseInt(clean.slice(2, 4), 16) / 255;
+      const b = parseInt(clean.slice(4, 6), 16) / 255;
+      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      return lum > 0.45;
+    };
+
+    // 1. Select a Harmonized Studio Color Palette
+    const randomPalette = CURATED_PALETTES[Math.floor(Math.random() * CURATED_PALETTES.length)];
+    const isLightBg = isLightColor(randomPalette.backgroundColor);
+
+    // 2. Smart Font Pairing Selection (70% Curated Studio Pairing, 30% Contrasting Category Pairing)
+    const useCuratedPairing = Math.random() < 0.7;
+    const pickedPairing = CURATED_PAIRINGS[Math.floor(Math.random() * CURATED_PAIRINGS.length)];
+
     const randomHeadlineFont = allAvailableFonts[Math.floor(Math.random() * allAvailableFonts.length)];
-    const randomHeadlineWeight = randomHeadlineFont.weights[Math.floor(Math.random() * randomHeadlineFont.weights.length)];
-    const randomHeadlineSize = Math.floor(Math.random() * 26) + 38; // 38px to 64px
-    const randomHeadlineTracking = Number(((Math.random() * 0.24) - 0.05).toFixed(2));
-    const randomHeadlineLeading = Number(((Math.random() * 0.35) + 0.85).toFixed(2));
-    const alignments: Array<TypographicState['textAlign']> = ['left', 'center', 'right', 'justify'];
-    const randomAlign = alignments[Math.floor(Math.random() * alignments.length)];
-    const transforms: Array<TypographicState['textTransform']> = ['uppercase', 'none', 'capitalize'];
-    const randomTransform = transforms[Math.floor(Math.random() * transforms.length)];
+    const contrastingCategoryMap: Record<string, string[]> = {
+      serif: ['grotesk', 'monospace'],
+      grotesk: ['monospace', 'serif'],
+      display: ['monospace', 'grotesk'],
+      experimental: ['monospace', 'grotesk'],
+      monospace: ['grotesk', 'serif'],
+    };
+    const targetSubCategories = contrastingCategoryMap[randomHeadlineFont.category] || ['monospace', 'grotesk'];
+    const eligibleSecondaryFonts = allAvailableFonts.filter(
+      f => f.cssFamily !== randomHeadlineFont.cssFamily && targetSubCategories.includes(f.category)
+    );
+    const randomSecondaryFont = eligibleSecondaryFonts.length > 0
+      ? eligibleSecondaryFonts[Math.floor(Math.random() * eligibleSecondaryFonts.length)]
+      : allAvailableFonts[0];
+
+    const headlineFamily = useCuratedPairing ? pickedPairing.headlineFamily : randomHeadlineFont.cssFamily;
+    const headlineWeight = useCuratedPairing
+      ? pickedPairing.headlineWeight
+      : randomHeadlineFont.weights[Math.floor(Math.random() * randomHeadlineFont.weights.length)];
+    const headlineTracking = useCuratedPairing
+      ? pickedPairing.headlineTracking
+      : Number(((Math.random() * 0.14) - 0.03).toFixed(2));
+
+    const subFontFamily = useCuratedPairing ? pickedPairing.bodyFamily : randomSecondaryFont.cssFamily;
+    const bodyWeights = randomSecondaryFont.weights.filter(w => w <= 600);
+    const subFontWeight = useCuratedPairing
+      ? pickedPairing.bodyWeight
+      : (bodyWeights.length > 0 ? bodyWeights[Math.floor(Math.random() * bodyWeights.length)] : randomSecondaryFont.weights[0]);
+    const subLetterSpacing = useCuratedPairing
+      ? pickedPairing.bodyTracking
+      : Number(((Math.random() * 0.05) + 0.01).toFixed(2));
+
+    // 3. Select Architectural Poster Layout & Matching Alignment
+    const layouts: PosterLayout[] = [
+      'classic-stack', 'swiss-split', 'editorial-magazine', 'brutalist-frame',
+      'center-monolith', 'diagonal-construct', 'index-catalog', 'kinetic-banner'
+    ];
+    const randomLayout = layouts[Math.floor(Math.random() * layouts.length)];
+    const randomAlign: TypographicState['textAlign'] =
+      randomLayout === 'center-monolith' ? 'center' :
+      (randomLayout === 'swiss-split' || randomLayout === 'index-catalog' || randomLayout === 'brutalist-frame') ? 'left' :
+      (Math.random() > 0.25 ? 'left' : 'center');
 
     const headlinePhrases = [
       "DIE NEUE GRAPHIK",
@@ -143,130 +197,125 @@ export const App: React.FC = () => {
       "OPTICAL CADENCE",
       "KINETIC VECTORS",
       "GEOMETRIC TENSION",
-      "FORM FOLLOWS FORM",
       "ARCHITECTURAL ORDER",
-      "SYSTEM CALIBRATION",
       "THE SUBLIME GEOMETRY",
-      "AVANT-GARDE HYPER-TYPE",
-      "PRESSURE // VELOCITY",
-      "RADAR TELEMETRY 11",
       "CONCRETE CONSTRUCT",
-      "TYPOGRAPHIC DIALOGUE",
-      "HAIRLINE BRACKETS",
-      "SYNAPTIC EMULSION"
+      "MUSICA VIVA ZÜRICH",
+      "KUNSTHALLE BASEL",
+      "TONHALLE ARCHIVE",
+      "FORMA & STRUTTURA"
     ];
-    const randomHeadlineText = headlinePhrases[Math.floor(Math.random() * headlinePhrases.length)];
-
-    // 2. Secondary Pairing Layer Randomization (Ensure distinct complementary font!)
-    const eligibleSecondaryFonts = allAvailableFonts.filter(f => f.cssFamily !== randomHeadlineFont.cssFamily);
-    const randomSecondaryFont = eligibleSecondaryFonts.length > 0
-      ? eligibleSecondaryFonts[Math.floor(Math.random() * eligibleSecondaryFonts.length)]
-      : allAvailableFonts[0];
-
-    const bodyWeights = randomSecondaryFont.weights.filter(w => w <= 600);
-    const randomSecondaryWeight = bodyWeights.length > 0
-      ? bodyWeights[Math.floor(Math.random() * bodyWeights.length)]
-      : randomSecondaryFont.weights[0];
-
-    const randomSecondarySize = Math.floor(Math.random() * 5) + 11; // 11px to 15px
-    const randomSecondaryTracking = Number(((Math.random() * 0.08) + 0.02).toFixed(2)); // 0.02 to 0.10em
+    const randomHeadlineText = useCuratedPairing && Math.random() > 0.45
+      ? pickedPairing.headlineSample
+      : headlinePhrases[Math.floor(Math.random() * headlinePhrases.length)];
 
     const secondaryPhrases = [
       "1957 // ZÜRICH — Internationale Zeitschrift für Graphische Kunst und verwandte Gebiete.",
       "An orthogonal grid brings imagery, type, and color into intellectual and optical unity.",
       "A rigorous dialogue between Enlightenment Didone hairline brackets and grotesque vectors.",
-      "Vertical compression creates undeniable spatial dominance across massive architectural poster canvases.",
-      "Telemetry coordinates locked at 1420.405 MHz. Optical vectors stabilized across all axes.",
       "Order is the prerequisite of optical clarity across architectural layouts and print media.",
-      "Digital letterforms are mathematical Bézier curves undergoing continuous kinetic transformation.",
-      "Harmonic modular scales produce consistent typographic progressions across infinite viewport densities.",
       "Allgemeine Gewerbeschule Basel // Kunstgewerbeschule Zürich Typographic Specimen Engine.",
       "Josef Müller-Brockmann & Armin Hofmann: The Swiss Grid and Modernist Poster Art."
     ];
-    const randomSecondaryText = secondaryPhrases[Math.floor(Math.random() * secondaryPhrases.length)];
+    const randomSecondaryText = useCuratedPairing && Math.random() > 0.35
+      ? pickedPairing.bodySample
+      : secondaryPhrases[Math.floor(Math.random() * secondaryPhrases.length)];
 
-    // 3. Harmonized Studio Color Palette (20 curated studio palettes)
-    const randomPalette = CURATED_PALETTES[Math.floor(Math.random() * CURATED_PALETTES.length)];
-    const randomSkew = Math.random() > 0.7 ? Math.floor((Math.random() * 16) - 8) : 0;
-    const watermarks = ["57", "11", "№", "§", "R", "SPQR", "M", "AXIOM", "68", "09"];
-    const randomWatermark = watermarks[Math.floor(Math.random() * watermarks.length)];
+    // 4. Smart Luminance-Matched Texture & Blend Mode (No jarring difference/invert or washed-out contrast)
+    const subtleTextures: Array<TypographicState['backgroundTexture']> = isLightBg
+      ? ['crumpled-paper', 'linen-weave', 'letterpress-bite', 'japanese-washi', 'photostat', 'risograph', 'newsprint-halftone', 'topo-contour', 'bauhaus-grid', 'none']
+      : ['darkroom', 'macro-ink', 'film-grain', 'topo-contour', 'architectural-draft', 'oscilloscope-harmonic', 'concrete-formwork', 'moire-wave', 'swiss-cross-matrix', 'blueprint-grid', 'none'];
+    const randomTexture = subtleTextures[Math.floor(Math.random() * subtleTextures.length)];
+    const randomBlend: TypographicState['textureBlendMode'] = isLightBg
+      ? (['multiply', 'soft-light'] as const)[Math.floor(Math.random() * 2)]
+      : (['overlay', 'soft-light'] as const)[Math.floor(Math.random() * 2)];
+    const smartTextureOpacity = isLightBg
+      ? Number((Math.random() * 0.10 + 0.14).toFixed(2))
+      : Number((Math.random() * 0.10 + 0.16).toFixed(2));
 
-    // 4. Random Texture & Modifiers (All 23 Graphic Textures)
-    const allTextures: Array<TypographicState['backgroundTexture']> = [
-      'photostat', 'darkroom', 'swiss-grid', 'macro-ink', 'risograph', 
-      'crumpled-paper', 'marbled-ink', 'distressed-xerox', 'glitch-matrix', 
-      'woodcut-hatch', 'thermal-fax', 'halftone-dots', 'cyber-scanline', 'blueprint-grid', 'film-grain',
-      'topo-contour', 'microfiche-grid', 'ascii-matrix', 'linen-weave', 'carbon-fiber',
-      'moire-wave', 'terrazzo-stone', 'bauhaus-grid'
-    ];
-    const randomTexture = allTextures[Math.floor(Math.random() * allTextures.length)];
-    const blendModes: Array<TypographicState['textureBlendMode']> = ['normal', 'screen', 'overlay', 'hard-light', 'difference'];
-    const randomBlend = blendModes[Math.floor(Math.random() * blendModes.length)];
-    const tints: Array<TypographicState['textureTint']> = [
-      'none', 'green', 'amber', 'cyan', 'crimson', 'violet', 'cobalt', 'acid-lime', 'copper', 'monochrome'
-    ];
-    const randomTint = Math.random() > 0.4 ? randomPalette.textureTint : tints[Math.floor(Math.random() * tints.length)];
-    const frames: Array<TypographicState['canvasFrame']> = ['poster', 'square', 'editorial', 'ribbon'];
-    const randomFrame = frames[Math.floor(Math.random() * frames.length)];
-
-    // 5. Graphic Plates library for image layer
-    const plates = [
-      '/images/crumpled-paper-plate.jpg',
-      '/images/photostat-grain-plate.jpg',
-      '/images/risograph-halftone-mesh.jpg',
-      '/images/swiss-grid-abstract-geometry.jpg',
-      '/images/type-lab-darkroom-texture.jpg',
-      '/images/macro-ink-interference-plate.jpg',
-    ];
-    const randomPlate = plates[Math.floor(Math.random() * plates.length)];
-    const randomShowImage = Math.random() > 0.65;
-    const placements: Array<TypographicState['imagePlacement']> = ['between', 'background', 'below'];
+    // 5. Smart Studio Specimen Plate Selection (Coordinated with palette & layout)
+    const randomPlate = STUDIO_PLATES[Math.floor(Math.random() * STUDIO_PLATES.length)];
+    const randomShowImage = Math.random() < 0.6;
+    const placements: Array<TypographicState['imagePlacement']> = ['between', 'below', 'above'];
     const randomPlacement = placements[Math.floor(Math.random() * placements.length)];
+    const smartImageBlend: TypographicState['imageBlendMode'] = isLightBg
+      ? (randomPlate.category === 'Photographic' ? 'multiply' : 'normal')
+      : 'normal';
+
+    // 6. Coordinated Archival Header & Footer Metadata
+    const metadataSets = [
+      { l1: 'Kunsthalle Zürich // Exhibition Series', l2: 'International Typographic Style 1957', f1: 'Allgemeine Gewerbeschule Basel // Archiv', f2: 'Swiss Modular Grid System DIN 476', badge: 'Specimen Fig. 11-A' },
+      { l1: 'Staatliches Bauhaus Dessau // Werkstätten', l2: 'Elementare Typographie & Photographie', f1: 'Moholy-Nagy & Herbert Bayer Press', f2: 'Constructivist Monograph Series', badge: 'Katalog Nr. 26' },
+      { l1: 'Tokyo Zine & Risograph Overprint Lab', l2: 'Dual-Drum Soy Ink Separation Study', f1: 'Shibuya Graphic Press // Sector 09', f2: 'Experimental Printmaking & Halftones', badge: 'Plate // RISO-09' },
+      { l1: 'Edizioni Milano // Architettura & Forma', l2: 'Collezione Tipografica Contemporanea', f1: 'Triennale di Milano // Sezione Grafica', f2: 'Proporzione Aurea & Spazio Negativo', badge: 'Tavola IV' },
+      { l1: 'Tonhalle-Gesellschaft Zürich // Musica Viva', l2: 'Akustische Proportionsstudie 1955', f1: 'Josef Müller-Brockmann // Konzerthaus', f2: 'Orthogonal Mathematical Rhythm', badge: 'Opus 55-B' },
+    ];
+    const pickedMeta = metadataSets[Math.floor(Math.random() * metadataSets.length)];
+
+    const frames: Array<TypographicState['canvasFrame']> = ['poster', 'square', 'editorial', 'broadsheet', 'landscape'];
+    const randomFrame = frames[Math.floor(Math.random() * frames.length)];
 
     setTypoState(prev => ({
       ...prev,
       // Headline Layer
       text: randomHeadlineText,
-      fontFamily: randomHeadlineFont.cssFamily,
-      fontWeight: randomHeadlineWeight,
-      fontSize: randomHeadlineSize,
-      letterSpacing: randomHeadlineTracking,
-      lineHeight: randomHeadlineLeading,
+      fontFamily: headlineFamily,
+      fontWeight: headlineWeight,
+      fontSize: Math.floor(Math.random() * 18) + 42, // 42px to 59px balanced scale
+      letterSpacing: headlineTracking,
+      lineHeight: Number(((Math.random() * 0.18) + 0.90).toFixed(2)),
       textAlign: randomAlign,
-      textTransform: randomTransform,
+      textTransform: Math.random() > 0.25 ? 'uppercase' : 'none',
       textColor: randomPalette.textColor,
       backgroundColor: randomPalette.backgroundColor,
+      strokeWidth: 0,
       strokeColor: randomPalette.strokeColor,
       shadowGlowColor: randomPalette.shadowGlowColor,
-      skew: randomSkew,
+      textShadow: false,
+      skew: 0,
+      rotation: 0,
       canvasFrame: randomFrame,
+      posterLayout: randomLayout,
       // Secondary Pairing Layer
       showSubText: true,
       subText: randomSecondaryText,
-      subFontFamily: randomSecondaryFont.cssFamily,
-      subFontWeight: randomSecondaryWeight,
-      subFontSize: randomSecondarySize,
-      subLetterSpacing: randomSecondaryTracking,
+      subFontFamily,
+      subFontWeight,
+      subFontSize: Math.floor(Math.random() * 3) + 12, // 12px to 14px
+      subLetterSpacing,
       subTextColor: randomPalette.subTextColor,
-      // Ambient Watermark
-      watermarkText: randomWatermark,
-      // Graphic Texture & Modifiers
+      // Editable Header & Footer
+      showHeader: true,
+      headerLeftTitle: pickedMeta.l1,
+      headerLeftSubtitle: pickedMeta.l2,
+      headerRightTitle: '',
+      headerRightSubtitle: '',
+      showFooter: true,
+      footerLeftTitle: pickedMeta.f1,
+      footerLeftSubtitle: pickedMeta.f2,
+      footerRightBadge: pickedMeta.badge,
+      // Keep background clean of random numbers/characters and green crosshairs by default
+      showWatermark: false,
+      showGrid: false,
+      // Smart Graphic Texture & Modifiers
       backgroundTexture: randomTexture,
-      textureOpacity: Number((Math.random() * 0.35 + 0.45).toFixed(2)),
+      textureOpacity: smartTextureOpacity,
       textureBlendMode: randomBlend,
-      textureScale: [75, 100, 125, 150, 175][Math.floor(Math.random() * 5)],
-      textureContrast: [90, 110, 130, 160][Math.floor(Math.random() * 4)],
-      textureBrightness: [95, 105, 115][Math.floor(Math.random() * 3)],
-      textureBlur: [0, 0, 1][Math.floor(Math.random() * 3)],
-      textureInvert: Math.random() > 0.75,
-      textureTint: randomTint,
-      // Graphic Image Plate Layer
+      textureScale: 100,
+      textureContrast: 105,
+      textureBrightness: 100,
+      textureBlur: 0,
+      textureInvert: false,
+      textureTint: randomPalette.textureTint,
+      // Smart Graphic Image Plate Layer
       showImageLayer: randomShowImage,
-      imageUrl: randomPlate,
+      imageUrl: randomPlate.url,
+      imageCaption: randomPlate.caption,
       imagePlacement: randomPlacement,
-      imageOpacity: Number((Math.random() * 0.3 + 0.7).toFixed(2)),
-      imageBlendMode: 'normal',
-      imageHeight: Math.floor(Math.random() * 100) + 160,
+      imageOpacity: Number((Math.random() * 0.15 + 0.85).toFixed(2)),
+      imageBlendMode: smartImageBlend,
+      imageFilter: 'none',
+      imageHeight: Math.floor(Math.random() * 50) + 160,
     }));
   };
 
@@ -355,6 +404,7 @@ ${typoState.isVertical ? `writing-mode: vertical-rl;` : ''}`;
                 state={typoState}
                 onChangeText={(text) => handleUpdateState({ text })}
                 onChangeSubText={(subText) => handleUpdateState({ subText })}
+                onUpdateState={handleUpdateState}
                 onChangeTexture={(bg) => handleUpdateState({ backgroundTexture: bg })}
                 canvasRef={canvasRef}
                 onAutoFitSize={handleAutoFitSize}

@@ -42,9 +42,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span>COLOR_SPACE: DCI-P3 // RGB TELEMETRY</span>
         </div>
         <div className="flex items-center space-x-4">
-          <span className="text-[#00FF66] font-semibold">CATALOG: 88 DESIGNER FONTS</span>
+          <span className="text-[#00FF66] font-semibold">CATALOG: 108 DESIGNER FONTS</span>
           <span className="text-[#3A4250]">|</span>
-          <span>SPECIMENS: 10 ACTIVE</span>
+          <span>SPECIMENS: 12 ACTIVE</span>
           <span className="text-[#3A4250]">|</span>
           <span className="text-[#F4F5F7]">
             PRESS <kbd className="px-1.5 py-0.5 bg-[#1F242E] text-[#00FF66] border border-[#2E3544] text-xs rounded">?</kbd> FOR SHORTCUTS
