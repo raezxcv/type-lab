@@ -223,8 +223,8 @@ export const App: React.FC = () => {
 
     // 4. Smart Luminance-Matched Texture & Blend Mode (No jarring difference/invert or washed-out contrast)
     const subtleTextures: Array<TypographicState['backgroundTexture']> = isLightBg
-      ? ['crumpled-paper', 'linen-weave', 'letterpress-bite', 'japanese-washi', 'photostat', 'risograph', 'newsprint-halftone', 'topo-contour', 'bauhaus-grid', 'none']
-      : ['darkroom', 'macro-ink', 'film-grain', 'topo-contour', 'architectural-draft', 'oscilloscope-harmonic', 'concrete-formwork', 'moire-wave', 'swiss-cross-matrix', 'blueprint-grid', 'none'];
+      ? ['crumpled-paper', 'ferrofluid-bloom', 'suminagashi-ink', 'photostat', 'risograph', 'linen-weave', 'letterpress-bite', 'japanese-washi', 'newsprint-halftone', 'topo-contour', 'bauhaus-grid', 'none']
+      : ['darkroom', 'macro-ink', 'brutalist-vault', 'brutalist-facade', 'wheatpaste-fold', 'kraft-collage', 'oxidized-etching', 'celluloid-burn', 'film-grain', 'topo-contour', 'architectural-draft', 'oscilloscope-harmonic', 'concrete-formwork', 'moire-wave', 'none'];
     const randomTexture = subtleTextures[Math.floor(Math.random() * subtleTextures.length)];
     const randomBlend: TypographicState['textureBlendMode'] = isLightBg
       ? (['multiply', 'soft-light'] as const)[Math.floor(Math.random() * 2)]

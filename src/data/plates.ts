@@ -9,7 +9,7 @@ export interface StudioPlate {
 const svgPlate = (svg: string) => `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
 export const STUDIO_PLATES: StudioPlate[] = [
-  // 1. PHOTOGRAPHIC PLATES
+  // 1. PHOTOGRAPHIC PLATES (14 High-Resolution Studio & Architectural Plates)
   {
     id: 'swiss-brutalist',
     label: 'SWISS BRUTALIST',
@@ -18,38 +18,94 @@ export const STUDIO_PLATES: StudioPlate[] = [
     url: '/images/swiss-grid-abstract-geometry.jpg',
   },
   {
-    id: 'darkroom-optics',
-    label: 'DARKROOM OPTICS',
+    id: 'brutalist-vault',
+    label: 'BRUTALIST VAULT',
     category: 'Photographic',
-    caption: 'Fig. 02 // Silver Halide Focal Caustics',
-    url: '/images/type-lab-darkroom-texture.jpg',
+    caption: 'Fig. 02 // Cantilevered Concrete Alpine Shaft',
+    url: '/images/brutalist-concrete-vault.jpg',
+  },
+  {
+    id: 'brutalist-facade',
+    label: 'CONSTRUCTIVIST FACADE',
+    category: 'Photographic',
+    caption: 'Fig. 03 // Double-Exposure Concrete Monolith Grid',
+    url: '/images/swiss-brutalist-facade.jpg',
+  },
+  {
+    id: 'ferrofluid-bloom',
+    label: 'FERROFLUID INK BLOOM',
+    category: 'Photographic',
+    caption: 'Fig. 04 // Dendritic Sumi & Ferrofluid Capillary Study',
+    url: '/images/ferrofluid-ink-bloom.jpg',
   },
   {
     id: 'macro-ink-bleed',
     label: 'MACRO INK BLEED',
     category: 'Photographic',
-    caption: 'Fig. 03 // Lithographic Capillary Dispersion',
+    caption: 'Fig. 05 // Lithographic Capillary Dispersion',
     url: '/images/macro-ink-interference-plate.jpg',
   },
   {
-    id: 'risograph-mesh',
-    label: 'RISOGRAPH MESH',
+    id: 'oxidized-etching',
+    label: 'INK & LINEN FIBERS',
     category: 'Photographic',
-    caption: 'Fig. 04 // Dual-Drum Soy Halftone Screen',
-    url: '/images/risograph-halftone-mesh.jpg',
+    caption: 'Fig. 06 // Macro Iridescent Ink in Raw Hemp Fibers',
+    url: '/images/oxidized-etching-plate.jpg',
+  },
+  {
+    id: 'suminagashi-ink',
+    label: 'SUMINAGASHI MARBLE',
+    category: 'Photographic',
+    caption: 'Fig. 07 // Floating Sumi Ink Fluid Interference Rings',
+    url: '/images/suminagashi-marble-ink.jpg',
   },
   {
     id: 'crumpled-kraft',
     label: 'CRUMPLED KRAFT',
     category: 'Photographic',
-    caption: 'Fig. 05 // Folded Archival Kraft Relief',
+    caption: 'Fig. 08 // Folded Archival Kraft Relief',
     url: '/images/crumpled-paper-plate.jpg',
+  },
+  {
+    id: 'wheatpaste-fold',
+    label: 'FOLDED WHEATPASTE',
+    category: 'Photographic',
+    caption: 'Fig. 09 // Weathered Street Poster Crease & Deckle Edge',
+    url: '/images/folded-wheatpaste-poster.jpg',
+  },
+  {
+    id: 'kraft-collage',
+    label: 'TORN KRAFT COLLAGE',
+    category: 'Photographic',
+    caption: 'Fig. 10 // Sculptural Charcoal & Unbleached Kraft Relief',
+    url: '/images/torn-kraft-collage.jpg',
+  },
+  {
+    id: 'darkroom-optics',
+    label: 'DARKROOM OPTICS',
+    category: 'Photographic',
+    caption: 'Fig. 11 // Silver Halide Focal Caustics',
+    url: '/images/type-lab-darkroom-texture.jpg',
+  },
+  {
+    id: 'celluloid-burn',
+    label: 'CELLULOID FILM BURN',
+    category: 'Photographic',
+    caption: 'Fig. 12 // 35mm Emulsion Developer Burn & Safelight',
+    url: '/images/celluloid-film-burn.jpg',
+  },
+  {
+    id: 'risograph-mesh',
+    label: 'RISOGRAPH MESH',
+    category: 'Photographic',
+    caption: 'Fig. 13 // Dual-Drum Soy Halftone Screen',
+    url: '/images/risograph-halftone-mesh.jpg',
   },
   {
     id: 'photostat-grain',
     label: 'PHOTOSTAT GRAIN',
     category: 'Photographic',
-    caption: 'Fig. 06 // Electrostatic Toner Transfer',
+    caption: 'Fig. 14 // Electrostatic Toner Transfer',
     url: '/images/photostat-grain-plate.jpg',
   },
 
@@ -284,3 +340,4 @@ export const STUDIO_PLATES: StudioPlate[] = [
     </svg>`),
   },
 ];
+

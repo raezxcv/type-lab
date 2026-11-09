@@ -1463,22 +1463,25 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-1.5 max-h-[210px] overflow-y-auto pr-0.5">
+                    <div className="grid grid-cols-2 gap-1.5 max-h-[260px] overflow-y-auto pr-0.5">
                       {STUDIO_PLATES.filter(p => plateCategoryFilter === 'ALL' || p.category === plateCategoryFilter).map((plate) => (
                         <button
                           key={plate.id}
                           onClick={() => onChange({ imageUrl: plate.url, imageCaption: plate.caption, showImageLayer: true })}
-                          className={`py-1.5 px-2 text-left text-xs border transition-colors flex flex-col justify-between ${
+                          className={`p-1.5 text-left text-xs border transition-colors flex flex-col justify-between ${
                             state.imageUrl === plate.url
                               ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66] font-bold'
                               : 'border-[#1E2430] bg-[#11141A] text-[#A1A1AA] hover:text-[#F4F5F7]'
                           }`}
                         >
+                          <div className="w-full h-10 mb-1 overflow-hidden border border-[#222834] bg-[#070809]">
+                            <img src={plate.url} alt={plate.label} className="w-full h-full object-cover" loading="lazy" />
+                          </div>
                           <div className="flex items-center justify-between w-full">
-                            <span className="truncate font-bold">{plate.label}</span>
+                            <span className="truncate font-bold text-[11px]">{plate.label}</span>
                             {state.imageUrl === plate.url && <span className="text-[#00FF66] text-xs shrink-0">✓</span>}
                           </div>
-                          <span className="text-[10px] text-[#808898] truncate mt-0.5">{plate.category}</span>
+                          <span className="text-[10px] text-[#808898] truncate">{plate.category}</span>
                         </button>
                       ))}
                     </div>
@@ -1648,7 +1651,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               <div className="flex items-center justify-between">
                 <label className="text-[#F4F5F7] text-xs font-semibold flex items-center gap-2">
                   <ImageIcon className="w-4 h-4 text-[#00FF66]" />
-                  <span>ORIGINAL GRAPHIC TEXTURES (32)</span>
+                  <span>ORIGINAL GRAPHIC TEXTURES (40)</span>
                 </label>
                 <span className="text-xs px-2 py-0.5 bg-[#171C26] text-[#00FF66] font-mono-code font-bold">
                   {state.backgroundTexture !== 'none' ? state.backgroundTexture.toUpperCase() : 'OFF'}
@@ -1667,7 +1670,7 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                         : 'border-[#22262E] bg-[#0D0F14] text-[#9AA2B1] hover:text-[#F4F5F7]'
                     }`}
                   >
-                    {cat}
+                    {cat === 'PHOTO' ? 'PHOTO PLATES (14)' : cat}
                   </button>
                 ))}
               </div>
@@ -1675,38 +1678,46 @@ export const ControlDock: React.FC<ControlDockProps> = ({
               {/* Texture Selection Grid */}
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { id: 'none', label: 'SOLID CANVAS', desc: 'Minimal stark Swiss poster ground', category: 'SOLID' },
-                  { id: 'crumpled-paper', label: 'CRUMPLED KRAFT', desc: 'Folded editorial paper creases & cracks', category: 'PHOTO' },
-                  { id: 'photostat', label: 'PHOTOSTAT GRAIN', desc: '1960s electrostatic toner dust dispersion', category: 'PHOTO' },
-                  { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics, focal lens & optics', category: 'PHOTO' },
-                  { id: 'swiss-grid', label: 'BRUTALIST CONCRETE', desc: 'Monolithic concrete shadow study', category: 'PHOTO' },
-                  { id: 'macro-ink', label: 'MACRO INK BLEED', desc: 'Lithographic capillary paper bleed', category: 'PHOTO' },
-                  { id: 'risograph', label: 'RISOGRAPH HALFTONE', desc: 'Macro dual-drum screen mesh & ink gain', category: 'PHOTO' },
-                  { id: 'marbled-ink', label: 'MARBLED SUMINAGASHI', desc: 'Fluid turbulence & organic marbled trails', category: 'PRINT' },
-                  { id: 'distressed-xerox', label: 'DISTRESSED XEROX', desc: 'High-contrast photocopier toner abrasion', category: 'PRINT' },
-                  { id: 'glitch-matrix', label: 'GLITCH RGB MATRIX', desc: 'Chromatic channel split & digital artifact', category: 'DIGITAL' },
-                  { id: 'woodcut-hatch', label: 'WOODCUT CROSSHATCH', desc: 'Linocut relief hatching & woodblock bite', category: 'PRINT' },
-                  { id: 'thermal-fax', label: 'THERMAL RECEIPT FAX', desc: 'Micro dot-matrix thermal print line raster', category: 'PRINT' },
-                  { id: 'halftone-dots', label: 'VECTOR HALFTONE', desc: 'Procedural geometric dot raster matrix', category: 'VECTOR' },
-                  { id: 'cyber-scanline', label: 'CRT SCANLINES', desc: 'Phosphor cathode ray line interference', category: 'DIGITAL' },
-                  { id: 'blueprint-grid', label: 'BLUEPRINT MATRIX', desc: 'Drafting coordinate grid with marks', category: 'VECTOR' },
-                  { id: 'film-grain', label: 'FILM ISO NOISE', desc: 'Silver halide micro-emulsion noise', category: 'PHOTO' },
-                  { id: 'topo-contour', label: 'TOPOGRAPHIC ISOLINE', desc: 'Cartographic elevation contour vectors', category: 'VECTOR' },
-                  { id: 'microfiche-grid', label: 'MICROFICHE ARCHIVE', desc: 'Optical calibration ticks & index frame', category: 'VECTOR' },
-                  { id: 'ascii-matrix', label: 'BINARY PUNCH MATRIX', desc: 'Mainframe punch-card perforated grid', category: 'DIGITAL' },
-                  { id: 'linen-weave', label: 'BOOKBINDER LINEN', desc: 'Fine cross-woven archival cloth texture', category: 'TACTILE' },
-                  { id: 'carbon-fiber', label: 'CARBON TWILL WEAVE', desc: 'High-density diagonal industrial weave', category: 'TACTILE' },
-                  { id: 'moire-wave', label: 'OPTICAL MOIRÉ WAVE', desc: 'Concentric op-art interference harmonics', category: 'VECTOR' },
-                  { id: 'terrazzo-stone', label: 'TERRAZZO AGGREGATE', desc: 'Brutalist mineral stone chip speckle', category: 'TACTILE' },
-                  { id: 'bauhaus-grid', label: 'BAUHAUS GEOMETRIC', desc: 'Modular nested circles & diagonals', category: 'VECTOR' },
-                  { id: 'letterpress-bite', label: 'LETTERPRESS COTTON', desc: 'Archival cotton pulp & ink impression', category: 'PRINT' },
-                  { id: 'newsprint-halftone', label: 'NEWSPRINT GRAVURE', desc: '1970s tabloid 45° halftone screen', category: 'PRINT' },
-                  { id: 'architectural-draft', label: 'AXONOMETRIC DRAFT', desc: '30°/60° isometric drafting grid', category: 'VECTOR' },
-                  { id: 'oscilloscope-harmonic', label: 'LISSAJOUS HARMONIC', desc: 'Phase-locked sinusoidal wave curves', category: 'VECTOR' },
-                  { id: 'concrete-formwork', label: 'SHUTTERED CONCRETE', desc: 'Board-formed brutalist tie-rod grain', category: 'TACTILE' },
-                  { id: 'vhs-tracking', label: 'MAGNETIC TAPE NOISE', desc: 'Helical-scan analog dropout bands', category: 'DIGITAL' },
-                  { id: 'japanese-washi', label: 'KOZO WASHI PAPER', desc: 'Organic mulberry deckle fiber weave', category: 'TACTILE' },
-                  { id: 'swiss-cross-matrix', label: 'HELVETIC PLUS GRID', desc: 'Precision Swiss micro-plus registration', category: 'VECTOR' },
+                  { id: 'none', label: 'SOLID CANVAS', desc: 'Minimal stark Swiss poster ground', category: 'SOLID', thumb: '' },
+                  { id: 'macro-ink', label: 'MACRO INK BLEED', desc: 'Lithographic capillary paper bleed', category: 'PHOTO', thumb: '/images/macro-ink-interference-plate.jpg' },
+                  { id: 'ferrofluid-bloom', label: 'FERROFLUID BLOOM', desc: 'Dendritic sumi ink & magnetic spikes', category: 'PHOTO', thumb: '/images/ferrofluid-ink-bloom.jpg' },
+                  { id: 'oxidized-etching', label: 'INK & LINEN FIBERS', desc: 'Iridescent ink in raw hemp fibers', category: 'PHOTO', thumb: '/images/oxidized-etching-plate.jpg' },
+                  { id: 'suminagashi-ink', label: 'SUMINAGASHI MARBLE', desc: 'Floating sumi ink fluid waves', category: 'PHOTO', thumb: '/images/suminagashi-marble-ink.jpg' },
+                  { id: 'crumpled-paper', label: 'CRUMPLED KRAFT', desc: 'Folded editorial paper creases & cracks', category: 'PHOTO', thumb: '/images/crumpled-paper-plate.jpg' },
+                  { id: 'wheatpaste-fold', label: 'FOLDED WHEATPASTE', desc: 'Weathered street poster creases & deckle', category: 'PHOTO', thumb: '/images/folded-wheatpaste-poster.jpg' },
+                  { id: 'kraft-collage', label: 'TORN KRAFT COLLAGE', desc: 'Sculptural charcoal & kraft paper relief', category: 'PHOTO', thumb: '/images/torn-kraft-collage.jpg' },
+                  { id: 'swiss-grid', label: 'SWISS BRUTALIST', desc: 'Monolithic concrete shadow study', category: 'PHOTO', thumb: '/images/swiss-grid-abstract-geometry.jpg' },
+                  { id: 'brutalist-vault', label: 'BRUTALIST VAULT', desc: 'Cantilevered concrete & alpine light shaft', category: 'PHOTO', thumb: '/images/brutalist-concrete-vault.jpg' },
+                  { id: 'brutalist-facade', label: 'CONSTRUCTIVIST FACADE', desc: 'Double-exposure concrete monolith grid', category: 'PHOTO', thumb: '/images/swiss-brutalist-facade.jpg' },
+                  { id: 'darkroom', label: 'DARKROOM PHOTOGRAM', desc: 'Laser caustics, focal lens & optics', category: 'PHOTO', thumb: '/images/type-lab-darkroom-texture.jpg' },
+                  { id: 'celluloid-burn', label: 'CELLULOID FILM BURN', desc: '35mm developer emulsion burn & flare', category: 'PHOTO', thumb: '/images/celluloid-film-burn.jpg' },
+                  { id: 'photostat', label: 'PHOTOSTAT GRAIN', desc: '1960s electrostatic toner dust dispersion', category: 'PHOTO', thumb: '/images/photostat-grain-plate.jpg' },
+                  { id: 'risograph', label: 'RISOGRAPH HALFTONE', desc: 'Macro dual-drum screen mesh & ink gain', category: 'PHOTO', thumb: '/images/risograph-halftone-mesh.jpg' },
+                  { id: 'marbled-ink', label: 'VECTOR SUMINAGASHI', desc: 'Fluid turbulence & organic marbled trails', category: 'PRINT', thumb: '' },
+                  { id: 'distressed-xerox', label: 'DISTRESSED XEROX', desc: 'High-contrast photocopier toner abrasion', category: 'PRINT', thumb: '' },
+                  { id: 'glitch-matrix', label: 'GLITCH RGB MATRIX', desc: 'Chromatic channel split & digital artifact', category: 'DIGITAL', thumb: '' },
+                  { id: 'woodcut-hatch', label: 'WOODCUT CROSSHATCH', desc: 'Linocut relief hatching & woodblock bite', category: 'PRINT', thumb: '' },
+                  { id: 'thermal-fax', label: 'THERMAL RECEIPT FAX', desc: 'Micro dot-matrix thermal print line raster', category: 'PRINT', thumb: '' },
+                  { id: 'halftone-dots', label: 'VECTOR HALFTONE', desc: 'Procedural geometric dot raster matrix', category: 'VECTOR', thumb: '' },
+                  { id: 'cyber-scanline', label: 'CRT SCANLINES', desc: 'Phosphor cathode ray line interference', category: 'DIGITAL', thumb: '' },
+                  { id: 'blueprint-grid', label: 'BLUEPRINT MATRIX', desc: 'Drafting coordinate grid with marks', category: 'VECTOR', thumb: '' },
+                  { id: 'film-grain', label: 'FILM ISO NOISE', desc: 'Silver halide micro-emulsion noise', category: 'PRINT', thumb: '' },
+                  { id: 'topo-contour', label: 'TOPOGRAPHIC ISOLINE', desc: 'Cartographic elevation contour vectors', category: 'VECTOR', thumb: '' },
+                  { id: 'microfiche-grid', label: 'MICROFICHE ARCHIVE', desc: 'Optical calibration ticks & index frame', category: 'VECTOR', thumb: '' },
+                  { id: 'ascii-matrix', label: 'BINARY PUNCH MATRIX', desc: 'Mainframe punch-card perforated grid', category: 'DIGITAL', thumb: '' },
+                  { id: 'linen-weave', label: 'BOOKBINDER LINEN', desc: 'Fine cross-woven archival cloth texture', category: 'TACTILE', thumb: '' },
+                  { id: 'carbon-fiber', label: 'CARBON TWILL WEAVE', desc: 'High-density diagonal industrial weave', category: 'TACTILE', thumb: '' },
+                  { id: 'moire-wave', label: 'OPTICAL MOIRÉ WAVE', desc: 'Concentric op-art interference harmonics', category: 'VECTOR', thumb: '' },
+                  { id: 'terrazzo-stone', label: 'TERRAZZO AGGREGATE', desc: 'Brutalist mineral stone chip speckle', category: 'TACTILE', thumb: '' },
+                  { id: 'bauhaus-grid', label: 'BAUHAUS GEOMETRIC', desc: 'Modular nested circles & diagonals', category: 'VECTOR', thumb: '' },
+                  { id: 'letterpress-bite', label: 'LETTERPRESS COTTON', desc: 'Archival cotton pulp & ink impression', category: 'PRINT', thumb: '' },
+                  { id: 'newsprint-halftone', label: 'NEWSPRINT GRAVURE', desc: '1970s tabloid 45° halftone screen', category: 'PRINT', thumb: '' },
+                  { id: 'architectural-draft', label: 'AXONOMETRIC DRAFT', desc: '30°/60° isometric drafting grid', category: 'VECTOR', thumb: '' },
+                  { id: 'oscilloscope-harmonic', label: 'LISSAJOUS HARMONIC', desc: 'Phase-locked sinusoidal wave curves', category: 'VECTOR', thumb: '' },
+                  { id: 'concrete-formwork', label: 'SHUTTERED CONCRETE', desc: 'Board-formed brutalist tie-rod grain', category: 'TACTILE', thumb: '' },
+                  { id: 'vhs-tracking', label: 'MAGNETIC TAPE NOISE', desc: 'Helical-scan analog dropout bands', category: 'DIGITAL', thumb: '' },
+                  { id: 'japanese-washi', label: 'KOZO WASHI PAPER', desc: 'Organic mulberry deckle fiber weave', category: 'TACTILE', thumb: '' },
+                  { id: 'swiss-cross-matrix', label: 'HELVETIC PLUS GRID', desc: 'Precision Swiss micro-plus registration', category: 'VECTOR', thumb: '' },
                 ].filter(item => textureCategoryFilter === 'ALL' || item.id === 'none' || item.category === textureCategoryFilter).map((item) => {
                   const isSelected = state.backgroundTexture === item.id;
                   return (
@@ -1715,25 +1726,30 @@ export const ControlDock: React.FC<ControlDockProps> = ({
                       onClick={() => {
                         onChange({
                           backgroundTexture: item.id as any,
-                          textureOpacity: (state.textureOpacity && state.textureOpacity >= 0.4) ? state.textureOpacity : 0.65,
-                          textureBlendMode: state.textureBlendMode || 'normal',
+                          textureOpacity: (state.textureOpacity && state.textureOpacity >= 0.35) ? state.textureOpacity : 0.45,
+                          textureBlendMode: state.textureBlendMode || 'overlay',
                         });
                       }}
-                      className={`p-2.5 text-left border transition-all ${
+                      className={`p-2 text-left border transition-all flex flex-col justify-between ${
                         isSelected
                           ? 'border-[#00FF66] bg-[#16221C] text-[#00FF66]'
                           : 'border-[#22262E] bg-[#0D0F14] text-[#A1A1AA] hover:text-[#F4F5F7] hover:border-[#3A4354]'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold leading-tight">{item.label}</span>
-                        <span className={`text-[11px] px-1.5 py-0.5 rounded font-mono-code ${
+                      {item.thumb && (
+                        <div className="w-full h-11 mb-1.5 overflow-hidden border border-[#222834] bg-[#070809]">
+                          <img src={item.thumb} alt={item.label} className="w-full h-full object-cover" loading="lazy" />
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between w-full gap-1">
+                        <span className="text-xs font-bold leading-tight truncate">{item.label}</span>
+                        <span className={`text-[10px] px-1 py-0.5 rounded font-mono-code shrink-0 ${
                           isSelected ? 'bg-[#00FF66]/20 text-[#00FF66]' : 'bg-[#181D26] text-[#A1A1AA]'
                         }`}>
                           {item.category}
                         </span>
                       </div>
-                      <div className="text-[11px] text-[#A1A1AA] mt-1 line-clamp-1">{item.desc}</div>
+                      <div className="text-[11px] text-[#A1A1AA] mt-0.5 line-clamp-1">{item.desc}</div>
                     </button>
                   );
                 })}
